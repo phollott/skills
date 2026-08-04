@@ -397,13 +397,21 @@ plis:scene {
         ] .
 
     #############################################################
-    # CANONICAL FACILITIES - INTERIOR HEALTH
+    # CANONICAL FACILITIES AND REPORTING DOMAIN - INTERIOR HEALTH
     #############################################################
+
+    plis:IHReportingDomain
+        a plis:ReportingDomain ;
+        schema:name "Interior Health Reporting Domain" ;
+        schema:memberOf plis:InteriorHealth ;
+        plis:identifierSystem
+            plis:InteriorHealthIdentifierSystem .
 
     plis:facility-ALH
         a plis:Hospital ;
         schema:name "Arrow Lakes Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "ALH" ;
         plis:reportingCode "IHALH" ;
         plis:reportingCode "IHALR" ;
@@ -420,6 +428,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Kelowna General Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "KGH" ;
         plis:reportingCode "IHKGH" ;
         schema:telephone "250-862-4000" ;
@@ -435,6 +444,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Kootenay Boundary Regional Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "KBH" ;
         plis:reportingCode "IHKBH" ;
         schema:telephone "250-368-3311" ;
@@ -450,6 +460,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Royal Inland Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "RIH" ;
         plis:reportingCode "IHRIH" ;
         schema:telephone "250-374-5111" ;
@@ -465,6 +476,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Kootenay Lake Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "KLH" ;
         plis:reportingCode "IHKLH" ;
         schema:telephone "250-352-3111" ;
@@ -480,6 +492,7 @@ plis:scene {
         a plis:CommunityHealthCentre ;
         schema:name "Ashcroft Hospital & Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "AHH" ;
         plis:reportingCode "IHAHH" ;
         schema:telephone "250-453-2211" ;
@@ -495,6 +508,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Barriere Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "BAC" ;
         plis:reportingCode "IHBAC" ;
         schema:telephone "250-672-9731" ;
@@ -510,6 +524,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Boundary Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "BDH" ;
         plis:reportingCode "IHBDH" ;
         schema:telephone "250-443-2116" ;
@@ -525,6 +540,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Cariboo Memorial Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "CMH" ;
         plis:reportingCode "IHCMH" ;
         schema:telephone "250-392-8215" ;
@@ -540,6 +556,7 @@ plis:scene {
         a plis:CommunityHealthCentre ;
         schema:name "Castlegar & District Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "CDH" ;
         plis:reportingCode "IHCDH" ;
         schema:telephone "250-365-7711" ;
@@ -555,6 +572,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Chase & District Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "CDF" ;
         plis:reportingCode "IHCDF" ;
         schema:telephone "250-679-1400" ;
@@ -570,6 +588,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "100 Mile & District General Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "OMH" ;
         plis:reportingCode "IHOMH" ;
         schema:telephone "250-395-7600" ;
@@ -585,6 +604,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Creston Valley Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "CVH" ;
         plis:reportingCode "IHCVH" ;
         schema:telephone "250-428-3828" ;
@@ -600,6 +620,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Dr Helmcken Memorial Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "DHH" ;
         plis:reportingCode "IHDHH" ;
         schema:telephone "250-674-2244" ;
@@ -615,6 +636,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "East Kootenay Regional Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "EKH" ;
         plis:reportingCode "IHEKH" ;
         schema:telephone "250-489-6443" ;
@@ -630,6 +652,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Elk Valley Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "EVH" ;
         plis:reportingCode "IHEVH" ;
         schema:telephone "250-423-4453" ;
@@ -645,6 +668,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Elkford Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "EHC" ;
         plis:reportingCode "IHEHC" ;
         schema:telephone "250-865-2247" ;
@@ -660,6 +684,7 @@ plis:scene {
         a plis:CommunityHealthCentre ;
         schema:name "Enderby Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "EDC" ;
         plis:reportingCode "IHEDC" ;
         schema:telephone "250-838-2452" ;
@@ -675,6 +700,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Golden Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "GDH" ;
         plis:reportingCode "IHGDH" ;
         schema:telephone "250-344-3040" ;
@@ -690,6 +716,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Invermere and District Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IDH" ;
         plis:reportingCode "IHIDH" ;
         schema:telephone "250-342-2321" ;
@@ -705,6 +732,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Lillooet Hospital and Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "LIH" ;
         plis:reportingCode "IHLIH" ;
         schema:telephone "250-256-1301" ;
@@ -720,6 +748,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Sparwood Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "SPE" ;
         plis:reportingCode "IHSPE" ;
         schema:telephone "250-425-6212" ;
@@ -735,6 +764,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "St. Bartholomew's Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "SBH" ;
         plis:reportingCode "IHSBH" ;
         schema:telephone "250-455-2221" ;
@@ -750,6 +780,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Summerland Memorial Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "SGH" ;
         plis:reportingCode "IHSGH" ;
         schema:telephone "250-404-8010" ;
@@ -765,6 +796,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Vernon Jubilee Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "VJH" ;
         plis:reportingCode "IHVJH" ;
         schema:telephone "250-558-1342" ;
@@ -780,6 +812,7 @@ plis:scene {
         a plis:CommunityHealthCentre ;
         schema:name "Victorian Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "VHK" ;
         plis:reportingCode "IHVHK" ;
         schema:telephone "250-353-2291" ;
@@ -795,6 +828,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Logan Lake Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHLLC" ;
         schema:telephone "250-523-9414" ;
         schema:address [
@@ -809,6 +843,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Nicola Valley Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHNVH" ;
         schema:telephone "250-378-2242" ;
         schema:address [
@@ -823,6 +858,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Princeton General Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHPGH" ;
         schema:telephone "250-295-4414" ;
         schema:address [
@@ -837,6 +873,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Penticton Regional Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHPRH" ;
         schema:telephone "250-492-9014" ;
         schema:address [
@@ -851,6 +888,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Pleasant Valley Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHPVC" ;
         schema:telephone "250-546-4739" ;
         schema:address [
@@ -865,6 +903,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Queen Victoria Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHQVH" ;
         schema:telephone "250-837-2131" ;
         schema:address [
@@ -879,6 +918,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Slocan Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHSCH" ;
         schema:telephone "250-358-7911" ;
         schema:address [
@@ -893,6 +933,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Shuswap Lake Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHSLH" ;
         schema:telephone "250-833-3600" ;
         schema:address [
@@ -907,6 +948,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "South Okanagan General Hospital" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHSOG" ;
         schema:telephone "250-498-5015" ;
         schema:address [
@@ -921,6 +963,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "South Similkameen Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHSSH" ;
         schema:telephone "250-499-3005" ;
         schema:address [
@@ -932,13 +975,21 @@ plis:scene {
         ] .
 
     #############################################################
-    # CANONICAL FACILITIES - FRASER HEALTH
+    # CANONICAL FACILITIES AND REPORTING DOMAIN - FRASER HEALTH
     #############################################################
+
+    plis:FHReportingDomain
+        a plis:ReportingDomain ;
+        schema:name "Fraser Health Reporting Domain" ;
+        schema:memberOf plis:FraserHealth ;
+        plis:identifierSystem
+            plis:FraserHealthIdentifierSystem .
 
     plis:facility-ARH
         a plis:Hospital ;
         schema:name "Abbotsford Regional Hospital and Cancer Centre" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "ARH" ;
         schema:telephone "604-851-4700 x646518" ;
         schema:address [
@@ -953,6 +1004,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Burnaby Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "BH" ;
         schema:telephone "604-412-6245" ;
         schema:address [
@@ -967,6 +1019,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Chilliwack General Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "CGH" ;
         plis:reportingCode "HV" ;
         schema:telephone "604-795-4108" ;
@@ -982,6 +1035,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Delta Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "DH" ;
         schema:telephone "604-940-3431" ;
         schema:address [
@@ -996,6 +1050,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Eagle Ridge Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "ERH" ;
         schema:telephone "604-461-2022 x543140" ;
         schema:address [
@@ -1010,6 +1065,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Fraser Canyon Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "FCH" ;
         schema:telephone "604-860-7702" ;
         schema:address [
@@ -1024,6 +1080,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Langley Memorial Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "LMH" ;
         schema:telephone "604-534-4121 x745387" ;
         schema:address [
@@ -1038,6 +1095,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Mission Memorial Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "MMH" ;
         schema:telephone "604-814-5115" ;
         schema:address [
@@ -1052,6 +1110,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Peace Arch Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "PAH" ;
         schema:telephone "604-535-4502" ;
         schema:address [
@@ -1066,6 +1125,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Royal Columbian Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "RCH" ;
         schema:telephone "604-520-4300" ;
         schema:address [
@@ -1080,6 +1140,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Ridge Meadows Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "RMH" ;
         schema:telephone "604-463-1802" ;
         schema:address [
@@ -1094,6 +1155,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Surrey Memorial Hospital" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "SMH" ;
         schema:telephone "604-588-3324" ;
         schema:address [
@@ -1108,6 +1170,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Jim Pattison Outpatient Care and Surgery Centre" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "SCSC" ;
         schema:telephone "604-582-4550" ;
         schema:address [
@@ -1122,12 +1185,24 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Fellburn Care Centre" ;
         schema:memberOf plis:FraserHealth ;
+        plis:memberOfReportingDomain plis:FHReportingDomain ;
         plis:reportingCode "FCC" ;
         schema:address [
             a schema:PostalAddress ;
             schema:addressLocality "Burnaby" ;
             schema:addressRegion "BC"
         ] .
+
+    #############################################################
+    # CANONICAL REPORTING DOMAIN - NORTHERN HEALTH
+    #############################################################
+
+    plis:NHReportingDomain
+        a plis:ReportingDomain ;
+        schema:name "Northern Health Reporting Domain" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:identifierSystem
+            plis:NorthernHealthIdentifierSystem .
 
     #############################################################
     # CANONICAL FACILITIES - NORTHERN HEALTH - NORTH CENTRAL
@@ -1137,6 +1212,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "University Hospital of Northern BC" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Pr George RH" ;
         schema:telephone "250-565-2000" ;
         schema:address [
@@ -1151,6 +1227,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "St. John Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Vhf-St John H" ;
         schema:telephone "250-567-2211" ;
         schema:address [
@@ -1165,6 +1242,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Fraser Lake Community Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Fraser Lake CHC" ;
         schema:telephone "250-699-7742" ;
         schema:address [
@@ -1179,6 +1257,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Stuart Lake Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Stuart Lake H" ;
         schema:telephone "250-996-8201" ;
         schema:address [
@@ -1193,6 +1272,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Mackenzie & District Hospital & Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Mackenzie DH" ;
         schema:telephone "250-997-3263" ;
         schema:address [
@@ -1207,6 +1287,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "McBride & District Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "McBride DH" ;
         schema:telephone "250-569-2251" ;
         schema:address [
@@ -1221,6 +1302,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Valemount Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Valemount HC" ;
         schema:telephone "250-566-9138" ;
         schema:address [
@@ -1235,6 +1317,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "GR Baker Memorial Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "GR Baker MH" ;
         schema:telephone "250-985-5600" ;
         schema:address [
@@ -1253,10 +1336,10 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Bulkley Valley District Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "BulkleyValleyDH" ;
         schema:telephone "250-847-2611" ;
         schema:address [
-        a schema:PostalAddress ;
             a schema:PostalAddress ;
             schema:streetAddress "3950 8th Avenue" ;
             schema:addressLocality "Smithers" ;
@@ -1268,6 +1351,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Houston Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Houston HC" ;
         schema:telephone "250-845-2294" ;
         schema:address [
@@ -1282,6 +1366,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Wrinch Memorial Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Wrinch MH" ;
         schema:telephone "250-842-5211" ;
         schema:address [
@@ -1296,6 +1381,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Mills Memorial Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Mills MH" ;
         schema:telephone "250-635-2211" ;
         schema:address [
@@ -1310,6 +1396,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Kitimat General Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Kitimat GH" ;
         schema:telephone "250-632-2121" ;
         schema:address [
@@ -1324,6 +1411,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Prince Rupert Regional Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "PrinceRupert RH" ;
         schema:telephone "250-624-2171" ;
         schema:address [
@@ -1338,6 +1426,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Stewart Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Stewart HC" ;
         schema:telephone "250-636-2221" ;
         schema:address [
@@ -1352,6 +1441,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Northern Haida Gwaii Hospital and Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Masset H" ;
         schema:telephone "250-626-4700" ;
         schema:address [
@@ -1366,6 +1456,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Haida Gwaii Hospital and Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "QCI GH" ;
         schema:telephone "250-559-4300" ;
         schema:address [
@@ -1384,6 +1475,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Chetwynd General Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Chetwynd GH" ;
         schema:telephone "250-788-2236" ;
         schema:address [
@@ -1398,6 +1490,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Dawson Creek & District Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Dawson Creek DH" ;
         schema:telephone "250-782-8501" ;
         schema:address [
@@ -1412,6 +1505,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Fort Nelson General Hospital" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Ft Nelson GH" ;
         schema:telephone "250-774-8100" ;
         schema:address [
@@ -1426,6 +1520,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Fort St John Hospital & Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Ft St John H" ;
         schema:telephone "250-262-5200" ;
         schema:address [
@@ -1440,6 +1535,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Hudson's Hope Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Hudsons Hope HC" ;
         schema:telephone "250-783-9991" ;
         schema:address [
@@ -1454,6 +1550,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Tumbler Ridge Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Tumbler Ridge HC" ;
         schema:telephone "250-242-5271" ;
         schema:address [
@@ -1472,6 +1569,7 @@ plis:scene {
         a plis:Hospital ;
         schema:name "Lakes District Hospital & Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "Lakes DH" ;
         schema:telephone "250-692-2400" ;
         schema:address [
@@ -1486,6 +1584,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Stikine Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "DL-Stikine HC" ;
         schema:telephone "250-771-4444" ;
         schema:address [
@@ -1500,6 +1599,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Granisle Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "GRANISLE HC" ;
         schema:telephone "250-697-2251" ;
         schema:address [
@@ -1514,6 +1614,7 @@ plis:scene {
         a plis:HealthCentre ;
         schema:name "Atlin Health Centre" ;
         schema:memberOf plis:NorthernHealth ;
+        plis:memberOfReportingDomain plis:NHReportingDomain ;
         plis:reportingCode "ATLIN HC" ;
         schema:telephone "250-651-7677" ;
         schema:address [
@@ -1552,6 +1653,7 @@ plis:scene {
         a plis:ClinicalProgram ;
         schema:name "Primary Health & Chronic Disease" ;
         schema:memberOf plis:InteriorHealth ;
+        plis:memberOfReportingDomain plis:IHReportingDomain ;
         plis:reportingCode "IHPCP" ;
         plis:reportingCode "IHPCM" ;
         plis:reportingCode "IHPCN" .
@@ -1572,9 +1674,6 @@ rpt:projection {
 
 #################################################################
 # REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
-# Will not work for VHC/STS/PHC domains because they are not 
-# facilities and the query requires:
-#   ?reportingEntity schema:memberOf ?organization
 #################################################################
 
     rpt:FacilityDisciplineFooterLookup
@@ -1589,43 +1688,81 @@ PREFIX plis: <http://plis.hlth.gov.bc.ca/ns#>
 PREFIX rpt:  <http://plis.hlth.gov.bc.ca/reporting#>
 PREFIX schema: <https://schema.org/>
 
-SELECT ?notice ?text
+SELECT DISTINCT ?notice ?text
 WHERE {
 
-    VALUES (?reportingEntity ?discipline) {
-       (<FACILITY_URI> <DISCIPLINE_URI>)
+    VALUES (?root ?extension ?discipline) {
+        (
+            "<OID>"
+            "<EXTENSION>"
+            <DISCIPLINE_URI>
+        )
     }
 
-    {
-        ?reportingEntity schema:memberOf ?organization .
+    #####################################################
+    # Resolve reporting entity
+    #####################################################
 
-        ?config
-            rpt:appliesToReportingEntity ?organization ;
-            rpt:discipline ?discipline ;
-            rpt:includesNotice ?notice .
+    ?reportingEntity
+        plis:reportingCode ?extension .
+
+    {
+        ?reportingEntity
+            plis:memberOfReportingDomain ?reportingDomain .
+
+        ?reportingDomain
+            plis:identifierSystem ?identifierSystem .
     }
     UNION
     {
-        ?reportingEntity plis:memberOfReportingDomain ?reportingDomain .
-        
-        ?config
-            rpt:appliesToReportingEntity ?reportingDomain ;
-            rpt:discipline ?discipline ;
-            rpt:includesNotice ?notice .
-    
+        ?reportingEntity
+            plis:identifierSystem ?identifierSystem .
+    }
+
+    ?identifierSystem
+        schema:identifier ?root .
+
+    #####################################################
+    # Candidate entities
+    #
+    # 1. Reporting entity itself
+    # 2. Reporting domain (if present)
+    #####################################################
+
+    {
+        BIND(?reportingEntity AS ?candidateEntity)
     }
     UNION
     {
-        ?config
-            rpt:appliesToReportingEntity ?reportingEntity ;
-            rpt:includesNotice ?notice .
+        ?reportingEntity
+            plis:memberOfReportingDomain ?candidateEntity .
     }
-    UNION
+
+    #####################################################
+    # Discipline-specific notices
+    #####################################################
+
     {
         ?config
-            rpt:appliesToReportingEntity ?reportingEntity ;
+            rpt:appliesToReportingEntity ?candidateEntity ;
             rpt:discipline ?discipline ;
             rpt:includesNotice ?notice .
+    }
+
+    UNION
+
+    #####################################################
+    # Non-discipline notices
+    #####################################################
+
+    {
+        ?config
+            rpt:appliesToReportingEntity ?candidateEntity ;
+            rpt:includesNotice ?notice .
+
+        FILTER NOT EXISTS {
+            ?config rpt:discipline ?anyDiscipline
+        }
     }
 
     ?notice schema:text ?text .
@@ -2088,7 +2225,7 @@ Inquiries: Valley Medical Laboratories - Vernon
 
     rpt:PHSA-GeneralChemistry
         a rpt:LaboratoryReportingConfiguration ;
-        rpt:appliesToReportingEntity plis:PHSA ;
+        rpt:appliesToReportingEntity plis:PHSALaboratories ;
         rpt:discipline plis:GeneralChemistry ;
         rpt:includesNotice
             rpt:PHSAGeneralChemistryLegend ,
@@ -2096,7 +2233,7 @@ Inquiries: Valley Medical Laboratories - Vernon
 
     rpt:PHSA-Microbiology
         a rpt:LaboratoryReportingConfiguration ;
-        rpt:appliesToReportingEntity plis:PHSA ;
+        rpt:appliesToReportingEntity plis:PHSALaboratories ;
         rpt:discipline plis:Microbiology ;
         rpt:includesNotice
             rpt:PHSAMicrobiologyLegend ,
@@ -2104,7 +2241,7 @@ Inquiries: Valley Medical Laboratories - Vernon
 
     rpt:PHSA-AnatomicPathology
         a rpt:LaboratoryReportingConfiguration ;
-        rpt:appliesToReportingEntity plis:PHSA ;
+        rpt:appliesToReportingEntity plis:PHSALaboratories ;
         rpt:discipline plis:AnatomicPathology ;
         rpt:includesNotice
             rpt:PHSAAvailabilityNotice .
@@ -2115,14 +2252,14 @@ Inquiries: Valley Medical Laboratories - Vernon
 
     rpt:IH-GeneralChemistry
         a rpt:LaboratoryReportingConfiguration ;
-        rpt:appliesToReportingEntity plis:InteriorHealth ;
+        rpt:appliesToReportingEntity plis:IHReportingDomain ;
         rpt:discipline plis:GeneralChemistry ;
         rpt:includesNotice
             rpt:IHAAvailabilityNotice .
 
     rpt:IH-Microbiology
         a rpt:LaboratoryReportingConfiguration ;
-        rpt:appliesToReportingEntity plis:InteriorHealth ;
+        rpt:appliesToReportingEntity plis:IHReportingDomain ;
         rpt:discipline plis:Microbiology ;
         rpt:includesNotice
             rpt:IHAMicrobiologyLegend ,
@@ -2130,7 +2267,7 @@ Inquiries: Valley Medical Laboratories - Vernon
 
     rpt:IH-AnatomicPathology
         a rpt:LaboratoryReportingConfiguration ;
-        rpt:appliesToReportingEntity plis:InteriorHealth ;
+        rpt:appliesToReportingEntity plis:IHReportingDomain ;
         rpt:discipline plis:AnatomicPathology ;
         rpt:includesNotice
             rpt:IHAAnatomicPathologyNotice .
@@ -2142,7 +2279,7 @@ Inquiries: Valley Medical Laboratories - Vernon
     rpt:NH-GeneralChemistry
         a rpt:LaboratoryReportingConfiguration ;
         rpt:appliesToReportingEntity
-            plis:NorthernHealth ;
+            plis:NHReportingDomain ;
         rpt:discipline
             plis:GeneralChemistry ;
         rpt:includesNotice
@@ -2151,7 +2288,7 @@ Inquiries: Valley Medical Laboratories - Vernon
     rpt:NH-Microbiology
         a rpt:LaboratoryReportingConfiguration ;
         rpt:appliesToReportingEntity
-            plis:NorthernHealth ;
+            plis:NHReportingDomain ;
         rpt:discipline
             plis:Microbiology ;
         rpt:includesNotice
@@ -2160,7 +2297,7 @@ Inquiries: Valley Medical Laboratories - Vernon
     rpt:NH-AnatomicPathology
         a rpt:LaboratoryReportingConfiguration ;
         rpt:appliesToReportingEntity
-            plis:NorthernHealth ;
+            plis:NHReportingDomain ;
         rpt:discipline
             plis:AnatomicPathology .
 
