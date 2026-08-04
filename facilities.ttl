@@ -12,7 +12,7 @@
 plis:scene {
 
     plis:ReportingEntity
-    a rdfs:Class ;
+        a rdfs:Class ;
         rdfs:subClassOf
             holon:Holon .
 
