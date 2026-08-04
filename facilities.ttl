@@ -17,7 +17,7 @@ plis:scene {
             holon:Holon .
 
     #############################################################
-    # ORGANIZATIONS
+    # ORGANIZATIONS AND IDENTIFIER SYSTEMS (OIDS)
     #############################################################
 
     plis:PHSA
@@ -27,54 +27,6 @@ plis:scene {
             plis:PHSAIdentifierSystem ,
             plis:PHSANewbornScreeningIdentifierSystem.
 
-    plis:InteriorHealth
-        a holon:OrganizationHolon ;
-        schema:name "Interior Health" ;
-        plis:identifierSystem plis:InteriorHealthIdentifierSystem .
-
-    plis:NorthernHealth
-        a holon:OrganizationHolon ;
-        schema:name "Northern Health" ;
-        plis:identifierSystem plis:NorthernHealthIdentifierSystem .
-
-    plis:FraserHealth
-        a holon:OrganizationHolon ;
-        schema:name "Fraser Health" ;
-        plis:identifierSystem plis:FraserHealthIdentifierSystem .
-
-    plis:IslandHealth
-        a holon:OrganizationHolon ;
-        schema:name "Vancouver Island Health Authority" ;
-        plis:identifierSystem plis:IslandHealthIdentifierSystem .
-
-    plis:VancouverCoastalHealth
-        a holon:OrganizationHolon ;
-        schema:name "Vancouver Coastal Health" ;
-        plis:identifierSystem 
-            plis:VancouverCoastalIdentifierSystemA ,
-            plis:VancouverCoastalIdentifierSystemB .
-
-    plis:ProvidenceHealthCare
-        a holon:OrganizationHolon ;
-        schema:name "Providence Health Care" ;
-        plis:identifierSystem plis:ProvidenceHealthcareIdentifierSystem .
-
-    plis:LifeLabs
-        a holon:OrganizationHolon ;
-        schema:name "LifeLabs" ;
-        plis:identifierSystem
-            plis:LifeLabsIdentifierSystem .
-
-    plis:CanadianBloodServices
-        a holon:OrganizationHolon ;
-        schema:name "Canadian Blood Services" ;
-        plis:identifierSystem
-            plis:CanadianBloodServicesIdentifierSystem .
-
-    #############################################################
-    # IDENTIFIER SYSTEMS
-    #############################################################
-
     plis:PHSAIdentifierSystem
         schema:identifier
             "2.16.840.1.113883.3.301.1.62" .
@@ -83,21 +35,48 @@ plis:scene {
         schema:identifier
             "2.16.840.1.113883.3.301.10.62" .
 
+    plis:InteriorHealth
+        a holon:OrganizationHolon ;
+        schema:name "Interior Health" ;
+        plis:identifierSystem plis:InteriorHealthIdentifierSystem .
+
     plis:InteriorHealthIdentifierSystem
         schema:identifier
             "2.16.840.1.113883.3.277.1.62" .
+
+    plis:NorthernHealth
+        a holon:OrganizationHolon ;
+        schema:name "Northern Health" ;
+        plis:identifierSystem plis:NorthernHealthIdentifierSystem .
 
     plis:NorthernHealthIdentifierSystem
         schema:identifier
             "2.16.840.1.113883.3.523.1.62" .
 
+    plis:FraserHealth
+        a holon:OrganizationHolon ;
+        schema:name "Fraser Health" ;
+        plis:identifierSystem plis:FraserHealthIdentifierSystem .
+
     plis:FraserHealthIdentifierSystem
         schema:identifier
             "2.16.840.1.113883.3.784.1.62" .
 
+    plis:IslandHealth
+        a holon:OrganizationHolon ;
+        schema:name "Vancouver Island Health Authority" ;
+        plis:identifierSystem plis:IslandHealthIdentifierSystem .
+
     plis:IslandHealthIdentifierSystem
         schema:identifier
             "2.16.840.1.113883.3.851.1.62" .
+
+    plis:VancouverCoastalHealth
+        a holon:OrganizationHolon ;
+        schema:name "Vancouver Coastal Health" ;
+        plis:identifierSystem 
+            plis:VancouverCoastalIdentifierSystemA ,
+            plis:VancouverCoastalIdentifierSystemB .
 
     plis:VancouverCoastalIdentifierSystemA
         schema:identifier
@@ -107,13 +86,30 @@ plis:scene {
         schema:identifier
             "2.16.840.1.113883.3.1343.2.62" .
 
+    plis:ProvidenceHealthCare
+        a holon:OrganizationHolon ;
+        schema:name "Providence Health Care" ;
+        plis:identifierSystem plis:ProvidenceHealthcareIdentifierSystem .
+
     plis:ProvidenceHealthcareIdentifierSystem
         schema:identifier
             "2.16.840.1.113883.3.1343.1.62" .
 
+    plis:LifeLabs
+        a holon:OrganizationHolon ;
+        schema:name "LifeLabs" ;
+        plis:identifierSystem
+            plis:LifeLabsIdentifierSystem .
+
     plis:LifeLabsIdentifierSystem
         schema:identifier
             "2.16.840.1.113883.3.1772.1.62" .
+
+    plis:CanadianBloodServices
+        a holon:OrganizationHolon ;
+        schema:name "Canadian Blood Services" ;
+        plis:identifierSystem
+            plis:CanadianBloodServicesIdentifierSystem .
 
     plis:CanadianBloodServicesIdentifierSystem
         schema:identifier
@@ -146,11 +142,6 @@ plis:scene {
         a rdfs:Class ;
         rdfs:subClassOf
             plis:ReportingEntity .
-
-    plis:RegionalHospital
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:Hospital .
 
     plis:HealthCentre
         a rdfs:Class ;
@@ -284,6 +275,127 @@ plis:scene {
             ] .
 
     #############################################################
+    # FACILITIES - HOSPITALS - ISLAND HEALTH - EXPERIMENTAL
+    #############################################################
+
+    :RoyalJubileeHospital
+        a :Hospital ;
+        schema:name "Royal Jubilee Hospital" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-370-8000" ;
+        schema:address [
+            schema:streetAddress "1952 Bay Street" ;
+            schema:addressLocality "Victoria" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V8R 1J8" ;
+        ] .
+
+    :VictoriaGeneralHospital
+        a :Hospital ;
+        schema:name "Victoria General Hospital" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-727-4212" ;
+        schema:address [
+            schema:streetAddress "1 Hospital Way" ;
+            schema:addressLocality "Victoria" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V8Z 6R5" ;
+        ] .
+
+    :NanaimoRegionalGeneralHospital
+        a :Hospital ;
+        schema:name "Nanaimo Regional General Hospital" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-755-7691" ;
+        schema:address [
+            schema:streetAddress "1200 Dufferin Crescent" ;
+            schema:addressLocality "Nanaimo" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V9S 2B7" ;
+        ] .
+
+    :CowichanDistrictHospital
+        a :Hospital ;
+        schema:name "Cowichan District Hospital" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-737-2030" ;
+        schema:address [
+            schema:streetAddress "3045 Gibbins Road" ;
+            schema:addressLocality "Duncan" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V9L 1E5" ;
+        ] .
+
+    :CampbellRiverHospital
+        a :Hospital ;
+        schema:name "Campbell River Hospital" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-850-2660" ;
+        schema:address [
+            schema:streetAddress "375 Second Avenue" ;
+            schema:addressLocality "Campbell River" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V9W 3V1" ;
+        ] .
+
+    :NorthIslandHospitalComoxValley
+        a :Hospital ;
+        schema:name "North Island Hospital - Comox Valley" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-331-5900" ;
+        schema:address [
+            schema:streetAddress "1475 Lerwick Road" ;
+            schema:addressLocality "Courtenay" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V9N 0B9" ;
+        ] .
+
+    :NorthIslandHospitalCampbellRiver
+        a :Hospital ;
+        schema:name "North Island Hospital - Campbell River" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-850-2660" ;
+        schema:address [
+            schema:streetAddress "375 Second Avenue" ;
+            schema:addressLocality "Campbell River" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V9W 3V1" ;
+        ] .
+
+    :WestCoastGeneralHospital
+        a :Hospital ;
+        schema:name "West Coast General Hospital" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-724-8281" ;
+        schema:address [
+            schema:streetAddress "3949 Port Alberni Highway" ;
+            schema:addressLocality "Port Alberni" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V9Y 4S1" ;
+        ] .
+
+    PLIS:LadyMintoHospital
+        a plis:Hospital ;
+        schema:name "Lady Minto Hospital" ;
+        schema:memberOf plis:IslandHealth ;
+        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
+        schema:telephone "+1-250-537-4291" ;
+        schema:address [
+            schema:streetAddress "251 Cormorant Street" ;
+            schema:addressLocality "Salt Spring Island" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V8K 2B4" ;
+        ] .
+
+    #############################################################
     # CANONICAL FACILITIES - INTERIOR HEALTH
     #############################################################
 
@@ -317,7 +429,7 @@ plis:scene {
         ] .
 
     plis:facility-KBH
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "Kootenay Boundary Regional Hospital" ;
         schema:memberOf plis:InteriorHealth ;
         plis:reportingCode "KBH" ;
@@ -331,7 +443,7 @@ plis:scene {
         ] .
 
     plis:facility-RIH
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "Royal Inland Hospital" ;
         schema:memberOf plis:InteriorHealth ;
         plis:reportingCode "RIH" ;
@@ -485,7 +597,7 @@ plis:scene {
         ] .
 
     plis:facility-EKH
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "East Kootenay Regional Hospital" ;
         schema:memberOf plis:InteriorHealth ;
         plis:reportingCode "EKH" ;
@@ -692,7 +804,7 @@ plis:scene {
         ] .
 
     plis:facility-PRH
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "Penticton Regional Hospital" ;
         schema:memberOf plis:InteriorHealth ;
         plis:reportingCode "IHPRH" ;
@@ -787,7 +899,7 @@ plis:scene {
     #############################################################
 
     plis:facility-ARH
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "Abbotsford Regional Hospital and Cancer Centre" ;
         schema:memberOf plis:FraserHealth ;
         plis:reportingCode "ARH" ;
@@ -905,7 +1017,7 @@ plis:scene {
         ] .
 
     plis:facility-RCH
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "Royal Columbian Hospital" ;
         schema:memberOf plis:FraserHealth ;
         plis:reportingCode "RCH" ;
@@ -931,7 +1043,7 @@ plis:scene {
         ] .
 
     plis:facility-SMH
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "Surrey Memorial Hospital" ;
         schema:memberOf plis:FraserHealth ;
         plis:reportingCode "SMH" ;
@@ -971,7 +1083,7 @@ plis:scene {
     #############################################################
 
     plis:facility-PrinceGeorge
-        a plis:RegionalHospital ;
+        a plis:Hospital ;
         schema:name "University Hospital of Northern BC" ;
         schema:memberOf plis:NorthernHealth ;
         plis:reportingCode "Pr George RH" ;
@@ -1144,7 +1256,7 @@ plis:scene {
             ] .
 
         plis:facility-PrinceRupert
-            a plis:RegionalHospital ;
+            a plis:Hospital ;
             schema:name "Prince Rupert Regional Hospital" ;
             schema:memberOf plis:NorthernHealth ;
             plis:reportingCode "PrinceRupert RH" ;
