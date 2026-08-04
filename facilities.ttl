@@ -16,6 +16,64 @@ plis:scene {
         rdfs:subClassOf
             holon:Holon .
 
+    plis:ReportingDomain
+        a rdfs:Class ;
+        rdfs:subClassOf
+            plis:ReportingEntity .
+
+    plis:memberOfReportingDomain
+        a rdf:Property ;
+        rdfs:domain plis:ReportingEntity ;
+        rdfs:range plis:ReportingDomain .
+
+    #############################################################
+    # REPORTING ENTITY TYPES
+    #############################################################
+
+    plis:Hospital
+        a rdfs:Class ;
+        rdfs:subClassOf
+            plis:ReportingEntity .
+
+    plis:HealthCentre
+        a rdfs:Class ;
+        rdfs:subClassOf
+            plis:ReportingEntity .
+
+    plis:CommunityHealthCentre
+        a rdfs:Class ;
+        rdfs:subClassOf
+            plis:HealthCentre .
+
+    plis:LaboratoryService
+        a rdfs:Class ;
+        rdfs:subClassOf
+            plis:ReportingEntity .
+
+    plis:ClinicalProgram
+        a rdfs:Class ;
+        rdfs:subClassOf
+            plis:ReportingEntity .
+
+    #############################################################
+    # DISCIPLINES
+    #############################################################
+
+    plis:Discipline
+        a rdfs:Class .
+
+    plis:GeneralChemistry
+        a plis:Discipline ;
+        schema:name "General Chemistry" .
+
+    plis:Microbiology
+        a plis:Discipline ;
+        schema:name "Microbiology" .
+
+    plis:AnatomicPathology
+        a plis:Discipline ;
+        schema:name "Anatomic Pathology" .
+
     #############################################################
     # ORGANIZATIONS AND IDENTIFIER SYSTEMS (OIDS)
     #############################################################
@@ -116,59 +174,6 @@ plis:scene {
             "2.16.840.1.113883.3.3565.1.62" .
 
     #############################################################
-    # DISCIPLINES
-    #############################################################
-
-    plis:Discipline
-        a rdfs:Class .
-
-    plis:GeneralChemistry
-        a plis:Discipline ;
-        schema:name "General Chemistry" .
-
-    plis:Microbiology
-        a plis:Discipline ;
-        schema:name "Microbiology" .
-
-    plis:AnatomicPathology
-        a plis:Discipline ;
-        schema:name "Anatomic Pathology" .
-
-    #############################################################
-    # REPORTING ENTITY TYPES
-    #############################################################
-
-    plis:Hospital
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:ReportingEntity .
-
-    plis:HealthCentre
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:ReportingEntity .
-
-    plis:CommunityHealthCentre
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:HealthCentre .
-
-    plis:LaboratoryService
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:ReportingEntity .
-
-    plis:ClinicalProgram
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:ReportingEntity .
-
-    plis:ReportingDomain
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:ReportingEntity .
-
-    #############################################################
     # VANCOUVER COASTAL / PROVIDENCE / PHSA REPORTING ENTITIES
     #############################################################
 
@@ -254,141 +259,137 @@ plis:scene {
     # CANONICAL REPORTING DOMAIN - ISLAND HEALTH
     #############################################################
 
-        plis:VIHACNReportingDomain
-            a plis:ReportingDomain ;
-            schema:name
-                "VIHA Department of Laboratory Medicine, Pathology and Medical Genetics" ;
-            schema:memberOf
-                plis:IslandHealth ;
-            plis:reportingCode
-                "VIHA-CN" ;
-            plis:identifierSystem
-                plis:IslandHealthIdentifierSystem ;
-            schema:telephone
-                "250-370-8355" ,
-                "1-866-370-8355" ;
-            schema:address [
-                schema:streetAddress "1952 Bay Street" ;
-                schema:addressLocality "Victoria" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V8R 1J8"
-            ] .
+    plis:VIHACNReportingDomain
+        a plis:ReportingDomain ;
+        schema:name
+            "VIHA Department of Laboratory Medicine, Pathology and Medical Genetics" ;
+        schema:memberOf
+            plis:IslandHealth ;
+        plis:reportingCode
+            "VIHA-CN" ;
+        plis:identifierSystem
+            plis:IslandHealthIdentifierSystem ;
+        schema:telephone
+            "250-370-8355" ,
+            "1-866-370-8355" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "1952 Bay Street" ;
+            schema:addressLocality "Victoria" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V8R 1J8"
+        ] .
 
     #############################################################
     # FACILITIES - HOSPITALS - ISLAND HEALTH - EXPERIMENTAL
     #############################################################
 
-    :RoyalJubileeHospital
-        a :Hospital ;
+    plis:RoyalJubileeHospital
+        a plis:Hospital ;
         schema:name "Royal Jubilee Hospital" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-370-8000" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1952 Bay Street" ;
             schema:addressLocality "Victoria" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V8R 1J8" ;
         ] .
 
-    :VictoriaGeneralHospital
-        a :Hospital ;
+    plis:VictoriaGeneralHospital
+        a plis:Hospital ;
         schema:name "Victoria General Hospital" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-727-4212" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1 Hospital Way" ;
             schema:addressLocality "Victoria" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V8Z 6R5" ;
         ] .
 
-    :NanaimoRegionalGeneralHospital
-        a :Hospital ;
+    plis:NanaimoRegionalGeneralHospital
+        a plis:Hospital ;
         schema:name "Nanaimo Regional General Hospital" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-755-7691" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1200 Dufferin Crescent" ;
             schema:addressLocality "Nanaimo" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V9S 2B7" ;
         ] .
 
-    :CowichanDistrictHospital
-        a :Hospital ;
+    plis:CowichanDistrictHospital
+        a plis:Hospital ;
         schema:name "Cowichan District Hospital" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-737-2030" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "3045 Gibbins Road" ;
             schema:addressLocality "Duncan" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V9L 1E5" ;
         ] .
 
-    :CampbellRiverHospital
-        a :Hospital ;
-        schema:name "Campbell River Hospital" ;
-        schema:memberOf plis:IslandHealth ;
-        plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
-        schema:telephone "+1-250-850-2660" ;
-        schema:address [
-            schema:streetAddress "375 Second Avenue" ;
-            schema:addressLocality "Campbell River" ;
-            schema:addressRegion "BC" ;
-            schema:postalCode "V9W 3V1" ;
-        ] .
-
-    :NorthIslandHospitalComoxValley
-        a :Hospital ;
+    plis:NorthIslandHospitalComoxValley
+        a plis:Hospital ;
         schema:name "North Island Hospital - Comox Valley" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-331-5900" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1475 Lerwick Road" ;
             schema:addressLocality "Courtenay" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V9N 0B9" ;
         ] .
 
-    :NorthIslandHospitalCampbellRiver
-        a :Hospital ;
+    plis:NorthIslandHospitalCampbellRiver
+        a plis:Hospital ;
         schema:name "North Island Hospital - Campbell River" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-850-2660" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "375 Second Avenue" ;
             schema:addressLocality "Campbell River" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V9W 3V1" ;
         ] .
 
-    :WestCoastGeneralHospital
-        a :Hospital ;
+    plis:WestCoastGeneralHospital
+        a plis:Hospital ;
         schema:name "West Coast General Hospital" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-724-8281" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "3949 Port Alberni Highway" ;
             schema:addressLocality "Port Alberni" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V9Y 4S1" ;
         ] .
 
-    PLIS:LadyMintoHospital
+    plis:LadyMintoHospital
         a plis:Hospital ;
         schema:name "Lady Minto Hospital" ;
         schema:memberOf plis:IslandHealth ;
         plis:memberOfReportingDomain plis:VIHACNReportingDomain ;
         schema:telephone "+1-250-537-4291" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "251 Cormorant Street" ;
             schema:addressLocality "Salt Spring Island" ;
             schema:addressRegion "BC" ;
@@ -408,6 +409,7 @@ plis:scene {
         plis:reportingCode "IHALR" ;
         schema:telephone "250-265-3636" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "97 3rd Avenue" ;
             schema:addressLocality "Nakusp" ;
             schema:addressRegion "BC" ;
@@ -422,6 +424,7 @@ plis:scene {
         plis:reportingCode "IHKGH" ;
         schema:telephone "250-862-4000" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "2268 Pandosy Street" ;
             schema:addressLocality "Kelowna" ;
             schema:addressRegion "BC" ;
@@ -436,6 +439,7 @@ plis:scene {
         plis:reportingCode "IHKBH" ;
         schema:telephone "250-368-3311" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1200 Hospital Bench" ;
             schema:addressLocality "Trail" ;
             schema:addressRegion "BC" ;
@@ -450,6 +454,7 @@ plis:scene {
         plis:reportingCode "IHRIH" ;
         schema:telephone "250-374-5111" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "311 Columbia Street" ;
             schema:addressLocality "Kamloops" ;
             schema:addressRegion "BC" ;
@@ -464,6 +469,7 @@ plis:scene {
         plis:reportingCode "IHKLH" ;
         schema:telephone "250-352-3111" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "3 View Street" ;
             schema:addressLocality "Nelson" ;
             schema:addressRegion "BC" ;
@@ -478,6 +484,7 @@ plis:scene {
         plis:reportingCode "IHAHH" ;
         schema:telephone "250-453-2211" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "700 Elm Street" ;
             schema:addressLocality "Ashcroft" ;
             schema:addressRegion "BC" ;
@@ -492,6 +499,7 @@ plis:scene {
         plis:reportingCode "IHBAC" ;
         schema:telephone "250-672-9731" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "537-4521 Barriere Town Road" ;
             schema:addressLocality "Barriere" ;
             schema:addressRegion "BC" ;
@@ -506,6 +514,7 @@ plis:scene {
         plis:reportingCode "IHBDH" ;
         schema:telephone "250-443-2116" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "7649 22nd Street" ;
             schema:addressLocality "Grand Forks" ;
             schema:addressRegion "BC" ;
@@ -520,6 +529,7 @@ plis:scene {
         plis:reportingCode "IHCMH" ;
         schema:telephone "250-392-8215" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "517 North 6th Avenue" ;
             schema:addressLocality "Williams Lake" ;
             schema:addressRegion "BC" ;
@@ -534,6 +544,7 @@ plis:scene {
         plis:reportingCode "IHCDH" ;
         schema:telephone "250-365-7711" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "709 10th Street" ;
             schema:addressLocality "Castlegar" ;
             schema:addressRegion "BC" ;
@@ -548,6 +559,7 @@ plis:scene {
         plis:reportingCode "IHCDF" ;
         schema:telephone "250-679-1400" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "825 Thompson Avenue" ;
             schema:addressLocality "Chase" ;
             schema:addressRegion "BC" ;
@@ -562,6 +574,7 @@ plis:scene {
         plis:reportingCode "IHOMH" ;
         schema:telephone "250-395-7600" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "555 Cedar Avenue South" ;
             schema:addressLocality "100 Mile House" ;
             schema:addressRegion "BC" ;
@@ -576,6 +589,7 @@ plis:scene {
         plis:reportingCode "IHCVH" ;
         schema:telephone "250-428-3828" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "312 15th Avenue" ;
             schema:addressLocality "Creston" ;
             schema:addressRegion "BC" ;
@@ -590,6 +604,7 @@ plis:scene {
         plis:reportingCode "IHDHH" ;
         schema:telephone "250-674-2244" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "640 Park Drive" ;
             schema:addressLocality "Clearwater" ;
             schema:addressRegion "BC" ;
@@ -604,6 +619,7 @@ plis:scene {
         plis:reportingCode "IHEKH" ;
         schema:telephone "250-489-6443" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "13 24th Avenue North" ;
             schema:addressLocality "Cranbrook" ;
             schema:addressRegion "BC" ;
@@ -618,6 +634,7 @@ plis:scene {
         plis:reportingCode "IHEVH" ;
         schema:telephone "250-423-4453" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1501 5th Avenue" ;
             schema:addressLocality "Fernie" ;
             schema:addressRegion "BC" ;
@@ -632,6 +649,7 @@ plis:scene {
         plis:reportingCode "IHEHC" ;
         schema:telephone "250-865-2247" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "212 Alpine Way" ;
             schema:addressLocality "Elkford" ;
             schema:addressRegion "BC" ;
@@ -646,6 +664,7 @@ plis:scene {
         plis:reportingCode "IHEDC" ;
         schema:telephone "250-838-2452" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "707 3rd Avenue" ;
             schema:addressLocality "Enderby" ;
             schema:addressRegion "BC" ;
@@ -660,6 +679,7 @@ plis:scene {
         plis:reportingCode "IHGDH" ;
         schema:telephone "250-344-3040" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "835 9th Avenue South" ;
             schema:addressLocality "Golden" ;
             schema:addressRegion "BC" ;
@@ -674,6 +694,7 @@ plis:scene {
         plis:reportingCode "IHIDH" ;
         schema:telephone "250-342-2321" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "850 10th Avenue" ;
             schema:addressLocality "Invermere" ;
             schema:addressRegion "BC" ;
@@ -688,6 +709,7 @@ plis:scene {
         plis:reportingCode "IHLIH" ;
         schema:telephone "250-256-1301" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "951 Murray Street" ;
             schema:addressLocality "Lillooet" ;
             schema:addressRegion "BC" ;
@@ -702,6 +724,7 @@ plis:scene {
         plis:reportingCode "IHSPE" ;
         schema:telephone "250-425-6212" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "570 Pine Avenue" ;
             schema:addressLocality "Sparwood" ;
             schema:addressRegion "BC" ;
@@ -716,6 +739,7 @@ plis:scene {
         plis:reportingCode "IHSBH" ;
         schema:telephone "250-455-2221" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "531 Main Street" ;
             schema:addressLocality "Lytton" ;
             schema:addressRegion "BC" ;
@@ -730,6 +754,7 @@ plis:scene {
         plis:reportingCode "IHSGH" ;
         schema:telephone "250-404-8010" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "12815 Atkinson Road" ;
             schema:addressLocality "Summerland" ;
             schema:addressRegion "BC" ;
@@ -744,6 +769,7 @@ plis:scene {
         plis:reportingCode "IHVJH" ;
         schema:telephone "250-558-1342" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "2101 32nd Street" ;
             schema:addressLocality "Vernon" ;
             schema:addressRegion "BC" ;
@@ -758,6 +784,7 @@ plis:scene {
         plis:reportingCode "IHVHK" ;
         schema:telephone "250-353-2291" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "673 A Avenue" ;
             schema:addressLocality "Kaslo" ;
             schema:addressRegion "BC" ;
@@ -771,6 +798,7 @@ plis:scene {
         plis:reportingCode "IHLLC" ;
         schema:telephone "250-523-9414" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "5 Beryl Drive" ;
             schema:addressLocality "Logan Lake" ;
             schema:addressRegion "BC" ;
@@ -784,6 +812,7 @@ plis:scene {
         plis:reportingCode "IHNVH" ;
         schema:telephone "250-378-2242" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "3451 Voght Street" ;
             schema:addressLocality "Merritt" ;
             schema:addressRegion "BC" ;
@@ -797,6 +826,7 @@ plis:scene {
         plis:reportingCode "IHPGH" ;
         schema:telephone "250-295-4414" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "98 Ridgewood Drive" ;
             schema:addressLocality "Princeton" ;
             schema:addressRegion "BC" ;
@@ -810,6 +840,7 @@ plis:scene {
         plis:reportingCode "IHPRH" ;
         schema:telephone "250-492-9014" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "550 Carmi Avenue" ;
             schema:addressLocality "Penticton" ;
             schema:addressRegion "BC" ;
@@ -823,6 +854,7 @@ plis:scene {
         plis:reportingCode "IHPVC" ;
         schema:telephone "250-546-4739" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "3800 Patten Drive" ;
             schema:addressLocality "Armstrong" ;
             schema:addressRegion "BC" ;
@@ -836,6 +868,7 @@ plis:scene {
         plis:reportingCode "IHQVH" ;
         schema:telephone "250-837-2131" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1200 Newlands Road" ;
             schema:addressLocality "Revelstoke" ;
             schema:addressRegion "BC" ;
@@ -849,6 +882,7 @@ plis:scene {
         plis:reportingCode "IHSCH" ;
         schema:telephone "250-358-7911" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "401 Galena Avenue" ;
             schema:addressLocality "New Denver" ;
             schema:addressRegion "BC" ;
@@ -862,6 +896,7 @@ plis:scene {
         plis:reportingCode "IHSLH" ;
         schema:telephone "250-833-3600" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "601 10th Street N.E." ;
             schema:addressLocality "Salmon Arm" ;
             schema:addressRegion "BC" ;
@@ -875,6 +910,7 @@ plis:scene {
         plis:reportingCode "IHSOG" ;
         schema:telephone "250-498-5015" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "7139 362nd Avenue" ;
             schema:addressLocality "Oliver" ;
             schema:addressRegion "BC" ;
@@ -888,6 +924,7 @@ plis:scene {
         plis:reportingCode "IHSSH" ;
         schema:telephone "250-499-3005" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "700 Third Street" ;
             schema:addressLocality "Keremeos" ;
             schema:addressRegion "BC" ;
@@ -905,6 +942,7 @@ plis:scene {
         plis:reportingCode "ARH" ;
         schema:telephone "604-851-4700 x646518" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "32900 Marshall Road" ;
             schema:addressLocality "Abbotsford" ;
             schema:addressRegion "BC" ;
@@ -918,6 +956,7 @@ plis:scene {
         plis:reportingCode "BH" ;
         schema:telephone "604-412-6245" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "3935 Kincaid Street" ;
             schema:addressLocality "Burnaby" ;
             schema:addressRegion "BC" ;
@@ -932,6 +971,7 @@ plis:scene {
         plis:reportingCode "HV" ;
         schema:telephone "604-795-4108" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "45600 Menholm Road" ;
             schema:addressLocality "Chilliwack" ;
             schema:addressRegion "BC" ;
@@ -945,6 +985,7 @@ plis:scene {
         plis:reportingCode "DH" ;
         schema:telephone "604-940-3431" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "5800 Mountain View Boulevard" ;
             schema:addressLocality "Delta" ;
             schema:addressRegion "BC" ;
@@ -958,6 +999,7 @@ plis:scene {
         plis:reportingCode "ERH" ;
         schema:telephone "604-461-2022 x543140" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "475 Guildford Way" ;
             schema:addressLocality "Port Moody" ;
             schema:addressRegion "BC" ;
@@ -971,6 +1013,7 @@ plis:scene {
         plis:reportingCode "FCH" ;
         schema:telephone "604-860-7702" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1275 7th Avenue" ;
             schema:addressLocality "Hope" ;
             schema:addressRegion "BC" ;
@@ -984,6 +1027,7 @@ plis:scene {
         plis:reportingCode "LMH" ;
         schema:telephone "604-534-4121 x745387" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "22051 Fraser Highway" ;
             schema:addressLocality "Langley" ;
             schema:addressRegion "BC" ;
@@ -997,6 +1041,7 @@ plis:scene {
         plis:reportingCode "MMH" ;
         schema:telephone "604-814-5115" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "7324 Hurd Street" ;
             schema:addressLocality "Mission" ;
             schema:addressRegion "BC" ;
@@ -1010,6 +1055,7 @@ plis:scene {
         plis:reportingCode "PAH" ;
         schema:telephone "604-535-4502" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "15521 Russell Avenue" ;
             schema:addressLocality "White Rock" ;
             schema:addressRegion "BC" ;
@@ -1023,6 +1069,7 @@ plis:scene {
         plis:reportingCode "RCH" ;
         schema:telephone "604-520-4300" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "330 East Columbia Street" ;
             schema:addressLocality "New Westminster" ;
             schema:addressRegion "BC" ;
@@ -1036,6 +1083,7 @@ plis:scene {
         plis:reportingCode "RMH" ;
         schema:telephone "604-463-1802" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "11666 Laity Street" ;
             schema:addressLocality "Maple Ridge" ;
             schema:addressRegion "BC" ;
@@ -1049,6 +1097,7 @@ plis:scene {
         plis:reportingCode "SMH" ;
         schema:telephone "604-588-3324" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "13750 96 Avenue" ;
             schema:addressLocality "Surrey" ;
             schema:addressRegion "BC" ;
@@ -1062,6 +1111,7 @@ plis:scene {
         plis:reportingCode "SCSC" ;
         schema:telephone "604-582-4550" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "9750 140 Street" ;
             schema:addressLocality "Surrey" ;
             schema:addressRegion "BC" ;
@@ -1074,6 +1124,7 @@ plis:scene {
         schema:memberOf plis:FraserHealth ;
         plis:reportingCode "FCC" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:addressLocality "Burnaby" ;
             schema:addressRegion "BC"
         ] .
@@ -1089,6 +1140,7 @@ plis:scene {
         plis:reportingCode "Pr George RH" ;
         schema:telephone "250-565-2000" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1475 Edmonton Street" ;
             schema:addressLocality "Prince George" ;
             schema:addressRegion "BC" ;
@@ -1102,6 +1154,7 @@ plis:scene {
         plis:reportingCode "Vhf-St John H" ;
         schema:telephone "250-567-2211" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "3255 Hospital Road" ;
             schema:addressLocality "Vanderhoof" ;
             schema:addressRegion "BC" ;
@@ -1115,6 +1168,7 @@ plis:scene {
         plis:reportingCode "Fraser Lake CHC" ;
         schema:telephone "250-699-7742" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "130 Chowsunket Street" ;
             schema:addressLocality "Fraser Lake" ;
             schema:addressRegion "BC" ;
@@ -1128,6 +1182,7 @@ plis:scene {
         plis:reportingCode "Stuart Lake H" ;
         schema:telephone "250-996-8201" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "600 Stuart Drive E." ;
             schema:addressLocality "Fort St. James" ;
             schema:addressRegion "BC" ;
@@ -1141,6 +1196,7 @@ plis:scene {
         plis:reportingCode "Mackenzie DH" ;
         schema:telephone "250-997-3263" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "45 Centennial Drive" ;
             schema:addressLocality "Mackenzie" ;
             schema:addressRegion "BC" ;
@@ -1154,6 +1210,7 @@ plis:scene {
         plis:reportingCode "McBride DH" ;
         schema:telephone "250-569-2251" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1136 5th Avenue" ;
             schema:addressLocality "McBride" ;
             schema:addressRegion "BC" ;
@@ -1167,6 +1224,7 @@ plis:scene {
         plis:reportingCode "Valemount HC" ;
         schema:telephone "250-566-9138" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "1445 5th Avenue" ;
             schema:addressLocality "Valemount" ;
             schema:addressRegion "BC" ;
@@ -1180,270 +1238,291 @@ plis:scene {
         plis:reportingCode "GR Baker MH" ;
         schema:telephone "250-985-5600" ;
         schema:address [
+            a schema:PostalAddress ;
             schema:streetAddress "543 Front Street" ;
             schema:addressLocality "Quesnel" ;
             schema:addressRegion "BC" ;
             schema:postalCode "V2J 2K7"
         ] .
 
-        #############################################################
-        # CANONICAL FACILITIES - NORTHERN HEALTH - NORTHWEST
-        #############################################################
+    #############################################################
+    # CANONICAL FACILITIES - NORTHERN HEALTH - NORTHWEST
+    #############################################################
 
-        plis:facility-BulkleyValley
-            a plis:Hospital ;
-            schema:name "Bulkley Valley District Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "BulkleyValleyDH" ;
-            schema:telephone "250-847-2611" ;
-            schema:address [
-                schema:streetAddress "3950 8th Avenue" ;
-                schema:addressLocality "Smithers" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0J 2N0"
-            ] .
+    plis:facility-BulkleyValley
+        a plis:Hospital ;
+        schema:name "Bulkley Valley District Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "BulkleyValleyDH" ;
+        schema:telephone "250-847-2611" ;
+        schema:address [
+        a schema:PostalAddress ;
+            a schema:PostalAddress ;
+            schema:streetAddress "3950 8th Avenue" ;
+            schema:addressLocality "Smithers" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0J 2N0"
+        ] .
 
-        plis:facility-Houston
-            a plis:HealthCentre ;
-            schema:name "Houston Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Houston HC" ;
-            schema:telephone "250-845-2294" ;
-            schema:address [
-                schema:streetAddress "3202 14th Street" ;
-                schema:addressLocality "Houston" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0J 1Z0"
-            ] .
+    plis:facility-Houston
+        a plis:HealthCentre ;
+        schema:name "Houston Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Houston HC" ;
+        schema:telephone "250-845-2294" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "3202 14th Street" ;
+            schema:addressLocality "Houston" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0J 1Z0"
+        ] .
 
-        plis:facility-Wrinch
-            a plis:Hospital ;
-            schema:name "Wrinch Memorial Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Wrinch MH" ;
-            schema:telephone "250-842-5211" ;
-            schema:address [
-                schema:streetAddress "2510 Hwy 62" ;
-                schema:addressLocality "Hazelton" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0J 1Y0"
-            ] .
+    plis:facility-Wrinch
+        a plis:Hospital ;
+        schema:name "Wrinch Memorial Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Wrinch MH" ;
+        schema:telephone "250-842-5211" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "2510 Hwy 62" ;
+            schema:addressLocality "Hazelton" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0J 1Y0"
+        ] .
 
-        plis:facility-MillsMemorial
-            a plis:Hospital ;
-            schema:name "Mills Memorial Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Mills MH" ;
-            schema:telephone "250-635-2211" ;
-            schema:address [
-                schema:streetAddress "4720 Haugland Avenue" ;
-                schema:addressLocality "Terrace" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V8G 2W7"
-            ] .
+    plis:facility-MillsMemorial
+        a plis:Hospital ;
+        schema:name "Mills Memorial Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Mills MH" ;
+        schema:telephone "250-635-2211" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "4720 Haugland Avenue" ;
+            schema:addressLocality "Terrace" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V8G 2W7"
+        ] .
 
-        plis:facility-Kitimat
-            a plis:Hospital ;
-            schema:name "Kitimat General Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Kitimat GH" ;
-            schema:telephone "250-632-2121" ;
-            schema:address [
-                schema:streetAddress "920 Lahakas Blvd. South" ;
-                schema:addressLocality "Kitimat" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V8C 2S3"
-            ] .
+    plis:facility-Kitimat
+        a plis:Hospital ;
+        schema:name "Kitimat General Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Kitimat GH" ;
+        schema:telephone "250-632-2121" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "920 Lahakas Blvd. South" ;
+            schema:addressLocality "Kitimat" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V8C 2S3"
+        ] .
 
-        plis:facility-PrinceRupert
-            a plis:Hospital ;
-            schema:name "Prince Rupert Regional Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "PrinceRupert RH" ;
-            schema:telephone "250-624-2171" ;
-            schema:address [
-                schema:streetAddress "1305 Summit Avenue" ;
-                schema:addressLocality "Prince Rupert" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V8J 2A6"
-            ] .
+    plis:facility-PrinceRupert
+        a plis:Hospital ;
+        schema:name "Prince Rupert Regional Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "PrinceRupert RH" ;
+        schema:telephone "250-624-2171" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "1305 Summit Avenue" ;
+            schema:addressLocality "Prince Rupert" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V8J 2A6"
+        ] .
 
-        plis:facility-Stewart
-            a plis:HealthCentre ;
-            schema:name "Stewart Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Stewart HC" ;
-            schema:telephone "250-636-2221" ;
-            schema:address [
-                schema:streetAddress "904 Brightwell Street" ;
-                schema:addressLocality "Stewart" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0T 1W0"
-            ] .
+    plis:facility-Stewart
+        a plis:HealthCentre ;
+        schema:name "Stewart Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Stewart HC" ;
+        schema:telephone "250-636-2221" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "904 Brightwell Street" ;
+            schema:addressLocality "Stewart" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0T 1W0"
+        ] .
 
-        plis:facility-NorthernHaidaGwaii
-            a plis:Hospital ;
-            schema:name "Northern Haida Gwaii Hospital and Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Masset H" ;
-            schema:telephone "250-626-4700" ;
-            schema:address [
-                schema:streetAddress "2520 Harrison Avenue" ;
-                schema:addressLocality "Masset" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0T 1M0"
-            ] .
+    plis:facility-NorthernHaidaGwaii
+        a plis:Hospital ;
+        schema:name "Northern Haida Gwaii Hospital and Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Masset H" ;
+        schema:telephone "250-626-4700" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "2520 Harrison Avenue" ;
+            schema:addressLocality "Masset" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0T 1M0"
+        ] .
 
-        plis:facility-HaidaGwaii
-            a plis:Hospital ;
-            schema:name "Haida Gwaii Hospital and Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "QCI GH" ;
-            schema:telephone "250-559-4300" ;
-            schema:address [
-                schema:streetAddress "3209 Oceanview Drive" ;
-                schema:addressLocality "Queen Charlotte" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0T 1S0"
-            ] .
+    plis:facility-HaidaGwaii
+        a plis:Hospital ;
+        schema:name "Haida Gwaii Hospital and Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "QCI GH" ;
+        schema:telephone "250-559-4300" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "3209 Oceanview Drive" ;
+            schema:addressLocality "Queen Charlotte" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0T 1S0"
+        ] .
 
-        #############################################################
-        # CANONICAL FACILITIES - NORTHERN HEALTH - NORTHEAST
-        #############################################################
+    #############################################################
+    # CANONICAL FACILITIES - NORTHERN HEALTH - NORTHEAST
+    #############################################################
 
-        plis:facility-Chetwynd
-            a plis:Hospital ;
-            schema:name "Chetwynd General Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Chetwynd GH" ;
-            schema:telephone "250-788-2236" ;
-            schema:address [
-                schema:streetAddress "5500 Hospital Road" ;
-                schema:addressLocality "Chetwynd" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0C 1J0"
-            ] .
+    plis:facility-Chetwynd
+        a plis:Hospital ;
+        schema:name "Chetwynd General Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Chetwynd GH" ;
+        schema:telephone "250-788-2236" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "5500 Hospital Road" ;
+            schema:addressLocality "Chetwynd" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0C 1J0"
+        ] .
 
-        plis:facility-DawsonCreek
-            a plis:Hospital ;
-            schema:name "Dawson Creek & District Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Dawson Creek DH" ;
-            schema:telephone "250-782-8501" ;
-            schema:address [
-                schema:streetAddress "11100 13th Street" ;
-                schema:addressLocality "Dawson Creek" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V1G 3W8"
-            ] .
+    plis:facility-DawsonCreek
+        a plis:Hospital ;
+        schema:name "Dawson Creek & District Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Dawson Creek DH" ;
+        schema:telephone "250-782-8501" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "11100 13th Street" ;
+            schema:addressLocality "Dawson Creek" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V1G 3W8"
+        ] .
 
-        plis:facility-FortNelson
-            a plis:Hospital ;
-            schema:name "Fort Nelson General Hospital" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Ft Nelson GH" ;
-            schema:telephone "250-774-8100" ;
-            schema:address [
-                schema:streetAddress "5315 Liard Street" ;
-                schema:addressLocality "Fort Nelson" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0C 1R0"
-            ] .
+    plis:facility-FortNelson
+        a plis:Hospital ;
+        schema:name "Fort Nelson General Hospital" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Ft Nelson GH" ;
+        schema:telephone "250-774-8100" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "5315 Liard Street" ;
+            schema:addressLocality "Fort Nelson" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0C 1R0"
+        ] .
 
-        plis:facility-FortStJohn
-            a plis:Hospital ;
-            schema:name "Fort St John Hospital & Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Ft St John H" ;
-            schema:telephone "250-262-5200" ;
-            schema:address [
-                schema:streetAddress "9636 100th Avenue" ;
-                schema:addressLocality "Fort St. John" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V1J 1Y3"
-            ] .
+    plis:facility-FortStJohn
+        a plis:Hospital ;
+        schema:name "Fort St John Hospital & Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Ft St John H" ;
+        schema:telephone "250-262-5200" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "9636 100th Avenue" ;
+            schema:addressLocality "Fort St. John" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V1J 1Y3"
+        ] .
 
-        plis:facility-HudsonsHope
-            a plis:HealthCentre ;
-            schema:name "Hudson's Hope Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Hudsons Hope HC" ;
-            schema:telephone "250-783-9991" ;
-            schema:address [
-                schema:streetAddress "10309 Kyllo Street" ;
-                schema:addressLocality "Hudson's Hope" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0C 1V0"
-            ] .
+    plis:facility-HudsonsHope
+        a plis:HealthCentre ;
+        schema:name "Hudson's Hope Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Hudsons Hope HC" ;
+        schema:telephone "250-783-9991" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "10309 Kyllo Street" ;
+            schema:addressLocality "Hudson's Hope" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0C 1V0"
+        ] .
 
-        plis:facility-TumblerRidge
-            a plis:HealthCentre ;
-            schema:name "Tumbler Ridge Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Tumbler Ridge HC" ;
-            schema:telephone "250-242-5271" ;
-            schema:address [
-                schema:streetAddress "220 Front Street" ;
-                schema:addressLocality "Tumbler Ridge" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0C 2W0"
-            ] .
+    plis:facility-TumblerRidge
+        a plis:HealthCentre ;
+        schema:name "Tumbler Ridge Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Tumbler Ridge HC" ;
+        schema:telephone "250-242-5271" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "220 Front Street" ;
+            schema:addressLocality "Tumbler Ridge" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0C 2W0"
+        ] .
 
-        #############################################################
-        # CANONICAL FACILITIES - NORTHERN HEALTH - RURAL / REMOTE
-        #############################################################
+    #############################################################
+    # CANONICAL FACILITIES - NORTHERN HEALTH - RURAL / REMOTE
+    #############################################################
 
-        plis:facility-LakesDistrict
-            a plis:Hospital ;
-            schema:name "Lakes District Hospital & Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "Lakes DH" ;
-            schema:telephone "250-692-2400" ;
-            schema:address [
-                schema:streetAddress "741 Centre Street" ;
-                schema:addressLocality "Burns Lake" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0J 1E0"
-            ] .
+    plis:facility-LakesDistrict
+        a plis:Hospital ;
+        schema:name "Lakes District Hospital & Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "Lakes DH" ;
+        schema:telephone "250-692-2400" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "741 Centre Street" ;
+            schema:addressLocality "Burns Lake" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0J 1E0"
+        ] .
 
-        plis:facility-Stikine
-            a plis:HealthCentre ;
-            schema:name "Stikine Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "DL-Stikine HC" ;
-            schema:telephone "250-771-4444" ;
-            schema:address [
-                schema:streetAddress "7171 Highway 37" ;
-                schema:addressLocality "Dease Lake" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0C 1L0"
-            ] .
+    plis:facility-Stikine
+        a plis:HealthCentre ;
+        schema:name "Stikine Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "DL-Stikine HC" ;
+        schema:telephone "250-771-4444" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "7171 Highway 37" ;
+            schema:addressLocality "Dease Lake" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0C 1L0"
+        ] .
 
-        plis:facility-Granisle
-            a plis:HealthCentre ;
-            schema:name "Granisle Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "GRANISLE HC" ;
-            schema:telephone "250-697-2251" ;
-            schema:address [
-                schema:streetAddress "80 Hagen Street" ;
-                schema:addressLocality "Granisle" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0J 1W0"
-            ] .
+    plis:facility-Granisle
+        a plis:HealthCentre ;
+        schema:name "Granisle Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "GRANISLE HC" ;
+        schema:telephone "250-697-2251" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "80 Hagen Street" ;
+            schema:addressLocality "Granisle" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0J 1W0"
+        ] .
 
-        plis:facility-Atlin
-            a plis:HealthCentre ;
-            schema:name "Atlin Health Centre" ;
-            schema:memberOf plis:NorthernHealth ;
-            plis:reportingCode "ATLIN HC" ;
-            schema:telephone "250-651-7677" ;
-            schema:address [
-                schema:streetAddress "3rd Street" ;
-                schema:addressLocality "Atlin" ;
-                schema:addressRegion "BC" ;
-                schema:postalCode "V0W 1A0"
-            ] .
+    plis:facility-Atlin
+        a plis:HealthCentre ;
+        schema:name "Atlin Health Centre" ;
+        schema:memberOf plis:NorthernHealth ;
+        plis:reportingCode "ATLIN HC" ;
+        schema:telephone "250-651-7677" ;
+        schema:address [
+            a schema:PostalAddress ;
+            schema:streetAddress "3rd Street" ;
+            schema:addressLocality "Atlin" ;
+            schema:addressRegion "BC" ;
+            schema:postalCode "V0W 1A0"
+        ] .
 
     #############################################################
     # SPECIALIZED SERVICES / PROGRAMS
@@ -1495,7 +1574,7 @@ rpt:projection {
 # REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
 # Will not work for VHC/STS/PHC domains because they are not 
 # facilities and the query requires:
-#   ?facility schema:memberOf ?organization
+#   ?reportingEntity schema:memberOf ?organization
 #################################################################
 
     rpt:FacilityDisciplineFooterLookup
@@ -1513,24 +1592,39 @@ PREFIX schema: <https://schema.org/>
 SELECT ?notice ?text
 WHERE {
 
-    VALUES (?facility ?discipline) {
+    VALUES (?reportingEntity ?discipline) {
        (<FACILITY_URI> <DISCIPLINE_URI>)
     }
 
     {
-        ?facility schema:memberOf ?organization .
+        ?reportingEntity schema:memberOf ?organization .
 
         ?config
             rpt:appliesToReportingEntity ?organization ;
             rpt:discipline ?discipline ;
             rpt:includesNotice ?notice .
     }
-
     UNION
-
+    {
+        ?reportingEntity plis:memberOfReportingDomain ?reportingDomain .
+        
+        ?config
+            rpt:appliesToReportingEntity ?reportingDomain ;
+            rpt:discipline ?discipline ;
+            rpt:includesNotice ?notice .
+    
+    }
+    UNION
     {
         ?config
-            rpt:appliesToReportingEntity ?facility ;
+            rpt:appliesToReportingEntity ?reportingEntity ;
+            rpt:includesNotice ?notice .
+    }
+    UNION
+    {
+        ?config
+            rpt:appliesToReportingEntity ?reportingEntity ;
+            rpt:discipline ?discipline ;
             rpt:includesNotice ?notice .
     }
 
