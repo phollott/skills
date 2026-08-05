@@ -7,6 +7,13 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 #################################################################
+# Scene Graph:  What exists?
+# Event Graph:  What happened?
+# Projection:   How is it presented?
+# Boundary:     How does it integrate?
+#################################################################
+
+#################################################################
 # SCENE GRAPH
 # Hospitals and Health Centres are modeled as composite
 # reporting entities that may simultaneously represent
@@ -1668,6 +1675,209 @@ plis:scene {
         plis:reportingCode "IHPCP" ;
         plis:reportingCode "IHPCM" ;
         plis:reportingCode "IHPCN" .
+
+}
+
+#################################################################
+# EVENT GRAPH
+#
+# The source system does not explicitly model event. However,
+# some projection artefacts contain temporal assertions from
+# which historical events may be inferred.
+#################################################################
+
+#################################################################
+# EVENT GRAPH
+#
+# The Event graph currently contains only events that can be
+# directly inferred from available source artefacts.
+#
+# These events represent changes in reporting availability and
+# help explain how the current reporting landscape came  to be.
+#
+# Additional onboarding and facility activation events may be
+# added as historical implementation records become available.
+#################################################################
+
+plis:event {
+
+    plis:Event
+        a rdfs:Class ;
+        rdfs:subClassOf holon:EventHolon .
+
+    plis:AvailabilityEvent
+        a rdfs:Class ;
+        rdfs:subClassOf plis:Event .
+
+    plis:ReportingAvailabilityEvent
+        a rdfs:Class ;
+        rdfs:subClassOf plis:AvailabilityEvent .
+
+    plis:subject
+        a rdf:Property .
+
+    plis:effectiveDate
+        a rdf:Property .
+
+    plis:affectedDiscipline
+        a rdf:Property .
+
+    #############################################################
+    # INTERIOR HEALTH
+    #############################################################
+
+    plis:IHClinicalLaboratoryAvailability
+        a plis:ReportingAvailabilityEvent ;
+
+        schema:name
+            "Interior Health Clinical Laboratory Reporting Available" ;
+
+        plis:subject
+            plis:IHReportingDomain ;
+
+        plis:effectiveDate
+            "2010-05-15"^^xsd:date ;
+
+        schema:description
+            """
+IHA lab data for Chemistry, Hematology, Microbiology and Blood Bank
+results became available through PLIS/eViewer.
+""" .
+
+    plis:IHAnatomicPathologyAvailability
+        a plis:ReportingAvailabilityEvent ;
+
+        schema:name
+            "Interior Health Anatomic Pathology Reporting Available" ;
+
+        plis:subject
+            plis:IHReportingDomain ;
+
+        plis:affectedDiscipline
+            plis:AnatomicPathology ;
+
+        plis:effectiveDate
+            "2012-04-18"^^xsd:date ;
+
+        schema:description
+            """
+IHA lab data for Anatomic Pathology results became available
+through PLIS/eViewer.
+""" .
+
+    #############################################################
+    # OTHER REPORTING DOMAINS CAN BE ADDED WITH DATES TO SUPPORT
+    #############################################################
+
+    plis:VIHAReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Island Health Reporting Available" ;
+        plis:subject plis:VIHACNReportingDomain ;
+        schema:description
+            """
+Reporting services available through PLIS. Event inferred from 
+reporting configuration and footer definitions.
+""" .
+
+    plis:PHCReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Providence Health Care Reporting Available" ;
+        plis:subject plis:PHCReportingDomain ;
+        schema:description
+            """
+Reporting services available through PLIS. Event inferred from 
+reporting configuration and footer definitions.
+""" .
+
+    plis:VHCReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Vancouver Coastal Health Reporting Available" ;
+        plis:subject plis:VHCReportingDomain ;
+        schema:description
+            """
+Reporting services available through PLIS. Event inferred from 
+reporting configuration and footer definitions.
+""" .
+
+    plis:STSReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Sea-to-Sky Reporting Available" ;
+        plis:subject plis:STSReportingDomain ;
+        schema:description
+            """
+Reporting services available through PLIS. Event inferred from 
+reporting configuration and footer definitions.
+""" .
+
+    plis:NHReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Northern Health Reporting Available" ;
+        plis:subject plis:NHReportingDomain ;
+        schema:description
+            """
+Reporting services available through PLIS. Event inferred from 
+reporting configuration and footer definitions.
+""" .
+
+    plis:BCBReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "BC Biomedical Laboratories Reporting Available" ;
+        plis:subject plis:BCBReportingDomain ;
+        schema:description
+            """
+Reporting services available through PLIS. Event inferred from 
+reporting configuration and footer definitions.
+""" .
+
+    plis:LifeLabsReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "LifeLabs Reporting Available" ;
+        plis:subject plis:LifeLabsReportingDomain ;
+        schema:description
+            """
+Reporting services available through PLIS. Event inferred from 
+reporting configuration and footer definitions.
+""" .
+
+    plis:VMLKReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Valley Medical Laboratories Kelowna Reporting Available" ;
+        plis:subject plis:VMLKReportingDomain .
+
+    plis:VMLOReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Valley Medical Laboratories Osoyoos Reporting Available" ;
+        plis:subject plis:VMLOReportingDomain .
+
+    plis:VMLPReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Valley Medical Laboratories Penticton Reporting Available" ;
+        plis:subject plis:VMLPReportingDomain .
+
+    plis:VMLVReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "Valley Medical Laboratories Vernon Reporting Available" ;
+        plis:subject plis:VMLVReportingDomain .
+
+    plis:PHSALaboratoryReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "PHSA Laboratory Reporting Available" ;
+        plis:subject plis:PHSALaboratories ;
+        schema:description
+            """
+Laboratory reporting services available through PLIS.
+Event inferred from reporting configuration.
+""" .
+
+    plis:BCNewbornScreeningReportingAvailability
+        a plis:ReportingAvailabilityEvent ;
+        schema:name "BC Newborn Screening Reporting Available" ;
+        plis:subject plis:BCNewbornScreeningLab ;
+        schema:description
+            """
+Newborn screening reporting services available through PLIS.
+Event inferred from reporting configuration.
+""" .
 
 }
 
