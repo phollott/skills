@@ -2,11 +2,18 @@
 @prefix rpt: <http://plis.hlth.gov.bc.ca/reporting#> .
 @prefix holon: <http://holon.org/ns#> .
 @prefix schema: <https://schema.org/> .
-@prefix fhir: <http://hl7.org/fhir/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 #################################################################
 # SCENE GRAPH
+# Hospitals and Health Centres are modeled as composite
+# reporting entities that may simultaneously represent
+# organizational, operational, and physical-place concepts.
+# These concerns may be separated into distinct holons in
+# a future revision if additional spatial or governance
+# requirements emerge.
 #################################################################
 
 plis:scene {
@@ -26,6 +33,12 @@ plis:scene {
         rdfs:domain plis:ReportingEntity ;
         rdfs:range plis:ReportingDomain .
 
+    plis:identifierSystem
+        a rdf:Property .
+
+    plis:reportingCode
+        a rdf:Property .
+
     #############################################################
     # REPORTING ENTITY TYPES
     #############################################################
@@ -39,11 +52,6 @@ plis:scene {
         a rdfs:Class ;
         rdfs:subClassOf
             plis:ReportingEntity .
-
-    plis:CommunityHealthCentre
-        a rdfs:Class ;
-        rdfs:subClassOf
-            plis:HealthCentre .
 
     plis:LaboratoryService
         a rdfs:Class ;
@@ -76,6 +84,9 @@ plis:scene {
 
     #############################################################
     # ORGANIZATIONS AND IDENTIFIER SYSTEMS (OIDS)
+    # The pair (identifierSystem, reportingCode) is logically equivalent
+    # to an HL7 v3 II (root, extension) identifier. This may be modeled
+    # explicitly in a future revision of the ontology.
     #############################################################
 
     plis:PHSA
@@ -489,7 +500,7 @@ plis:scene {
         ] .
 
     plis:facility-AHH
-        a plis:CommunityHealthCentre ;
+        a plis:HealthCentre ;
         schema:name "Ashcroft Hospital & Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
         plis:memberOfReportingDomain plis:IHReportingDomain ;
@@ -553,7 +564,7 @@ plis:scene {
         ] .
 
     plis:facility-CDH
-        a plis:CommunityHealthCentre ;
+        a plis:HealthCentre ;
         schema:name "Castlegar & District Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
         plis:memberOfReportingDomain plis:IHReportingDomain ;
@@ -681,7 +692,7 @@ plis:scene {
         ] .
 
     plis:facility-EDC
-        a plis:CommunityHealthCentre ;
+        a plis:HealthCentre ;
         schema:name "Enderby Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
         plis:memberOfReportingDomain plis:IHReportingDomain ;
@@ -809,7 +820,7 @@ plis:scene {
         ] .
 
     plis:facility-VHK
-        a plis:CommunityHealthCentre ;
+        a plis:HealthCentre ;
         schema:name "Victorian Community Health Centre" ;
         schema:memberOf plis:InteriorHealth ;
         plis:memberOfReportingDomain plis:IHReportingDomain ;
@@ -1662,26 +1673,127 @@ plis:scene {
 
 #################################################################
 # PROJECTION GRAPH
+#
+# The projection graph contains reporting views derived from the
+# scene graph. It defines how reporting entities, disciplines,
+# and domains are transformed into report-specific content such
+# as notices, footers, legends, and rendering rules.
 #################################################################
 
 rpt:projection {
 
     rpt:LaboratoryReportingConfiguration
         a rdfs:Class . 
-    
+
+    rpt:appliesToReportingEntity
+        a rdf:Property .
+
+    rpt:includesNotice
+        a rdf:Property .
+
+    rpt:discipline
+        a rdf:Property .
+
     rpt:NamedQuery
         a rdfs:Class .
 
-#################################################################
-# REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
-#################################################################
+    #################################################################
+    # REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
+    #################################################################
+
+    rpt:ResolveFacilityFooters
+        a rpt:NamedQuery ;
+        schema:name "Resolve Facility Footers" ;
+        schema:description """
+    Resolves all footer notices that apply to a reporting entity through direct 
+    assignment and reporting-domain inheritance.
+    """ ;
+        schema:text """
+PREFIX plis: <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX rpt:  <http://plis.hlth.gov.bc.ca/reporting#>
+PREFIX schema: <https://schema.org/>
+
+SELECT DISTINCT
+    ?entity
+    ?entityName
+    ?sourceEntity
+    ?sourceName
+    ?notice
+    ?text
+WHERE {
+
+    VALUES (?entity) {
+        (<REPORTING_ENTITY_URI>)
+    }
+
+    GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
+        ?entity
+            schema:name ?entityName .
+
+        {
+            BIND(?entity AS ?sourceEntity)
+
+            OPTIONAL {
+                ?sourceEntity schema:name ?sourceName .
+            }
+        } UNION {
+            ?entity
+                plis:memberOfReportingDomain
+                    ?sourceEntity .
+
+            OPTIONAL {
+                ?sourceEntity schema:name ?sourceName .
+            }
+        }
+    }
+
+    GRAPH <http://plis.hlth.gov.bc.ca/reporting#projection> {
+        ?config
+            rpt:appliesToReportingEntity
+                ?sourceEntity ;
+            rpt:includesNotice
+                ?notice .
+
+        ?notice
+            schema:text ?text .
+    }
+}
+ORDER BY ?sourceEntity ?notice
+""" .
+
+    #################################################################
+    # REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
+    #################################################################
+
+    rpt:ReportingDomainLookup
+        a rpt:NamedQuery ;
+        schema:name "Reporting Domain Lookup" ;
+        schema:description """
+    Returns all reporting domains and reporting codes.
+    """ ;
+        schema:text """
+PREFIX plis: <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX schema: <https://schema.org/>
+
+SELECT ?domain ?name ?code
+WHERE {
+  GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
+      ?domain a plis:ReportingDomain ;
+              schema:name ?name .
+
+      OPTIONAL {
+          ?domain plis:reportingCode ?code
+      }
+  }
+}
+ORDER BY ?name
+""" .
 
     rpt:FacilityDisciplineFooterLookup
         a rpt:NamedQuery ;
         schema:name "Facility Discipline Footer Lookup" ;
         schema:description """
-Returns all reporting notices applicable to a
-facility and discipline combination.
+Returns all reporting notices applicable to a facility and discipline combination.
 """ ;
         schema:text """
 PREFIX plis: <http://plis.hlth.gov.bc.ca/ns#>
@@ -1690,7 +1802,6 @@ PREFIX schema: <https://schema.org/>
 
 SELECT DISTINCT ?notice ?text
 WHERE {
-
     VALUES (?root ?extension ?discipline) {
         (
             "<OID>"
@@ -1703,69 +1814,61 @@ WHERE {
     # Resolve reporting entity
     #####################################################
 
-    ?reportingEntity
-        plis:reportingCode ?extension .
-
-    {
+    GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
         ?reportingEntity
-            plis:memberOfReportingDomain ?reportingDomain .
+            plis:reportingCode ?extension .
 
-        ?reportingDomain
-            plis:identifierSystem ?identifierSystem .
-    }
-    UNION
-    {
-        ?reportingEntity
-            plis:identifierSystem ?identifierSystem .
-    }
+        {
+            ?reportingEntity
+                plis:memberOfReportingDomain ?reportingDomain .
 
-    ?identifierSystem
-        schema:identifier ?root .
+            ?reportingDomain
+                plis:identifierSystem ?identifierSystem .
+        } UNION {
+            ?reportingEntity
+                plis:identifierSystem ?identifierSystem .
+        }
 
-    #####################################################
-    # Candidate entities
-    #
-    # 1. Reporting entity itself
-    # 2. Reporting domain (if present)
-    #####################################################
+        ?identifierSystem
+            schema:identifier ?root .
 
-    {
-        BIND(?reportingEntity AS ?candidateEntity)
-    }
-    UNION
-    {
-        ?reportingEntity
-            plis:memberOfReportingDomain ?candidateEntity .
-    }
+        #####################################################
+        # Candidate entities
+        #
+        # 1. Reporting entity itself
+        # 2. Reporting domain (if present)
+        #####################################################
 
-    #####################################################
-    # Discipline-specific notices
-    #####################################################
-
-    {
-        ?config
-            rpt:appliesToReportingEntity ?candidateEntity ;
-            rpt:discipline ?discipline ;
-            rpt:includesNotice ?notice .
-    }
-
-    UNION
-
-    #####################################################
-    # Non-discipline notices
-    #####################################################
-
-    {
-        ?config
-            rpt:appliesToReportingEntity ?candidateEntity ;
-            rpt:includesNotice ?notice .
-
-        FILTER NOT EXISTS {
-            ?config rpt:discipline ?anyDiscipline
+        {
+            BIND(?reportingEntity AS ?candidateEntity)
+        } UNION {
+            ?reportingEntity
+                plis:memberOfReportingDomain ?candidateEntity .
         }
     }
 
-    ?notice schema:text ?text .
+    #####################################################
+    # Discipline-specific and Non-discipline notices
+    #####################################################
+
+    GRAPH <http://plis.hlth.gov.bc.ca/reporting#projection> {
+        {
+            ?config
+                rpt:appliesToReportingEntity ?candidateEntity ;
+                rpt:discipline ?discipline ;
+                rpt:includesNotice ?notice .
+        } UNION {
+            ?config
+                rpt:appliesToReportingEntity ?candidateEntity ;
+                rpt:includesNotice ?notice .
+
+            FILTER NOT EXISTS {
+                ?config rpt:discipline ?anyDiscipline
+            }
+        }
+
+        ?notice schema:text ?text .
+    }
 }
 """ .
 
@@ -2621,16 +2724,34 @@ Inquiries: Valley Medical Laboratories - Vernon
 
 #################################################################
 # BOUNDARY GRAPH
+#
+# External representations, integration mappings,
+# source-system provenance, HL7 identifiers,
+# FHIR resource mappings, terminology alignments,
+# and interoperability contracts.
 #################################################################
 
 plis:boundary {
 
-    #############################################################
-    # ASSERTION STATUS VOCABULARY
-    #############################################################
+    plis:HL7InstanceIdentifier
+        a rdfs:Class .
 
-    plis:ObservedAssertion .
-    plis:InferredAssertion .
-    plis:VerifiedAssertion .
+    plis:mapsToHL7Root
+        a rdf:Property .
+
+    plis:mapsToHL7Extension
+        a rdf:Property .
+
+    plis:ReportDomain
+        plis:derivedFromTable
+            "FACILITY_LOOKUP" .
+
+    plis:reportingCode
+        plis:derivedFromColumn
+            "FACILITY_ID" .
+
+    plis:identifierSystem
+        plis:derivedFromColumn
+            "FACILITY_OID" .
 
 }
