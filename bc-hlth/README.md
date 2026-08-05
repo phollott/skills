@@ -1,2 +1,0 @@
-# skills
-Accumulated Skills Repository
