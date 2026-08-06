@@ -1893,7 +1893,7 @@ Event inferred from reporting configuration.
 rpt:projection {
 
     rpt:LaboratoryReportingConfiguration
-        a rdfs:Class . 
+        rdfs:subClassOf holon:DataHolon .
 
     rpt:appliesToReportingEntity
         a rdf:Property .
@@ -1905,7 +1905,7 @@ rpt:projection {
         a rdf:Property .
 
     rpt:NamedQuery
-        a rdfs:Class .
+        rdfs:subClassOf holon:DataHolon .
 
     #################################################################
     # REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
@@ -2006,80 +2006,53 @@ ORDER BY ?name
 Returns all reporting notices applicable to a facility and discipline combination.
 """ ;
         schema:text """
-PREFIX plis: <http://plis.hlth.gov.bc.ca/ns#>
-PREFIX rpt:  <http://plis.hlth.gov.bc.ca/reporting#>
+PREFIX plis:   <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX rpt:    <http://plis.hlth.gov.bc.ca/reporting#>
 PREFIX schema: <https://schema.org/>
 
-SELECT DISTINCT ?notice ?text
+SELECT DISTINCT
+    ?notice
+    ?text
 WHERE {
-    VALUES (?root ?extension ?discipline) {
-        (
-            "<OID>"
-            "<EXTENSION>"
-            <DISCIPLINE_URI>
-        )
-    }
-
-    #####################################################
-    # Resolve reporting entity
-    #####################################################
 
     GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
-        ?reportingEntity
-            plis:reportingCode ?extension .
 
-        {
-            ?reportingEntity
-                plis:memberOfReportingDomain ?reportingDomain .
+        ?facility
+            plis:reportingCode ?extension ;
+            plis:memberOfReportingDomain ?domain .
 
-            ?reportingDomain
-                plis:identifierSystem ?identifierSystem .
-        } UNION {
-            ?reportingEntity
-                plis:identifierSystem ?identifierSystem .
-        }
+        ?domain
+            plis:identifierSystem ?identifierSystem .
 
         ?identifierSystem
             schema:identifier ?root .
-
-        #####################################################
-        # Candidate entities
-        #
-        # 1. Reporting entity itself
-        # 2. Reporting domain (if present)
-        #####################################################
-
-        {
-            BIND(?reportingEntity AS ?candidateEntity)
-        } UNION {
-            ?reportingEntity
-                plis:memberOfReportingDomain ?candidateEntity .
-        }
     }
 
-    #####################################################
-    # Discipline-specific and Non-discipline notices
-    #####################################################
-
     GRAPH <http://plis.hlth.gov.bc.ca/reporting#projection> {
+
         {
             ?config
-                rpt:appliesToReportingEntity ?candidateEntity ;
-                rpt:discipline ?discipline ;
-                rpt:includesNotice ?notice .
-        } UNION {
-            ?config
-                rpt:appliesToReportingEntity ?candidateEntity ;
+                rpt:appliesToReportingEntity ?facility ;
                 rpt:includesNotice ?notice .
 
             FILTER NOT EXISTS {
-                ?config rpt:discipline ?anyDiscipline
+                ?config rpt:discipline ?d
             }
+        }
+
+        UNION
+
+        {
+            ?config
+                rpt:appliesToReportingEntity ?domain ;
+                rpt:discipline ?discipline ;
+                rpt:includesNotice ?notice .
         }
 
         ?notice schema:text ?text .
     }
 }
+ORDER BY ?notice
 """ .
 
     #############################################################
@@ -2087,6 +2060,7 @@ WHERE {
     #############################################################
 
     rpt:PHSAAvailabilityNotice
+        a holon:DataHolon ;
         schema:text """
 Results performed at PHSA Laboratories unless
 otherwise indicated.
@@ -2097,6 +2071,7 @@ or fax 604-708-8027.
 """ .
 
     rpt:PHSAMicrobiologyLegend
+        a holon:DataHolon ;
         schema:text """
 * Microbiology Susceptibility Grid
 indicates comment printed below grid.
@@ -2104,12 +2079,14 @@ indicates comment printed below grid.
 
 
     rpt:PHSAGeneralChemistryLegend
+        a holon:DataHolon ;
         schema:text """
 H/L/A = Abnormal
 HH/LL/AA = Critical
 """ .
 
     rpt:NBSScreeningNotice
+        a holon:DataHolon ;
         schema:text """
 Newborn screening is not a diagnostic test and
 all positive screens must be confirmed by
@@ -2131,6 +2108,7 @@ www.newbornscreeningbc.ca
     #############################################################
 
     rpt:IHAAvailabilityNotice
+        a holon:DataHolon ;
         schema:text """
 IHA lab data for Hematology, Chemistry,
 Microbiology and Blood Bank has been available
@@ -2139,6 +2117,7 @@ since May 15, 2010.
 """ .
 
     rpt:IHAAnatomicPathologyNotice
+        a holon:DataHolon ;
         schema:text """
 IHA lab data for Anatomic Pathology
 was added on an incremental basis
@@ -2146,6 +2125,7 @@ since April 18, 2012.
 """ .
 
     rpt:IHAMicrobiologyLegend
+        a holon:DataHolon ;
         schema:text """
 Microbiology Susceptibilities:
 S = Susceptible
@@ -2158,6 +2138,7 @@ R = Resistant
     #############################################################
 
     rpt:NHGeneralChemistryLegend
+        a holon:DataHolon ;
         schema:text """
 A = Abnormal
 H = High
@@ -2166,6 +2147,7 @@ CRIT = Critical
 """ .
 
     rpt:NHMicrobiologyLegend
+        a holon:DataHolon ;
         schema:text """
 Microbiology Susceptibilities:
 S = Susceptible
@@ -2177,162 +2159,189 @@ indicates comment printed below grid.
 """ .
 
     rpt:PrinceGeorgeInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: University Hospital of Northern BC
 (250-565-2000)
 """ .
 
     rpt:VanderhoofInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: St. John Hospital
 (250-567-2211)
 """ .
 
     rpt:BulkleyValleyInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Bulkley Valley District Hospital
 (250-847-2611)
 """ .
 
     rpt:ChetwyndInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Chetwynd General Hospital
 (250-788-2236)
 """ .
 
     rpt:DawsonCreekInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Dawson Creek & District Hospital
 (250-782-8501)
 """ .
 
     rpt:FortNelsonInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Fort Nelson General Hospital
 (250-774-8100)
 """ .
 
     rpt:FortStJohnInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Fort St John Hospital & Health Centre
 (250-262-5200)
 """ .
 
     rpt:FraserLakeInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Fraser Lake Community Health Centre
 (250-699-7742)
 """ .
 
     rpt:HoustonInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Houston Health Centre
 (250-845-2294)
 """ .
 
     rpt:HudsonsHopeInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Hudson's Hope Health Centre
 (250-783-9991)
 """ .
 
     rpt:KitimatInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Kitimat General Hospital
 (250-632-2121)
 """ .
 
     rpt:QuesnelInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: GR Baker Memorial Hospital
 (250-985-5600)
 """ .
 
     rpt:LakesDistrictInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Lakes District Hospital & Health Centre
 (250-692-2400)
 """ .
 
     rpt:MackenzieInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Mackenzie & District Hospital & Health Centre
 (250-997-3263)
 """ .
 
     rpt:NorthernHaidaGwaiiInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Northern Haida Gwaii Hospital and Health Centre
 (250-626-4700)
 """ .
 
     rpt:McBrideInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: McBride & District Hospital
 (250-569-2251)
 """ .
 
     rpt:MillsMemorialInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Mills Memorial Hospital
 (250-635-2211)
 """ .
 
     rpt:PrinceRupertInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Prince Rupert Regional Hospital
 (250-624-2171)
 """ .
 
     rpt:HaidaGwaiiInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Haida Gwaii Hospital and Health Centre
 (250-559-4300)
 """ .
 
     rpt:StewartInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Stewart Health Centre
 (250-636-2221)
 """ .
 
     rpt:StikineInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Stikine Health Centre
 (250-771-4444)
 """ .
 
     rpt:StuartLakeInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Stuart Lake Hospital
 (250-996-8201)
 """ .
 
     rpt:TumblerRidgeInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Tumbler Ridge Health Centre
 (250-242-5271)
 """ .
 
     rpt:ValemountInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Valemount Health Centre
 (250-566-9138)
 """ .
 
     rpt:WrinchInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Wrinch Memorial Hospital
 (250-842-5211)
 """ .
 
     rpt:GranisleInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Granisle Health Centre
 (250-697-2251)
 """ .
 
     rpt:AtlinInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Atlin Health Centre
 (250-651-7677)
@@ -2343,84 +2352,98 @@ Inquiries: Atlin Health Centre
     #############################################################
 
     rpt:AbbotsfordInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Abbotsford Regional Hospital and Cancer Centre
 604-851-4700 x646518
 """ .
 
     rpt:BurnabyInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Burnaby Hospital
 604-412-6245
 """ .
 
     rpt:ChilliwackInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Chilliwack General Hospital
 604-795-4108
 """ .
 
     rpt:DeltaInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Delta Hospital
 604-940-3431
 """ .
 
     rpt:EagleRidgeInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Eagle Ridge Hospital
 604-461-2022 x543140
 """ .
 
     rpt:FraserCanyonInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Fraser Canyon Hospital
 604-860-7702
 """ .
 
     rpt:LangleyInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Langley Memorial Hospital
 604-534-4121 x745387
 """ .
 
     rpt:MissionInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Mission Memorial Hospital
 604-814-5115
 """ .
 
     rpt:PeaceArchInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Peace Arch Hospital
 604-535-4502
 """ .
 
     rpt:RoyalColumbianInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Royal Columbian Hospital
 604-520-4300
 """ .
 
     rpt:RidgeMeadowsInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Ridge Meadows Hospital
 604-463-1802
 """ .
 
     rpt:SurreyMemorialInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Surrey Memorial Hospital
 604-588-3324
 """ .
 
     rpt:JimPattisonInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Jim Pattison Outpatient Care and Surgery Centre
 604-582-4550
 """ .
 
     rpt:FellburnCareInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Burnaby Hospital
 604-412-6245
@@ -2431,12 +2454,14 @@ Inquiries: Burnaby Hospital
     #############################################################
 
     rpt:PHCInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Providence Health Care
 1-877-747-2522
 """ .
 
     rpt:VHCInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Vancouver Coastal Health Laboratories
 1-877-747-2522
@@ -2447,6 +2472,7 @@ and Richmond Hospital Sites
 """ .
 
     rpt:STSInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Vancouver Coastal Health Laboratories
 1-877-747-2522
@@ -2463,6 +2489,7 @@ and Whistler Health Centre Sites
     #############################################################
 
     rpt:VIHAInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries for VIHA patients call
 250-370-8355
@@ -2471,6 +2498,7 @@ or
 """ .
 
     rpt:VIHAMicrobiologyLegend
+        a holon:DataHolon ;
         schema:text """
 Microbiology Susceptibilities:
 
@@ -2487,30 +2515,35 @@ N/A = Not Applicable
     #############################################################
 
     rpt:BCBInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: LifeLabs
 1-877-507-5595
 """ .
 
     rpt:LifeLabsInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: LifeLabs
 1-800-431-7206
 """ .
 
     rpt:VMLKInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Valley Medical Laboratories - Kelowna
 250-763-4813
 """ .
 
     rpt:VMLOInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Valley Medical Laboratories - Osoyoos
 250-495-2677
 """ .
 
     rpt:VMLPInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Valley Medical Laboratories - Penticton
 Okanagan Clinical Laboratories
@@ -2518,6 +2551,7 @@ Okanagan Clinical Laboratories
 """ .
 
     rpt:VMLVInquiryNotice
+        a holon:DataHolon ;
         schema:text """
 Inquiries: Valley Medical Laboratories - Vernon
 250-549-1207
