@@ -21,6 +21,17 @@
 # These concerns may be separated into distinct holons in
 # a future revision if additional spatial or governance
 # requirements emerge.
+#
+# Reporting Domains
+# PHSA:             plis:PHSAReportingDomain, plis:NBSReportingDomain
+# Providence:       plis:PHCReportingDomain
+# VCH:              plis:VHCReportingDomain, plis:STSReportingDomain
+# IslandHealth:     plis:VIHACNReportingDomain
+# InteriorHealth:   plis:IHReportingDomain
+# FraserHealth:     plis:FHReportingDomain
+# NorthernHealth:   plis:NHReportingDomain
+# LifeLabs: plis:BCBReportingDomain, plis:LifeLabsReportingDomain, plis:VMLKReportingDomain
+#           plis:VMLOReportingDomain, plis:VMLPReportingDomain, plis:VMLVReportingDomain
 #################################################################
 
 plis:scene {
@@ -33,7 +44,7 @@ plis:scene {
     plis:ReportingDomain
         a rdfs:Class ;
         rdfs:subClassOf
-            plis:ReportingEntity .
+            holon:dataHolon .
 
     plis:memberOfReportingDomain
         a rdf:Property ;
@@ -192,7 +203,29 @@ plis:scene {
             "2.16.840.1.113883.3.3565.1.62" .
 
     #############################################################
-    # VANCOUVER COASTAL / PROVIDENCE / PHSA REPORTING ENTITIES
+    # PHSA REPORTING DOMAINS
+    #############################################################
+
+    plis:PHSAReportingDomain
+        a plis:ReportingDomain ;
+        schema:name "PHSA Reporting Domain" ;
+        schema:memberOf plis:PHSA ;
+        plis:reportingCode "CDC" ;
+        plis:reportingCode "BCC" ;
+        plis:reportingCode "CWH" ;
+        plis:reportingCode "PHSA-SQ" ;
+        plis:identifierSystem
+            plis:PHSAIdentifierSystem .
+
+    plis:NBSReportingDomain
+        a plis:ReportingDomain ;
+        schema:memberOf plis:PHSA ;
+        plis:reportingCode "NBSLab" ;
+        plis:identifierSystem
+            plis:PHSANewbornScreeningIdentifierSystem .
+
+    #############################################################
+    # VANCOUVER COASTAL / PROVIDENCE REPORTING DOMAINS
     #############################################################
 
     plis:PHCReportingDomain
@@ -1653,6 +1686,7 @@ plis:scene {
         a plis:LaboratoryService ;
         schema:name "PHSA Laboratories" ;
         schema:memberOf plis:PHSA ;
+        plis:memberOfReportingDomain plis:PHSAReportingDomain ;
         plis:reportingCode "CDC" ;
         plis:reportingCode "BCC" ;
         plis:reportingCode "CWH" ;
@@ -1665,6 +1699,7 @@ plis:scene {
         a plis:ClinicalProgram ;
         schema:name "BC Newborn Screening Laboratory" ;
         schema:memberOf plis:PHSA ;
+        plis:memberOfReportingDomain plis:NBSReportingDomain ;
         plis:reportingCode "NBSLab" .
 
     plis:PrimaryHealthAndChronicDisease
@@ -1908,7 +1943,7 @@ rpt:projection {
         rdfs:subClassOf holon:DataHolon .
 
     #################################################################
-    # REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
+    # RESOLVE FACILITY FOOTERS GIVEN REPORTING DOMAIN AND DISCIPLINE
     #################################################################
 
     rpt:ResolveFacilityFooters
@@ -1972,38 +2007,87 @@ ORDER BY ?sourceEntity ?notice
 """ .
 
     #################################################################
-    # REPORTING QUERIES (BY FACILITY AND DISCIPLINE)
+    # RESOVE REPORTING DOMAIN GIVEN FACILITY OID AND ID
     #################################################################
 
-    rpt:ReportingDomainLookup
+    rpt:ResolveReportingDomain
         a rpt:NamedQuery ;
-        schema:name "Reporting Domain Lookup" ;
+        schema:name "Resolve Reporting Domain" ;
         schema:description """
-    Returns all reporting domains and reporting codes.
-    """ ;
+Resolves a reporting domain from an HL7 II root/extension pair.
+The root corresponds to the reporting identifier system (OID)
+and the extension corresponds to a reporting code.
+""" ;
         schema:text """
-PREFIX plis: <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX plis:   <http://plis.hlth.gov.bc.ca/ns#>
 PREFIX schema: <https://schema.org/>
 
-SELECT ?domain ?name ?code
+SELECT DISTINCT
+    ?reportingDomain
+    ?domainName
+    ?organization
+    ?organizationName
 WHERE {
-  GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
-      ?domain a plis:ReportingDomain ;
-              schema:name ?name .
 
-      OPTIONAL {
-          ?domain plis:reportingCode ?code
-      }
-  }
+    VALUES (?root ?extension) {
+        ("<IDENTIFIER_ROOT>" "<IDENTIFIER_EXTENSION>")
+    }
+
+    GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
+
+        #########################################################
+        # Pattern 1:
+        # Reporting code belongs directly to the reporting domain
+        #########################################################
+
+        {
+            ?reportingDomain
+                a plis:ReportingDomain ;
+                plis:identifierSystem ?identifierSystem ;
+                plis:reportingCode ?extension ;
+                schema:memberOf ?organization .
+        }
+
+        UNION
+
+        #########################################################
+        # Pattern 2:
+        # Reporting code belongs to a facility/entity that
+        # participates in a reporting domain
+        #########################################################
+
+        {
+            ?facility
+                plis:reportingCode ?extension ;
+                plis:memberOfReportingDomain ?reportingDomain .
+
+            ?reportingDomain
+                a plis:ReportingDomain ;
+                plis:identifierSystem ?identifierSystem ;
+                schema:memberOf ?organization .
+        }
+
+        ?identifierSystem
+            schema:identifier ?root .
+
+        OPTIONAL {
+            ?reportingDomain
+                schema:name ?domainName .
+        }
+
+        OPTIONAL {
+            ?organization
+                schema:name ?organizationName .
+        }
+    }
 }
-ORDER BY ?name
-""" .
+ORDER BY ?domainName""" .
 
-    rpt:FacilityDisciplineFooterLookup
+    rpt:ResolveReportingFooters
         a rpt:NamedQuery ;
-        schema:name "Facility Discipline Footer Lookup" ;
+        schema:name "Resolve Reporting Footers" ;
         schema:description """
-Returns all reporting notices applicable to a facility and discipline combination.
+Returns all notices applicable to a reporting domain and discipline combination.
 """ ;
         schema:text """
 PREFIX plis:   <http://plis.hlth.gov.bc.ca/ns#>
@@ -2015,44 +2099,58 @@ SELECT DISTINCT
     ?text
 WHERE {
 
-    GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
-
-        ?facility
-            plis:reportingCode ?extension ;
-            plis:memberOfReportingDomain ?domain .
-
-        ?domain
-            plis:identifierSystem ?identifierSystem .
-
-        ?identifierSystem
-            schema:identifier ?root .
+    VALUES (?reportingDomain ?discipline) {
+        (<REPORTING_DOMAIN_URI> <DISCIPLINE_URI>)
     }
 
     GRAPH <http://plis.hlth.gov.bc.ca/reporting#projection> {
 
         {
             ?config
-                rpt:appliesToReportingEntity ?facility ;
-                rpt:includesNotice ?notice .
-
-            FILTER NOT EXISTS {
-                ?config rpt:discipline ?d
-            }
-        }
-
-        UNION
-
-        {
-            ?config
-                rpt:appliesToReportingEntity ?domain ;
+                rpt:appliesToReportingEntity ?reportingDomain ;
                 rpt:discipline ?discipline ;
                 rpt:includesNotice ?notice .
         }
+        UNION
+        {
+            ?config
+                rpt:appliesToReportingEntity ?reportingDomain ;
+                rpt:includesNotice ?notice .
 
-        ?notice schema:text ?text .
+            FILTER NOT EXISTS {
+                ?config rpt:discipline ?anyDiscipline
+            }
+        }
+
+        ?notice
+            schema:text ?text .
     }
 }
 ORDER BY ?notice
+""" .
+
+    rpt:ReportingDomainLookup
+        a rpt:NamedQuery ;
+        schema:name "Reporting Domain Lookup" ;
+        schema:description """
+Returns all reporting domains and reporting codes. For testing.
+    """ ;
+        schema:text """
+PREFIX plis: <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX schema: <https://schema.org/>
+
+SELECT ?reportingDomain ?name ?code
+WHERE {
+  GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
+      ?reportingDomain a plis:ReportingDomain ;
+              schema:name ?name .
+
+      OPTIONAL {
+          ?reportingDomain plis:reportingCode ?code
+      }
+  }
+}
+ORDER BY ?name
 """ .
 
     #############################################################
