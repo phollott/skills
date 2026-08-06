@@ -219,6 +219,7 @@ plis:scene {
 
     plis:NBSReportingDomain
         a plis:ReportingDomain ;
+        schema:name "NBS Reporting Domain" ;
         schema:memberOf plis:PHSA ;
         plis:reportingCode "NBSLab" ;
         plis:identifierSystem
