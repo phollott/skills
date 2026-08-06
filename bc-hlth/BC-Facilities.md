@@ -44,6 +44,15 @@ related:
 
 # PLIS Reporting Domain Model Notes
 
+## Modeling Notes
+
+Facilities presently act as composite reporting entities and may simultaneously represent place, organization, and operational reporting concepts. Multiple reporting codes are retained where historical or alternate identifiers are known; although effective dating would ideally be represented through events, reliable transition dates are not currently available. The model therefore preserves identifier aliases without temporal assertions and leaves more granular organizational, provenance, and interoperability modeling for future revisions.
+
+- Reporting entities currently represent a deliberate composite of organizational, operational, and physical-place concepts. These concerns may be separated into distinct holons in a future revision if additional governance, spatial, or interoperability requirements emerge.
+- Facilities may contain multiple plis:reportingCode values representing aliases, legacy identifiers, or alternate source-system representations. While effective dating of these identifiers would ideally be modeled as events, the necessary historical transition data is not currently available, so codes are treated as coexisting identifiers without temporal assertions.
+- Disciplines are currently modeled as controlled vocabulary members rather than a formal terminology hierarchy. More rigorous SKOS or OWL-based modeling may be introduced if additional classification requirements arise.
+- The Boundary graph currently captures only lightweight source-system lineage and identifier mappings. Future revisions may incorporate richer interoperability artefacts such as HL7, FHIR, terminology, and provenance mappings as these become available.
+
 ## Key Insight
 
 The legacy `FACILITY_LOOKUP` table is probably **not actually a facility registry**.
