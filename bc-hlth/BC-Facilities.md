@@ -57,36 +57,7 @@ Facilities presently act as composite reporting entities and may simultaneously 
 
 The legacy `FACILITY_LOOKUP` table is probably **not actually a facility registry**.
 
-It is better understood as a:
-
-> **Reporting Domain Registry**
-
-The consistent characteristics of entries in `FACILITY_LOOKUP` are:
-
-- `FACILITY_ID` (reporting identifier)
-- `FACILITY_OID` (identifier system)
-- reporting footer content
-- report-generation behaviour
-
-These are all reporting concerns rather than physical facility concerns.
-
-Examples:
-
-```text
-ARH
-Prince George RH
-PHC
-VHC
-STS
-VIHA-CN
-LIFELABS
-VMLK
-CDC
-```
-
-All are selectable reporting scopes within PLIS.
-
----
+It is better understood as a: **Reporting Domain Registry**, identified by Facility ID and OID, which governs report generation. These are reporting concerns rather than physical facility concerns.
 
 ## Distinguish Three Concepts
 
@@ -109,12 +80,27 @@ Vancouver Coastal
 
 Example:
 
-```turtle
-plis:IslandHealth
-    a holon:OrganizationHolon .
-```
+```sparql
+PREFIX plis:   <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX holon:  <http://holon.org/ns#>
+PREFIX schema: <https://schema.org/>
 
----
+SELECT
+    ?organization
+    ?name
+WHERE {
+    GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
+        ?organization
+            a holon:OrganizationHolon .
+
+        OPTIONAL {
+            ?organization
+                schema:name ?name .
+        }
+    }
+}
+ORDER BY ?name
+```
 
 ### 2. Facility
 
@@ -131,44 +117,87 @@ Prince Rupert Regional Hospital
 
 Example:
 
-```turtle
-plis:RoyalJubileeHospital
-    a plis:RegionalHospital ;
-    schema:memberOf plis:IslandHealth .
-```
+```sparql
+PREFIX plis:   <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX schema: <https://schema.org/>
 
----
+SELECT
+    ?facility
+    ?name
+    ?organizationName
+    ?reportingDomainName
+    (GROUP_CONCAT(DISTINCT ?code; SEPARATOR=", ") AS ?identifiers)
+WHERE {
+    GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
+        {
+            ?facility a plis:Hospital .
+        }
+        UNION
+        {
+            ?facility a plis:HealthCentre .
+        }
+
+        OPTIONAL {
+            ?facility schema:name ?name .
+        }
+
+        OPTIONAL {
+            ?facility plis:reportingCode ?code .
+        }
+
+        OPTIONAL {
+            ?facility schema:memberOf ?organization .
+            ?organization schema:name ?organizationName .
+        }
+
+        OPTIONAL {
+            ?facility
+                plis:memberOfReportingDomain
+                    ?reportingDomain .
+
+            ?reportingDomain
+                schema:name ?reportingDomainName .
+        }
+    }
+}
+GROUP BY
+    ?facility
+    ?name
+    ?organizationName
+    ?reportingDomainName
+ORDER BY ?name
+```
 
 ### 3. Reporting Domain
 
 Represents a scope to which reporting rules, legends, notices, and footer content apply.
 
-Examples:
-
-```text
-VIHA-CN
-VHC
-STS
-PHC
-LIFELABS
-VMLK
-BCB
-CDC
-```
-
 Example:
 
-```turtle
-plis:VIHACNReportingDomain
-    a plis:ReportingDomain ;
-    plis:reportingCode "VIHA-CN" .
-```
+```sparql
+PREFIX plis:   <http://plis.hlth.gov.bc.ca/ns#>
+PREFIX schema: <https://schema.org/>
 
----
+SELECT
+    ?reportingDomain
+    ?name
+WHERE {
+    GRAPH <http://plis.hlth.gov.bc.ca/ns#scene> {
+        ?reportingDomain
+            a plis:ReportingDomain .
+
+        OPTIONAL {
+            ?reportingDomain
+                schema:name ?name .
+        }
+    }
+}
+ORDER BY ?name
+```
 
 ## Important Observation
 
-A facility and a reporting domain are **not the same thing**, although sometimes they coincide.
+A facility (location) and a reporting domain (reporting) are **not the same thing**, although sometimes they coincide.
 
 ### Northern Health
 
@@ -181,8 +210,6 @@ Fort St John Hospital
 ```
 
 Each facility effectively acts as its own reporting domain.
-
----
 
 ### Island Health
 
@@ -205,44 +232,6 @@ VIHA-CN
 ```
 
 This reveals why Facility and Reporting Domain must be separate concepts.
-
----
-
-## Proposed Relationship
-
-Introduce:
-
-```turtle
-plis:reportingDomain
-```
-
-(or possibly `plis:reportsThrough`)
-
-Example:
-
-```turtle
-plis:RoyalJubileeHospital
-    plis:reportingDomain
-        plis:VIHACNReportingDomain .
-
-plis:VictoriaGeneralHospital
-    plis:reportingDomain
-        plis:VIHACNReportingDomain .
-
-plis:NanaimoRegionalGeneralHospital
-    plis:reportingDomain
-        plis:VIHACNReportingDomain .
-```
-
-This preserves:
-
-- real facility structure
-- organizational structure
-- reporting structure
-
-without conflating them.
-
----
 
 ## Vancouver Coastal Example
 
@@ -268,8 +257,6 @@ plis:LionsGateHospital
         plis:STSReportingDomain .
 ```
 
----
-
 ## LifeLabs Example
 
 ```text
@@ -286,8 +273,6 @@ Reporting Domains:
 ```
 
 Many reporting domains under one organization.
-
----
 
 ## PHSA Example
 
@@ -312,48 +297,16 @@ PHSASQReportingDomain
 
 following the same pattern used for VHC, STS, VIHA-CN and LifeLabs.
 
----
-
 ## Future Query Direction
 
-Current query assumes:
-
-```sparql
-?facility schema:memberOf ?organization
-```
-
-This works for facility-centric reporting but breaks down for shared domains such as:
-
-```text
-VIHA-CN
-VHC
-STS
-PHC
-VMLK
-```
-
-Future model should resolve reporting through the reporting domain:
-
-```sparql
-?facility
-    plis:reportingDomain
-        ?domain .
-
-?config
-    rpt:appliesToReportingEntity
-        ?domain .
-```
-
-This enables a single reporting mechanism for:
+Enable a single reporting mechanism for:
 
 - facility-based reporting
 - domain-based reporting
 - program-based reporting
 - laboratory-service reporting
 
----
-
-## Alternative View: Make ReportingDomain the Primary Reporting Concept
+## Better View: ReportingDomain is the Primary Reporting Concept
 
 A stronger interpretation of the data is:
 
@@ -402,13 +355,11 @@ A resource may participate in both classifications simultaneously.
 
 This may ultimately simplify the reporting model while preserving rich facility and organizational structure.
 
----
-
 ## Working Hypothesis
 
 A useful rule of thumb:
 
-> Anything identified by a reporting code and assigned reporting footer behaviour should be modeled as a Reporting Domain.
+> Anything identified by a reporting code and assigned reporting footer behaviour is modeled as a Reporting Domain.
 
 Facilities, hospitals, programs, and laboratory services may participate in one or more reporting domains, but reporting domains are the primary unit used by the report generation system.
 
