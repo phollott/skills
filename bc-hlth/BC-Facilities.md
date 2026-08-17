@@ -125,6 +125,32 @@ Plain Text, OWL 2 RL, SKOS, SHACL, GraphDB or Stardog, Azure
 
 Benefits: Governance, Federated data access, Enterprise security, Advanced reasoning, AI integration
 
+### Ontology Responsibilities
+
+| Technology | Purpose |
+|------------|------------|
+| OWL	| Structural ontology and semantic relationships |
+| SKOS | Controlled vocabularies and terminology schemes |
+| SHACL | Data quality and validation rules |
+| RDF | Knowledge representation |
+| SPARQL | Query and integration |
+| PROV-O | Lineage and provenance |
+
+## Expected Outcomes
+
+The initiative would establish a provincial semantic foundation that:
+
+- Creates a canonical healthcare location model for BC
+- Unifies facilities, services, organizations, and terminology
+- Reduces integration and maintenance costs
+- Supports FHIR and HL7 interoperability initiatives
+- Improves analytics and reporting consistency
+- Enables AI and knowledge graph applications
+- Provides a foundation for future digital twin capabilities
+
+Most importantly, it would shift location and terminology management from application-specific implementations to a shared provincial knowledge asset that can be reused across health authorities, provincial services, and future digital health initiatives.
+
+
 ## Modeling Notes
 
 Facilities presently act as composite reporting entities and may simultaneously represent place, organization, and operational reporting concepts. Multiple reporting codes are retained where historical or alternate identifiers are known; although effective dating would ideally be represented through events, reliable transition dates are not currently available. The model therefore preserves identifier aliases without temporal assertions and leaves more granular organizational, provenance, and interoperability modeling for future revisions.
