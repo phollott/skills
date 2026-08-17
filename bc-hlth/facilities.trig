@@ -23,12 +23,11 @@
 
 #################################################################
 # SCENE GRAPH
-# Hospitals and Health Centres are modeled as composite
-# reporting entities that may simultaneously represent
-# organizational, operational, and physical-place concepts.
-# These concerns may be separated into distinct holons in
-# a future revision if additional spatial or governance
-# requirements emerge.
+# Hospitals and Health Centres are modeled as composite reporting
+# entities that may simultaneously represent organizational, 
+# operational, and physical-place concepts. These concerns may be
+# separated into distinct holons in a future revision if 
+# additional spatial or governance requirements emerge.
 #
 # Reporting Domains
 # PHSA:             plis:PHSAReportingDomain, plis:NBSReportingDomain
