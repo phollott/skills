@@ -44,6 +44,87 @@ related:
 
 # PLIS Reporting Domain Model Notes
 
+British Columbia's healthcare ecosystem depends on a shared understanding of locations, services, organizations, and clinical terminology. Today, these concepts are often duplicated across operational systems, integration layers, reporting applications, GIS platforms, registries, and healthcare information exchanges. The result is significant effort spent reconciling facility identifiers, service names, organizational hierarchies, reporting domains, and terminology mappings. An ontology-driven knowledge graph provides an opportunity to establish a canonical semantic layer that allows these assets to be defined once and reused consistently across programs, health authorities, provincial services, and digital health initiatives.
+
+A provincial ontology for locations and service locations would create a common model for healthcare delivery across British Columbia. Physical facilities such as hospitals, laboratories, community health centres, clinics, and diagnostic sites could be represented alongside organizational ownership, geographic relationships, service capabilities, reporting domains, and operational characteristics. Rather than treating location data as a collection of application-specific codes, the ontology would model the real-world entities and relationships that healthcare professionals, planners, analysts, and information systems interact with every day. This would support interoperability between systems while preserving healthcare-specific context and governance requirements.
+
+A complementary terminology layer would provide semantic alignment between local business concepts and established standards such as SNOMED CT, LOINC, FHIR, Schema.org, and HL7. By combining location, service, and terminology ontologies within a knowledge graph architecture, British Columbia could establish a foundation for advanced analytics, AI grounding, digital twins, service discovery, interoperability, and enterprise reporting. The resulting semantic infrastructure would become a strategic asset that supports both current operational needs and future innovation initiatives.
+
+## Proposed Initiative
+**Enterprise Healthcare Location and Terminology Graph for British Columbia**
+
+The proposed initiative would establish a provincial semantic platform consisting of three interconnected domains:
+
+1. Location Ontology
+
+Models physical and geographic entities including: Health authorities, Hospitals, Community health centres, Laboratories, Clinics, Campuses and Buildings, Departments and Rooms, Geographic regions and Service catchment areas
+
+2. Service Location Ontology
+
+Models where services are delivered and how services relate to facilities.
+
+Examples: Laboratory services, Diagnostic imaging, Emergency services, Pathology, Public health, Community care, Mental health services
+
+3. Terminology Ontology
+
+Models controlled vocabularies and terminology relationships.
+
+Examples: Disciplines, Service categories, Program types, Clinical specialties, Reporting classifications
+
+## Strategic Benefits
+
+**Improved Interoperability**
+
+Organizations currently maintain multiple representations of the same facility, service, or identifier.
+
+A shared ontology would provide: Canonical identifiers, Cross-system mappings, Shared definitions, Reduced integration complexity
+
+**Enhanced Data Governance**
+
+The ontology becomes the authoritative source for: Business definitions, Relationships, Identifier management, Provenance and Metadata
+
+This reduces ambiguity and improves trust in enterprise data.
+
+**Support for AI and Knowledge-Based Systems**
+
+Modern AI systems require strong grounding.
+
+A location and terminology graph provides: Verified entities, Explainable relationships, Controlled vocabulary alignment, Evidence-based retrieval
+
+Example query:
+
+Which laboratories provide microbiology services to facilities within the Interior Health reporting domain?
+
+This is naturally answered through graph traversal rather than document search.
+
+**Improved Analytics and Reporting**
+
+The graph allows reporting systems to reason over: Facility hierarchies, Service relationships, Geographic boundaries, Organizational structures
+
+**Foundation for Digital Twins**
+
+The ontology can act as the semantic backbone for healthcare digital twins.
+
+Future extensions may include: Capacity metrics, Equipment inventories, Workforce assignments, Service demand, Operational events
+
+## Recommended Platform Architecture
+
+**Option 1: Open Source Foundation**
+
+Recommended for pilots and early adoption.
+
+Plain Text, OWL 2 RL, SKOS, SHACL, Apache Jena Fuseki, GitHub
+
+Benefits: Low cost, Standards-based, Rapid experimentation, Easy deployment
+
+**Option 2: Enterprise Semantic Platform**
+
+Recommended for long-term provincial deployment.
+
+Plain Text, OWL 2 RL, SKOS, SHACL, GraphDB or Stardog, Azure
+
+Benefits: Governance, Federated data access, Enterprise security, Advanced reasoning, AI integration
+
 ## Modeling Notes
 
 Facilities presently act as composite reporting entities and may simultaneously represent place, organization, and operational reporting concepts. Multiple reporting codes are retained where historical or alternate identifiers are known; although effective dating would ideally be represented through events, reliable transition dates are not currently available. The model therefore preserves identifier aliases without temporal assertions and leaves more granular organizational, provenance, and interoperability modeling for future revisions.
