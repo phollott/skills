@@ -67,7 +67,7 @@ Examples: Laboratory services, Diagnostic imaging, Emergency services, Pathology
 
 3. Terminology Ontology
 
-Models controlled vocabularies and terminology relationships.
+Models controlled vocabularies and terminology relationships. For instance, PLIS stores an assortment of pCLOCD/LOINC codes for the different Health Authorities. A terminology server could be used to substitute these in at the source, as part of FHIR adaptation or in PLIS DAL, or in HealthIdeas/HDP. Currently, this is implemented within PLIS as a pair of lookup tables. 
 
 Examples: Disciplines, Service categories, Program types, Clinical specialties, Reporting classifications
 
