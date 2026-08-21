@@ -93,6 +93,8 @@ plis:scene {
 
     #############################################################
     # DISCIPLINES
+    # TODO: these are good enough for now, but should eventually 
+    # define schema:identifier "<legacy-code>" and FHIR mapping
     #############################################################
 
     plis:Discipline
@@ -100,15 +102,21 @@ plis:scene {
 
     plis:GeneralChemistry
         a plis:Discipline ;
-        schema:name "General Chemistry" .
+        skos:prefLabel "General Chemistry" ;
+        skos:notation "GC" ;
+        schema:identifier "GENLAB".
 
     plis:Microbiology
         a plis:Discipline ;
-        schema:name "Microbiology" .
+        skos:prefLabel "Microbiology" ;
+        skos:notation "MB" ;
+        schema:identifier "MICRO" .
 
-    plis:AnatomicPathology
+plis:AnatomicPathology
         a plis:Discipline ;
-        schema:name "Anatomic Pathology" .
+        skos:prefLabel "Anatomic Pathology" ;
+        skos:notation "AP" ;
+        schema:identifier "PATH".
 
     #############################################################
     # ORGANIZATIONS AND IDENTIFIER SYSTEMS (OIDS)
