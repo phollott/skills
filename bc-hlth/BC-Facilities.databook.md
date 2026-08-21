@@ -44,6 +44,8 @@ related:
 
 # PLIS Reporting Domain Model Notes
 
+The PLIS LAB database currently features a lookup table for Facilities, which provides header and footer information for Lab Results Reports; and a pair of lookup tables for Code lookup, relationships, and associated disciplines. This facility data is specific to PLIS, but should also be available as part of a broader ontology for service delivery locations in BC. Code lookup is also quite specific to PLIS, which is limiting, since this sort of information might also be useful in the EHR (subsisting a local code for a province-wide code), in the POSIA (supplementing a local code with a province-wide code), or in HealthIdeas/HDP (creating a query based on equivalent codes).   
+
 British Columbia's healthcare ecosystem depends on a shared understanding of locations, services, organizations, and clinical terminology. Today, these concepts are often duplicated across operational systems, integration layers, reporting applications, GIS platforms, registries, and healthcare information exchanges. The result is significant effort spent reconciling facility identifiers, service names, organizational hierarchies, reporting domains, and terminology mappings. An ontology-driven knowledge graph provides an opportunity to establish a canonical semantic layer that allows these assets to be defined once and reused consistently across programs, health authorities, provincial services, and digital health initiatives.
 
 A provincial ontology for locations and service locations would create a common model for healthcare delivery across British Columbia. Physical facilities such as hospitals, laboratories, community health centres, clinics, and diagnostic sites could be represented alongside organizational ownership, geographic relationships, service capabilities, reporting domains, and operational characteristics. Rather than treating location data as a collection of application-specific codes, the ontology would model the real-world entities and relationships that healthcare professionals, planners, analysts, and information systems interact with every day. This would support interoperability between systems while preserving healthcare-specific context and governance requirements.
@@ -67,7 +69,7 @@ Examples: Laboratory services, Diagnostic imaging, Emergency services, Pathology
 
 3. Terminology Ontology
 
-Models controlled vocabularies and terminology relationships. For instance, PLIS stores an assortment of pCLOCD/LOINC codes for the different Health Authorities. A terminology server could be used to substitute these in at the source, as part of FHIR adaptation or in PLIS DAL, or in HealthIdeas/HDP. Currently, this is implemented within PLIS as a pair of lookup tables. 
+Models controlled vocabularies and terminology relationships. For instance, PLIS stores an assortment of pCLOCD/LOINC codes for the different Health Authorities. A terminology server could be used to substitute these in at the source, as part of FHIR adaptation or in PLIS DAL, or in HealthIdeas/HDP. Currently, this is implemented within PLIS as a pair of lookup tables.
 
 Examples: Disciplines, Service categories, Program types, Clinical specialties, Reporting classifications
 
