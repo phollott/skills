@@ -44,47 +44,50 @@
 plis:scene {
 
     plis:ReportingEntity
-        a rdfs:Class ;
+        a owl:Class ;
         rdfs:subClassOf
             holon:Holon .
 
     plis:ReportingDomain
-        a rdfs:Class ;
+        a owl:Class ;
         rdfs:subClassOf
             holon:dataHolon .
 
     plis:memberOfReportingDomain
-        a rdf:Property ;
+        a owl:ObjectProperty ;
         rdfs:domain plis:ReportingEntity ;
         rdfs:range plis:ReportingDomain .
 
     plis:identifierSystem
-        a rdf:Property .
+        a owl:ObjectProperty .
+
+    schema:memberOf
+        a owl:ObjectProperty .
 
     plis:reportingCode
-        a rdf:Property .
+        a owl:ObjectProperty .
 
     #############################################################
     # REPORTING ENTITY TYPES
     #############################################################
 
     plis:Hospital
-        a rdfs:Class ;
+        a owl:Class ;
         rdfs:subClassOf
             plis:ReportingEntity .
 
     plis:HealthCentre
-        a rdfs:Class ;
+        a owl:Class ;
         rdfs:subClassOf
             plis:ReportingEntity .
 
     plis:LaboratoryService
-        a rdfs:Class ;
+        a owl:Class ;
         rdfs:subClassOf
             plis:ReportingEntity .
 
     plis:ClinicalProgram
-        a rdfs:Class ;
+        a owl:Class ;
         rdfs:subClassOf
             plis:ReportingEntity .
 
@@ -93,7 +96,7 @@ plis:scene {
     #############################################################
 
     plis:Discipline
-        a rdfs:Class .
+        a owl:Class .
 
     plis:GeneralChemistry
         a plis:Discipline ;
@@ -1760,7 +1763,7 @@ plis:event {
         a rdf:Property .
 
     plis:effectiveDate
-        a rdf:Property .
+        a owl:ObjectProperty .
 
     plis:affectedDiscipline
         a rdf:Property .
