@@ -1,10 +1,114 @@
+---
+id: cluelumbo-hga-golem
+title: Cluelumbo
+subtitle: A HOLON Graph Architecture and GOLEM Narrative Ontology Example
+type: databook
+status: draft
+
+author:
+  name: Piers Hollott
+
+keywords:
+  - HOLON
+  - GOLEM
+  - Narrative Ontology
+  - Knowledge Graph
+  - Columbo
+  - Clue
+  - Fan Fiction
+  - RDF
+  - TriG
+  - Event Sourcing
+  - Projection
+
+summary: >
+  Cluelumbo is a narrative knowledge-graph game in which card reveals
+  progressively collapse a space of fictional possibilities into a
+  canonical Columbo-style episode, represented as GOLEM narrative
+  entities and persisted as a HOLON world graph.
+
+ontology:
+  primary:
+    - HOLON
+    - GOLEM
+
+graphs:
+  - BoundaryGraph
+  - SceneGraph
+  - EventGraph
+  - ProjectionGraph
+
+concepts:
+  - Boundary
+  - Scene
+  - Event
+  - Projection
+  - Agent
+  - Character
+  - Setting
+  - Object
+  - Narrative
+  - Inference
+
+principles:
+  - Persist narrative reality rather than gameplay mechanics
+  - Cards select possibilities but are not persisted
+  - Events are ordered but not necessarily causal
+  - Agents provide perspective over the world state
+  - Episodes are projections over event history
+  - World state evolves through event accumulation
+
+architecture:
+  boundary:
+    purpose: Defines narrative constraints and episode templates
+
+  scene:
+    purpose: Represents the current world state
+
+  event:
+    purpose: Records canonical episode history
+
+  projection:
+    purpose: Produces contextual narrative views
+
+agent_model:
+  holon:Agent:
+    subclassOf: golem:Character
+    capabilities:
+      - possesses
+      - observes
+      - suspects
+      - remembers
+      - infers
+
+projection_examples:
+  - Episode View
+  - Detective Notebook
+  - Evidence Inventory
+  - Suspect Board
+  - Timeline
+  - Case Summary
+
+design_statement: >
+  The Scene Graph contains the current world, the Event Graph records
+  what happened, the Projection Graph determines how that history is
+  viewed, and the Boundary Graph constrains what kinds of stories may
+  emerge.
+
+formulae:
+  - "Episode = Projection(EventGraph)"
+  - "Template = BoundaryGraph + SceneGraph"
+  - "CanonicalWorld = SceneGraph + EventGraph"
+
+# Cluelumbo Basics
+
 Cluelumbo is a narrative knowledge-graph game in which card reveals progressively collapse a space of fictional possibilities into a canonical Columbo-style episode, represented as GOLEM narrative entities and persisted as a HOLON world graph.
 
 Cluelumbo is emerging as a HOLON Graph Architecture application in which a boundary graph defines the constraints of a Columbo-style mystery, a scene graph contains the persistent world (characters, locations, evidence, and agent state), an event graph records what actually happens during the episode, and projection graphs provide views such as detective notebooks, inventories, suspect boards, timelines, or case summaries. GOLEM contributes the narrative vocabulary, providing concepts such as Character, Setting, Object, Event, Narrative, and Inference, while HOLON provides the structural concepts of Boundary, Scene, Projection, Agent, and state evolution. The detective (for example, Columbo) is best modeled as a holon:Agent that is also a golem:Character, allowing inventories, knowledge, suspicions, and observations to be represented without forcing every character in the story to behave as an agent.
 
 A key conclusion is that card draws should probably not be persisted in the graph. Cards are runtime mechanics that select narrative possibilities, but the graph should store only the resulting fictional reality: discoveries, conversations, accusations, evidence, locations, and participant relationships. While card reveals can be viewed philosophically as events that collapse a space of narrative possibilities into a canonical episode, they are not necessarily meaningful parts of the story world itself. Likewise, event ordering is objective and can be represented in the event graph, but causal relationships and inference chains are often supplied implicitly by the player and are therefore difficult to model accurately. As a result, the graph should capture who, what, where, and when, while the player remains the source of interpretation and meaning, producing a canonical Columbo fan-fiction episode that is represented through GOLEM entities and persisted as evolving HOLON world state.
 
-### Strawman Episode
+## Strawman Episode
 
 ```trig
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
