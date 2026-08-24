@@ -100,6 +100,8 @@ formulae:
   - "Template = BoundaryGraph + SceneGraph"
   - "CanonicalWorld = SceneGraph + EventGraph"
 
+---
+
 # Cluelumbo Basics
 
 Cluelumbo is a narrative knowledge-graph game in which card reveals progressively collapse a space of fictional possibilities into a canonical Columbo-style episode, represented as GOLEM narrative entities and persisted as a HOLON world graph.
