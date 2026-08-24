@@ -1,5 +1,9 @@
 Cluelumbo is a narrative knowledge-graph game in which card reveals progressively collapse a space of fictional possibilities into a canonical Columbo-style episode, represented as GOLEM narrative entities and persisted as a HOLON world graph.
 
+Cluelumbo is emerging as a HOLON Graph Architecture application in which a boundary graph defines the constraints of a Columbo-style mystery, a scene graph contains the persistent world (characters, locations, evidence, and agent state), an event graph records what actually happens during the episode, and projection graphs provide views such as detective notebooks, inventories, suspect boards, timelines, or case summaries. GOLEM contributes the narrative vocabulary, providing concepts such as Character, Setting, Object, Event, Narrative, and Inference, while HOLON provides the structural concepts of Boundary, Scene, Projection, Agent, and state evolution. The detective (for example, Columbo) is best modeled as a holon:Agent that is also a golem:Character, allowing inventories, knowledge, suspicions, and observations to be represented without forcing every character in the story to behave as an agent.
+
+A key conclusion is that card draws should probably not be persisted in the graph. Cards are runtime mechanics that select narrative possibilities, but the graph should store only the resulting fictional reality: discoveries, conversations, accusations, evidence, locations, and participant relationships. While card reveals can be viewed philosophically as events that collapse a space of narrative possibilities into a canonical episode, they are not necessarily meaningful parts of the story world itself. Likewise, event ordering is objective and can be represented in the event graph, but causal relationships and inference chains are often supplied implicitly by the player and are therefore difficult to model accurately. As a result, the graph should capture who, what, where, and when, while the player remains the source of interpretation and meaning, producing a canonical Columbo fan-fiction episode that is represented through GOLEM entities and persisted as evolving HOLON world state.
+
 ### Strawman Episode
 
 ```trig
@@ -12,6 +16,9 @@ Cluelumbo is a narrative knowledge-graph game in which card reveals progressivel
 @prefix ex:    <https://cluelumbo.org/episode/001#> .
 
 ex:BoundaryGraph {
+
+    holon:Agent
+        rdfs:subClassOf golem:Character .
 
     ex:ColumboMysteryTemplate
         a holon:Boundary ;
@@ -26,6 +33,7 @@ ex:BoundaryGraph {
 ex:SceneGraph {
 
     ex:Columbo
+        a holon:Agent ;
         a golem:Character ;
         rdfs:label "Lieutenant Columbo" .
 
@@ -55,12 +63,14 @@ ex:EventGraph {
 
     ex:ArrivalEvent
         a golem:Event ;
+        holon:sequence 1;
 
         golem:hasParticipant ex:Columbo ;
         golem:occursIn ex:Conservatory .
 
     ex:GunDiscoveryEvent
         a golem:Event ;
+        holon:sequence 2;
 
         golem:hasParticipant ex:MrsPlum ;
         golem:occursIn ex:Conservatory ;
@@ -68,6 +78,7 @@ ex:EventGraph {
 
     ex:FalseStatementEvent
         a golem:Event ;
+        holon:sequence 3;
 
         golem:hasParticipant ex:MrGreen .
 
@@ -76,40 +87,30 @@ ex:EventGraph {
 
     ex:PhotoDiscoveryEvent
         a golem:Event ;
+        holon:sequence 4;
 
         golem:hasParticipant ex:Columbo ;
         golem:occursIn ex:Conservatory ;
         golem:involvesObject ex:Photograph .
 
     ex:InferenceEvent
-        a golem:Inference ;
+        a golem:Event ;
+        holon:sequence 5;
 
-        golem:hasParticipant ex:Columbo ;
+        golem:hasParticipant ex:Columbo .
 
-        holon:conclusion
-            "Mr Green lied about his whereabouts." .
+#        holon:conclusion
+#            "Mr Green lied about his whereabouts." .
 
     ex:AccusationEvent
         a golem:Event ;
+        holon:sequence 6;
 
         golem:hasParticipant ex:Columbo ;
         golem:hasParticipant ex:MrGreen ;
 
         holon:accuses ex:MrGreen .
-
-}
-
-ex:EpisodeGraph {
-
-    ex:Episode001
-        a golem:Narrative ;
-
-        golem:containsEvent ex:ArrivalEvent ;
-        golem:containsEvent ex:GunDiscoveryEvent ;
-        golem:containsEvent ex:FalseStatementEvent ;
-        golem:containsEvent ex:PhotoDiscoveryEvent ;
-        golem:containsEvent ex:InferenceEvent ;
-        golem:containsEvent ex:AccusationEvent .
+#        golem:containsEvent ex:AccusationEvent .
 
 }
 
@@ -124,6 +125,35 @@ ex:ProjectionGraph {
 
     ex:MrGreen
         holon:isPrimarySuspect true .
+
+    ex:EpisodeView
+        a holon:Projection ;
+
+        rdfs:label "Full Episode Narrative" ;
+
+        holon:query """
+PREFIX golem: <https://cluelumbo.org/golem#>
+PREFIX holon: <https://cluelumbo.org/holon#>
+
+CONSTRUCT {
+
+    ex:Episode
+        a golem:Narrative ;
+        golem:containsEvent ?event .
+
+    ?event
+        a golem:Event ;
+        holon:sequence ?sequence .
+}
+WHERE {
+    ?event a golem:Event ;
+           holon:sequence ?sequence .
+}
+ORDER BY ?sequence
+""" .
+
+}
+
 
 }
 ```
