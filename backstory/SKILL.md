@@ -42,6 +42,10 @@ GOLEM is one of the few ontologies that treats narrative as a network of events,
 
 If I were designing Backstory from scratch, I'd probably use GOLEM as the narrative layer, but I'd add a second layer explicitly devoted to uncertainty, revelation, and world evolution, because those seem to be the truly novel mechanics in your design. That's where Backstory starts to become something more like a "persistent fictional knowledge graph game" rather than simply a Scrivener-with-cards.
 
+### simplicity
+
+Focus on Character (gc:G1), Location (gc:G13), Setting (gc:G12), Event (gc:G5), NarrativeUnit (gc:G9)
+
 ## scene by scene
 
 Each writer spreadsheets their novel a little different, but from the spreadsheets I’ve looked and used to build my own, they all feature columns dedicated to:
