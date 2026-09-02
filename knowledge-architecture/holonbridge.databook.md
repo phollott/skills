@@ -2,7 +2,7 @@
 title: "HolonBridge Local-First Projection Architecture"
 subtitle: "From NL-to-SPARQL Generation to Projection-Based Intent Routing"
 author: "Piers Hollott"
-date: "2026-09-01"
+date: "2026-09-02"
 status: "working"
 maturity: "prototype"
 
@@ -164,3 +164,15 @@ The next evolution of HolonBridge is to use Mistral after projection execution r
 MCP could be used to extend HolonBridge beyond a single Fuseki dataset by allowing projections to invoke external tools and data sources while remaining grounded in the knowledge graph. In this model, the graph stores the ontology, business concepts, identifiers, rules, workflows, and capability definitions, while MCP tools provide access to operational systems such as SQL databases, FHIR servers, REST APIs, SharePoint, file systems, or analytics platforms. When a user asks a question, the graph determines the intent and the appropriate capability, which then calls the relevant MCP tool to retrieve current data. The graph acts as the semantic layer that gives meaning and context to the retrieved information.
 
 This creates a powerful architecture where the knowledge graph becomes a semantic control plane rather than merely a data store. Projections can function as a catalog of trusted MCP-accessible capabilities, allowing the system to answer questions using live enterprise data while remaining grounded in graph-defined concepts and governance. The resulting pattern becomes User Question → Projection Selection → MCP Tool Invocation → Data Retrieval → Graph Enrichment → Natural Language Response, combining the flexibility of MCP with the structure, explainability, and knowledge-centric design of Holon Graph Architecture.
+
+## Today’s progress summary: 2026-09-02
+
+### Capability Catalog
+
+HolonBridge does not need to understand the details of your healthcare ontology, PLIS model, or any other domain-specific graph. Its main purpose is to discover and execute capabilities. In practice, that means it only needs metadata describing available projections: what they are called, what they do, what parameters they require, and what SPARQL query implements them. Your domain graph remains the source of truth, while HolonBridge acts as an adapter that makes those capabilities accessible to AI systems.
+
+MCP (Model Context Protocol) adds another layer on top of this. Instead of an LLM generating SPARQL directly, a HolonBridge MCP server could expose graph capabilities as tools such as "Resolve Reporting Domain" or "Get Facilities By Authority". An AI client would select a capability, provide parameters, and HolonBridge would execute the stored SPARQL against Fuseki. This is faster, safer, and more deterministic than generating SPARQL from natural language every time.
+
+In the long term, the most interesting architecture may be to treat your projection graph as a self-describing capability catalog. The PLIS graph defines the knowledge, the projection graph defines the executable capabilities, HolonBridge exposes those capabilities as MCP tools, and any AI client can consume them. In that model, Fuseki stores both the knowledge and the definitions of how to access it, while HolonBridge becomes the translation layer that lets AI systems interact with the graph without needing to know its internal structure.
+
+The projection graph defines what knowledge capabilities are available, while the boundary graph defines the conditions under which those capabilities may create, modify, or integrate knowledge.
