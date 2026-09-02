@@ -1,0 +1,63 @@
+@prefix gc: <https://w3id.org/golem/ontology#> .
+@prefix ex: <https://example.org/story/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# -------------------------
+# Scene Graph
+# -------------------------
+
+ex:sceneGraph {
+
+    ex:ForestSetting
+        a gc:G12_Setting ;
+        rdfs:label "Moonlit Forest Scene" ;
+
+    ex:Alice
+        a gc:G1_Character ;
+        rdfs:label "Alice" ;
+        gc:setting ex:ForestSetting .
+
+    ex:WhisperingForest
+        a gc:G13_Narrative_Location ;
+        rdfs:label "Whispering Forest" ;
+        gc:setting ex:ForestSetting .
+
+    ex:FindLanternEvent
+        a gc:G5_Narrative_Event ;
+        rdfs:label "Alice discovers an ancient lantern" ;
+        gc:setting ex:ForestSetting ;
+        gc:participant ex:Alice ;
+        gc:participantPlace ex:WhisperingForest .
+}
+
+# -------------------------
+# Projection Graph
+# -------------------------
+
+ex:projectionGraph {
+
+    ex:LocationDatabook
+        a ex:Projection ;
+        schema:name "Location Databook" ;
+        schema:description "Retrieve locations and their associated settings." ;
+
+        schema:text """
+PREFIX gc: <https://w3id.org/golem/ontology#>
+PREFIX schema: <https://schema.org/>
+
+SELECT
+    ?location
+    ?locationName
+    ?setting
+    ?settingName
+WHERE {
+    ?location a gc:G13_Narrative_Location ;
+              schema:name ?locationName ;
+              gc:setting ?setting .
+
+    ?setting a gc:G12_Setting ;
+             schema:name ?settingName .
+}
+ORDER BY ?locationName
+""" .
+}
