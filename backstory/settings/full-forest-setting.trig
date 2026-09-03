@@ -14,9 +14,18 @@ holon:SceneGraph {
         rdfs:label "Moonlit Forest Scene" .
 
     ex:Alice
-        a gc:G1_Character ;
+        a holon:Agent ,
+          gc:G1_Character ,
+          gc:G2_Person ;
         rdfs:label "Alice" ;
         gc:setting ex:ForestSetting .
+
+    ex:OldForester
+        a gc:G2_Person ,
+          gc:G1_Character ;
+        rdfs:label "The Old Forester" ;
+        gc:setting ex:ForestSetting ;
+        ex:homeLocation ex:WhisperingForest .
 
     ex:WhisperingForest
         a gc:G13_Narrative_Location ;
@@ -40,8 +49,8 @@ holon:EventGraph {
         rdfs:label "Alice discovers an ancient lantern" ;
         gc:setting ex:ForestSetting ;
         gc:participant ex:Alice ;
-        gc:participantPlace ex:WhisperingForest ;
-        gc:object ex:AncientLantern .
+        gc:participant ex:AncientLantern ;
+        gc:participantPlace ex:WhisperingForest .
 
 }
 
