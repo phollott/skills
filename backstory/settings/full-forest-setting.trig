@@ -1,3 +1,4 @@
+@prefix holon:  <http://w3id.org/holon/> .
 @prefix gc: <https://w3id.org/golem/ontology#> .
 @prefix ex: <https://example.org/story/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -6,7 +7,7 @@
 # Scene Graph
 # -------------------------
 
-ex:sceneGraph {
+holon:SceneGraph {
 
     ex:ForestSetting
         a gc:G12_Setting ;
@@ -22,19 +23,28 @@ ex:sceneGraph {
         rdfs:label "Whispering Forest" ;
         gc:setting ex:ForestSetting .
 
+}
+
+# -------------------------
+# Event Graph
+# -------------------------
+
+holon:EventGraph {
+
     ex:FindLanternEvent
         a gc:G5_Narrative_Event ;
         rdfs:label "Alice discovers an ancient lantern" ;
         gc:setting ex:ForestSetting ;
         gc:participant ex:Alice ;
         gc:participantPlace ex:WhisperingForest .
+
 }
 
 # -------------------------
 # Projection Graph
 # -------------------------
 
-ex:projectionGraph {
+holon:ProjectionGraph {
 
     ex:LocationDatabook
         a ex:Projection ;
