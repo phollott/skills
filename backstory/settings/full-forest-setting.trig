@@ -21,8 +21,8 @@ holon:SceneGraph {
         gc:setting ex:ForestSetting .
 
     ex:OldForester
-        a gc:G2_Person ,
-          gc:G1_Character ;
+        a gc:G1_Character ,
+          gc:G2_Person ;
         rdfs:label "The Old Forester" ;
         gc:setting ex:ForestSetting ;
         ex:homeLocation ex:WhisperingForest .
