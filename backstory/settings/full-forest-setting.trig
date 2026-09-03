@@ -11,7 +11,7 @@ holon:SceneGraph {
 
     ex:ForestSetting
         a gc:G12_Setting ;
-        rdfs:label "Moonlit Forest Scene" ;
+        rdfs:label "Moonlit Forest Scene" .
 
     ex:Alice
         a gc:G1_Character ;
@@ -22,6 +22,10 @@ holon:SceneGraph {
         a gc:G13_Narrative_Location ;
         rdfs:label "Whispering Forest" ;
         gc:setting ex:ForestSetting .
+
+    ex:AncientLantern
+        a ex:Lantern ;
+        rdfs:label "Ancient Lantern" .
 
 }
 
@@ -36,7 +40,8 @@ holon:EventGraph {
         rdfs:label "Alice discovers an ancient lantern" ;
         gc:setting ex:ForestSetting ;
         gc:participant ex:Alice ;
-        gc:participantPlace ex:WhisperingForest .
+        gc:participantPlace ex:WhisperingForest ;
+        gc:object ex:AncientLantern .
 
 }
 
@@ -50,24 +55,19 @@ holon:ProjectionGraph {
         a ex:Projection ;
         schema:name "Location Databook" ;
         schema:description "Retrieve locations and their associated settings." ;
-
         schema:text """
 PREFIX gc: <https://w3id.org/golem/ontology#>
-PREFIX schema: <https://schema.org/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT
-    ?location
-    ?locationName
-    ?setting
-    ?settingName
+SELECT ?location ?locationLabel ?setting ?settingLabel
 WHERE {
     ?location a gc:G13_Narrative_Location ;
-              schema:name ?locationName ;
+              rdfs:label ?locationLabel ;
               gc:setting ?setting .
 
     ?setting a gc:G12_Setting ;
-             schema:name ?settingName .
+             rdfs:label ?settingLabel .
 }
-ORDER BY ?locationName
+ORDER BY ?locationLabel
 """ .
 }
