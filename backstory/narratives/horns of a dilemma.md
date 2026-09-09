@@ -1,5 +1,49 @@
+# In The Horns of a Dilemma
 
-In The Horns of a Dilemma
+## Notes:
+The old story already contains:
+
+Alex, the underperforming magic student, with a talent for floating/lightening himself rather than conventional heroic magic.
+The Teertsi invaders.
+A mysterious portal called the Teertsi Hole.
+A mission involving throwing Alex into the anomaly to discover its nature.
+A bovine spatial entity eventually identified as Odd-Hume, described through imagery of an immense horned cow.
+The realization that the anomaly is not evil, but a living being being exploited and fed by the Teertsi.
+
+What's striking is that the new version is not replacing the old story so much as deepening it.
+
+The weakest part of the older draft, viewed from today's perspective, is that Odd-Hume is essentially a plot device. Alex meets her, discovers how she works, returns, and becomes a hero. The emotional arc is thin. The occupation history is vivid, the Teertsi are memorable, and Odd-Hume is wonderfully strange, but there isn't much personal transformation beyond "boy succeeds in mission."
+
+The newer concept adds the missing emotional machinery:
+
+| Old Story	| New Story |
+|--------------------------------|-----------------------|
+| Odd-Hume is hungry. | Odd-Home is hungry for memories and identity. |
+| Alex proves useful.	| Alex learns empathy and belonging. |
+| Teertsi exploit portal.	| Teertsi exploit a sentient being. |
+| Portal explains invasion logistics.	| Portal embodies memory, grief, and history. |
+| Alex becomes hero.	| Alex helps two damaged beings heal. |
+
+The memory-birds are especially powerful because they solve a problem the original story didn't know it had. They create a bridge between:
+
+personal grief (Birria),
+collective memory (the war),
+and Odd-Home's missing identity.
+
+In the old manuscript, the occupation history appears mostly as exposition and flashback. In the new version, those same historical events could survive as living memories encountered inside Odd-Home. Alex could literally drift through fragments of the Battle of Galvany Fields, encounter echoes of his father, witness Birria's memories of her wife, and discover truths hidden beneath official history. That is a much more BCS-like approach than a straightforward recounting of past events.
+
+The other thing I notice is that the title actually works much better now than it did originally. In the old draft, "The Horns of a Dilemma" refers primarily to the geometric structure of a dilemma and Alex's uncertainty about where he is. In the newer version, the title simultaneously refers to: the dilemma, Odd-Home's bovine nature, Auðhumla-like symbolism, memory, nourishment, and identity.
+
+That's a richer literary symbol.
+
+So if I were taking this toward a BCS submission, I would not rewrite from scratch. I would treat the old story as an archaeological layer. Keep: Alex, the floating magic, the Teertsi, the occupation, Galvany Fields, Azure Spires, the mission into the anomaly, the giant cosmic cow imagery.
+
+Then graft onto it: Birria, memory-birds, Odd-Home's amnesia, the Mithwood ring-memories,
+grief as a central theme, and the idea that Alex discovers the rest of the story through memories encountered inside Odd-Home.
+
+My instinct is that you've already written perhaps 60-70% of the setting and premise years ago. The biggest innovation isn't the worldbuilding. It's realizing that Odd-Home should be a character rather than a mechanism, and that Alex's journey through her should reveal the emotional history of the people around him rather than merely the logistics of the Teertsi invasion.
+
+## The Horns of a Dilemma
  
 Alex was in a quandary. At least, that was where he thought he was, but he was unsure. If only he had paid more attention.
 Oh well, he had all the time in the world to ponder it now. He silently cursed himself for not paying more attention in his Psychic and Magical Telemetry and Geography of the Arcane World classes. Only last month, there had been a guest lecturer who was rumored to have spoken very knowledgeably on the subject of “Topological Non-Conformities in the Aether.” Alex, naturally, had skipped the lecture to go floating in the Tane, the small river that ran through the center of campus. It had been the hottest day of midsummer, far too hot to spend in a stuffy lecture hall.
