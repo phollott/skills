@@ -127,92 +127,27 @@ Those moments can hit much harder than battle spectacle.
 
 ### Suggested three-act structure
 Act I (25%)
-
-Alex enters Odd-Hume.
-
-Confusion.
-
-Strange memory-birds.
-
-Fragments of Birria.
-
-Question:
-
-What is this place?
+Alex enters Odd-Hume. Confusion. Strange memory-birds. Fragments of Birria.
+Question: What is this place?
 
 Act II (50%)
-
 Alex explores.
-
-Learns about:
-
-Birria's grief.
-Mithwood memory traditions.
-Odd-Hume's forgotten identity.
-Teertsi exploitation.
-
-Question changes to:
-
-How can Odd-Hume be healed?
+Learns about: Birria's grief. Mithwood memory traditions. Odd-Hume's forgotten identity. Teertsi exploitation.
+Question changes to: How can Odd-Hume be healed?
 
 Act III (25%)
-
-Alex assembles the lost memories.
-
-Accepts truths about himself.
-
-Returns Odd-Hume's name and history.
-
-Odd-Hume helps sever Teertsi control.
+Alex assembles the lost memories. Accepts truths about himself. Returns Odd-Hume's name and history. Odd-Hume helps sever Teertsi control.
 
 Alex returns not because he solved a magical puzzle, but because he learned how to belong.
 
-The ending I'd avoid
-
-I would avoid:
-
-Alex learns secret
-↓
-Returns
-↓
-Teertsi defeated
-↓
-Hero
-
-
-That's close to the existing ending.
-
-Instead aim for:
-
-Alex heals Odd-Hume
-↓
-Odd-Hume chooses her own future
-↓
-Teertsi lose control
-↓
-Alex returns changed
-
+The ending I'd aim for:
+Alex heals Odd-Hume; Odd-Hume chooses her own future; Teertsi lose control; Alex returns changed
 
 That preserves agency for Odd-Hume as a character rather than a magical resource.
 
-One final BCS observation
-
-The line that jumps out at me is from your own notes:
-
-Odd-Hume should be a character rather than a mechanism.
-
-I think that's the entire revision in a nutshell.
-
-If every new scene asks:
-
-What does this reveal about Odd-Hume's personality, memory, loneliness, or hunger?
-
-rather than
-
-What does this reveal about how the portal works?
+If every new scene asks: What does this reveal about Odd-Hume's personality, memory, loneliness, or hunger? rather than What does this reveal about how the portal works?
 
 the story will naturally deepen, lengthen, and become much more aligned with the kind of emotional secondary-world fantasy that Beneath Ceaseless Skies tends to publish.
-
 
 
 ## The Horns of a Dilemma
