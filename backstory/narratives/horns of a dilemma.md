@@ -151,32 +151,57 @@ the story will naturally deepen, lengthen, and become much more aligned with the
 
 
 ## The Horns of a Dilemma
- 
+
+### ACT I
+
 Alex was in a quandary. At least, that was where he thought he was, but he was unsure. If only he had paid more attention.
-Oh well, he had all the time in the world to ponder it now. He silently cursed himself for not paying more attention in his Psychic and Magical Telemetry and Geography of the Arcane World classes. Only last month, there had been a guest lecturer who was rumored to have spoken very knowledgeably on the subject of “Topological Non-Conformities in the Aether.” Alex, naturally, had skipped the lecture to go floating in the Tane, the small river that ran through the center of campus. It had been the hottest day of midsummer, far too hot to spend in a stuffy lecture hall.
-For almost two years now, Alex had attended the School of Arts and Magic, in the College of Dweomer at the ‘Varsity of Azure Spires. He was barely squeaking by with a passing grade in most of his subjects, “Psych and Madge” included.
-“Now let’s see… solutions: the quandary has four potential solutions, or egresses,” he muttered to himself. “Indeterminability: you can never be completely sure which solution you are approaching… but… but….” There always was a “but” or a “however” attached to these sorts of definitions, a matter which had caused Alex serious grief in the past. “But!” he exclaimed, “you are assured of eventual egress as an invariant state of the quandary, based on the impossibility of stasis.”
+Oh well, he had all the time in the world to ponder it now. He silently cursed himself for not paying more attention in his Psychic and Magical Telemetry and Geography of the Arcane World classes. Only last month, there had been a guest lecturer who was rumored to have spoken very knowledgeably on the subject of "Topological Non-Conformities in the Aether." Alex, naturally, had skipped the lecture to go floating in the Tane, the small river that ran through the center of campus. It had been the hottest day of midsummer, far too hot to spend in a stuffy lecture hall.
+
+For almost two years now, Alex had attended the School of Arts and Magic, in the College of Dweomer at the Varsity of Azure Spires. He was barely squeaking by with a passing grade in most of his subjects, "Psych and Madge" included.
+
+"Now let’s see… solutions: the quandary has four potential solutions, or egresses," he muttered to himself. "Indeterminability: you can never be completely sure which solution you are approaching… but… but…." There always was a "but" or a "however" attached to these sorts of definitions, a matter which had caused Alex serious grief in the past. "But!" he exclaimed, "you are assured of eventual egress as an invariant state of the quandary, based on the impossibility of stasis."
+
 Put simply, if you can’t stand still, you will eventually have to leave.
+
 Which is, ironically, a phrase several of his professors had applied to Alex in the last handful of months alone.
-“…so wherever you are, you will eventually leave the quandary!” This would have been reassuring to Alex, if this were in fact a quandary in which he was floating, but it came as cold comfort, as this particular aetherial non-conformity allowed of only two exits. He remembered that much from his hurried briefing, only hours earlier.
+"…so wherever you are, you will eventually leave the quandary!" This would have been reassuring to Alex, if this were in fact a quandary in which he was floating, but it came as cold comfort, as this particular aetherial non-conformity allowed of only two exits. He remembered that much from his hurried briefing, only hours earlier.
+
 A dilemma then… was the same thing true of a dilemma? He couldn’t remember. So! He might be in here forever. Surely they hadn’t intended that! The whole thing had happened so quickly. And there again was that strange voice in the back of his head. Alex asked it to go away, and it did.
+
+ * * *
  
 In the earliest days of the Teertsi occupation of the Azure Delta, stories had been passed around from neighborhood to neighborhood; like, for instance, the old washerwoman from Scrub Sheelie, who, after the Teertsi gangs had taken her family from her, had turned her strong hands from wringing out the days laundry to wringing the necks of any young Teertsi foolish enough to venture out after the curfew they themselves had imposed. In Galvany Fields, where Alex had lived before coming to Azure Spires, the standard rejoinder to this story had always been that, were the Teertsi youth not so filthy that they rarely had their clothes laundered, the poor woman might have accepted their trade instead.
+
 Alex had cringed when he heard stories like these. In those first days of occupation, his family had known both poverty and mistreatment at the hands of the Teertsi. He would never forget this.
+
 He had been there to witness the Teertsi Hole opening. This he would never forget either. There had been chaff demons in the fields that day. Each year at the harvest, the crop mages would set hexes on the straw and threshed hay, separating the usable wheat and other grains from the rest. As the hexes took effect, the chaff would form whirlwind homunculi, thin and tall, graceful manakins which would then lend their assistance during the rest of the harvest. They were neither strong nor durable, but the chaff demons were reliable, until the Autom Feast after last harvest, at which they would dance themselves to pieces.
+
 When the Hole opened over the fields, there was confusion. The dark aperture occluded the sun as it enlarged from an occult pinpoint in the sky to a wide tear. Baffled by its appearance, the crop mages huddled together. And then the Teertsi gangs began to emerge.
-“What… what is that?” Alex’s father, an elder among the crop mages, had cried out.
-“It looks like the sky is being torn!”
-“This is evil, evil magic.”
+
+"What… what is that?" Alex’s father, an elder among the crop mages, had cried out.
+
+"It looks like the sky is being torn!"
+
+"This is evil, evil magic."
+
 Alex could only agree.
+
 The first sight the Delta folk had had of the Teertsi were the heliothopters, spidery airborne vehicles with only a single rider, pumping pedals and bellows to keep his flimsy craft aloft – but these were only scouts, soon followed by handfuls of airships, proud and terrifying zeppelins. Within short moments, the airships were dropping balloons filled with only enough hot air to slow their descent, and attached to these balloons were baskets brimming with Teertsi ground troops in their oily black armor, made from the hide of no beast Alex had ever seen. From these baskets also emerged the Starcatchers and the Lutanists, who began setting up their equipment on a nearby hilltop. The ground troops charged down the hillside and across the fields of Galvany.
+
 Alex’s father and the other crop mages now agreed that it was time for action, and so, strengthening and redoubling the hexes they had made on the chaff demons, they sent them at the intruders. But the chaff demons were no match for the Teertsi ground offensive, and again and again the straw men were beaten down, trodden underfoot or exploded into nebulae of hay, only to be brought into being again by the tireless crop mages.
-“We can hold them! Keep them together, lads”
+
+"We can hold them! Keep them together, lads!"
+
 Alex prayed that his father was right. He was almost too young to believe that his father could be wrong.
+
 When the first wave of shock troops met the straw men in combat, they had smashed them with brute force. The crop mages pooled their guile and arcane energy, and the straw men were whirled back into being, forming larger and more powerful homunculi, which seemed momentarily to push back the Teertsi ground force. But then Alex had witnessed a terrifying sight, as some amongst the ground force drew forth lit torches, and set their comrades ablaze. Such was the nature of the Teertsi armor that it protected the wearer from the flames, while feeding the blaze. Alex watched as the burning soldiers tore a swath through the straw men, which kindled almost immediately into towering infernos, exploding from within as the crop dust took.
+
 Trolls, Alex had seen, on one memorable (and quite frightening) occasion when he had traveled with his father to the Mithwood, to trade with the people who lived there. But these invaders, in many ways troll-like, were different. The trolls had been ruthless, but had only been protecting what was theirs. These people were relentless, intent only on breaking through to Azure Spires and neighboring Galvany.
+
 And eventually the crop mages and their allies had had to do just that: to let the Teertsi pass through, and hope that they had given the twin cities of the Delta adequate time to prepare their defenses.
+
 Had this only been the case, the occupation would have ended there, but there had been strife between the cities, and so the cities were prepared for attack, but not from this direction, and the reinforcements they mobilized were delayed.
+
 First to arrive was the mage army of the Oakenshore Guild, who after a brief, uneasy parley with the crop mages (who had retreated to a hilltop overlooking the battlefield), turned their efforts to the ground assault, hurling bolts of lightning and explosive curses against the Teertsi shock troops.
 Soon after arrived the nimble lion-riders of Galvany, who were able to destroy much of the Teertsi ground offensive, distracted as the shock troopers were by the Oakenshore magic. With the lion-riders came birds of the sky, great eagles, which swooped down on the battlefield, plucking soldiers up and hurling them at their allies. The lion-riders set up a whooping battle cry, rallying and re-rallying as they tore the Teertsi to pieces. From the vantage of their hilltop aerie, Alex and the other farm-folk joined in the rallying cry. His chest nearly burst with pride as he watched the tide of battle turning.
  
