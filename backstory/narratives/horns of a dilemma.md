@@ -3,14 +3,9 @@
 ## Notes:
 The old story already contains:
 
-Alex, the underperforming magic student, with a talent for floating/lightening himself rather than conventional heroic magic.
-The Teertsi invaders.
-A mysterious portal called the Teertsi Hole.
-A mission involving throwing Alex into the anomaly to discover its nature.
-A bovine spatial entity eventually identified as Odd-Hume, described through imagery of an immense horned cow.
-The realization that the anomaly is not evil, but a living being being exploited and fed by the Teertsi.
-
-Alex enters the anomaly, learns her truth, and returns home
+Alex, the underperforming magic student, with a talent for floating himself rather than conventional heroic magic; The Teertsi invaders and a mysterious portal called the Teertsi Hole.
+A mission involving throwing Alex into the anomaly to discover its nature; a bovine spatial entity eventually identified as Odd-Hume, described through imagery of an immense horned cow.
+The realization that the anomaly is not evil, but a living being being exploited and fed by the Teertsi; Alex enters the anomaly, learns her truth, and returns home
 
 What's striking is that the new version is not replacing the old story so much as deepening it.
 
