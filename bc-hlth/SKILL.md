@@ -1,7 +1,18 @@
 ---
 name: bc-hlth
-description: Creates and validates British Columbia healthcare facility, organization, service delivery location, reporting domain, and health ontology models. Supports PLIS, FHIR, RDF, knowledge graph, semantic interoperability, terminology governance, and health knowledge layer design.
+description: An omnibus skill that covers various ongoing prototypes and concerns related to BC Government and Healthcare. Including ontology development for healthcare facilities, organization, service delivery location, reporting domain, and health ontology models; BI Publisher to SSRS Report conversion. Supports PLIS, FHIR, RDF, knowledge graph, semantic interoperability, terminology governance, and health knowledge layer design.
 ---
+
+# BC Health BI Publisher Report Conversion
+
+## Purpose
+
+This skill assists with understanding the business drivers for BI Publisher to SSRS Conversion for PBCS/HIBC
+
+This skill supports:
+
+- Pacific Blue Cross Solutions and Health Insurance BC
+- Ongoing need to deprecate existing BI Publisher reports to Power BI Service (SSRS), using the sideswipe-bip-to-rdl.xsl transform, which was developed using a prototype called Sideswipe, using ExistDB and SQL Server as a test framework.
 
 # BC Health Ontology and Service Delivery Location Skill
 
