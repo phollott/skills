@@ -12,7 +12,7 @@ This skill assists with understanding the business drivers for BI Publisher to S
 This skill supports:
 
 - Pacific Blue Cross Solutions and Health Insurance BC
-- Ongoing need to deprecate existing BI Publisher reports to Power BI Service (SSRS), using the sideswipe-bip-to-rdl.xsl transform, which was developed using a prototype called Sideswipe, using ExistDB and SQL Server as a test framework.
+- Ongoing need to deprecate existing BI Publisher reports to Power BI Service (SSRS), using the bip-to-rdl.xsl transform in the "BIP to SSRS Conversion" folder, which was developed using a prototype called Sideswipe, using ExistDB and SQL Server as a test framework. The transform is intended to be used with a shell script as a standalone, as described in additional documentation in the same folder.
 
 # BC Health Ontology and Service Delivery Location Skill
 
