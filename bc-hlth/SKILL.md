@@ -15,7 +15,7 @@ This skill supports:
 - Ongoing need to deprecate existing BI Publisher reports to Power BI Service (SSRS), using the bip-to-rdl.xsl transform in the "BIP to SSRS Conversion" folder, which was developed using a prototype called Sideswipe, using ExistDB and SQL Server as a test framework. The transform is intended to be used with a shell script as a standalone, as described in additional documentation in the same folder.
 - Outstanding question: do we need to change the SQL at all, since it is still coming from the same data source?
 
-# BC Health Ontology pCLOCD Service
+# BC Health Ontology pCLOCD Service and Patient Metadata
 
 ## Purpose
 
@@ -30,6 +30,34 @@ GET /ValueSet/$expand
 POST /ValueSet/$validate-code
 
 This could potentially provide a model for the PLIS Patient Metadata Endpoint. Need to obtain an OntoServer API credentials from Infoway.
+
+As part of FHIR API development, PLIS can also expose an endpoint for Patient that takes a PHN (Patient Identifier) and return ValueSets representing the metadata for this Patient (for instance, what are all the Labs where Patient Encounters have taken place, who were the Ordering Providers, what are all the batteries tested?) so that clinical viewers can populate dropdowns.
+
+For example:
+
+GET /Patient/{phn}/$reporting-labs
+
+could return:
+
+```json
+{
+  "resourceType": "ValueSet",
+  "compose": {
+    "include": [{
+      "concept": [
+        {
+          "code": "LAB001",
+          "display": "Vancouver General Hospital Lab"
+        },
+        {
+          "code": "LAB002",
+          "display": "LifeLabs Burnaby"
+        }
+      ]
+    }]
+  }
+}
+```
 
 # BC Health Ontology and Service Delivery Location Skill
 
