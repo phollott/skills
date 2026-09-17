@@ -15,6 +15,22 @@ This skill supports:
 - Ongoing need to deprecate existing BI Publisher reports to Power BI Service (SSRS), using the bip-to-rdl.xsl transform in the "BIP to SSRS Conversion" folder, which was developed using a prototype called Sideswipe, using ExistDB and SQL Server as a test framework. The transform is intended to be used with a shell script as a standalone, as described in additional documentation in the same folder.
 - Outstanding question: do we need to change the SQL at all, since it is still coming from the same data source?
 
+# BC Health Ontology pCLOCD Service
+
+## Purpose
+
+This skill helps evaluate whether BC eHealth could reduce terminology maintenance, improve interoperability, and simplify standards governance by replacing or consolidating existing internal terminology lookup services with Canada Health Infoway's OntoServer-based national terminology service. The service provides FHIR-native terminology operations and Canadian standards content, including SNOMED CT CA, pCLOCD (LOINC), CCDD, UCUM, and pan-Canadian ValueSets.
+
+From a technical perspective, OntoServer appears capable of replacing many functions currently provided by internal lookup tables, such as code validation, display-name resolution, ValueSet expansion, terminology version management, and concept mapping. It supports FHIR terminology operations including $lookup, $validate-code, $expand, and ConceptMaps, making it suitable as a centralized terminology authority for systems such as PLIS and other BC digital health applications. Because OntoServer also supports custom CodeSystems and ValueSets, BC-specific laboratory, program, or facility codes could potentially coexist alongside national standards rather than requiring a separate lookup infrastructure.
+
+A practical implementation would likely use OntoServer as the authoritative source of terminology while maintaining a BC-hosted cache or terminology layer for performance, availability, and governance reasons. Rather than fully replacing local services, a hybrid model would allow BC-specific extensions to be managed provincially while leveraging national terminology assets maintained by Canada Health Infoway. A proof of concept should measure how many existing PLIS and BC-local codes can be resolved directly through OntoServer and whether the remaining concepts can be represented as provincial extensions. If coverage is high, this would provide strong evidence that BC could simplify its terminology architecture and align more closely with the province's emerging FHIR-based interoperability strategy.
+
+GET /CodeSystem/$lookup
+GET /ValueSet/$expand
+POST /ValueSet/$validate-code
+
+This could potentially provide a model for the PLIS Patient Metadata Endpoint. Need to obtain an OntoServer API credentials from Infoway.
+
 # BC Health Ontology and Service Delivery Location Skill
 
 ## Purpose
