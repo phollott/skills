@@ -181,7 +181,11 @@ The projection graph defines what knowledge capabilities are available, while th
 
 ### HolonBridge Java
 
-Today I reflected on my attempts to stage the HolonBridge architecture locally and identified two practical challenges. First, the original design relied on a cloud-hosted LLM to generate SPARQL dynamically, introducing significant latency and creating a dependency on external services. To address this, I began exploring a local LLM approach where the model focuses on intent recognition and query selection rather than full SPARQL generation. This shifts the architecture toward a more deterministic and responsive model that can run entirely within a local environment.
+Today we renamed the Node project to `holon-bridge-node`, updated Docker Compose paths and service names, and added the new `holon-bridge-jvm` service alongside Fuseki and Ollama. The JVM project was built with Java 24, Spring Boot, LangChain4j, and a self-building Maven Docker image.
+
+We progressed through all five planned sprints: local LLM intent classification, approved query catalogs, Fuseki execution, bearer-token authentication and role authorization, and the end-to-end conversational flow. The JVM now accepts authenticated natural-language questions at `/api/ask`, discovers projections from Fuseki’s `graph:capabilities`, executes the stored RDF query, and returns structured results. The final live test selected `GetFacilitiesByAuthority` from `test.trig` and returned one matching facility; all 21 Java tests passed.
+
+The original design relied on a cloud-hosted LLM to generate SPARQL dynamically, introducing significant latency and creating a dependency on external services. To address this, I began exploring a local LLM approach where the model focuses on intent recognition and query selection rather than full SPARQL generation. This shifts the architecture toward a more deterministic and responsive model that can run entirely within a local environment.
 
 A key insight was that a Query Catalog may be more appropriate than unrestricted natural-language-to-SPARQL generation. Instead of asking the LLM to construct arbitrary queries, the model can identify a user's intent and select from a library of approved, parameterized query templates. This approach improves reliability, security, performance, and testability while still providing a natural language interface. The knowledge graph remains the authoritative source of truth, and the LLM acts primarily as an interpreter between user requests and graph operations.
 
