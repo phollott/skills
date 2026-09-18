@@ -84,6 +84,16 @@ Because this is an aggregated convenience response rather than a collection of a
       }
     },
     {
+      "name": "reporting-lab",
+      "valueReference": {
+        "identifier": {
+          "system": "https://example.ca/facility-id",
+          "value": "LAB-002"
+        },
+        "display": "Northern Diagnostics"
+      }
+    },
+    {
       "name": "ordering-provider",
       "valueReference": {
         "identifier": {
