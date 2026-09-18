@@ -176,3 +176,426 @@ MCP (Model Context Protocol) adds another layer on top of this. Instead of an LL
 In the long term, the most interesting architecture may be to treat your projection graph as a self-describing capability catalog. The PLIS graph defines the knowledge, the projection graph defines the executable capabilities, HolonBridge exposes those capabilities as MCP tools, and any AI client can consume them. In that model, Fuseki stores both the knowledge and the definitions of how to access it, while HolonBridge becomes the translation layer that lets AI systems interact with the graph without needing to know its internal structure.
 
 The projection graph defines what knowledge capabilities are available, while the boundary graph defines the conditions under which those capabilities may create, modify, or integrate knowledge.
+
+# HolonBridge Java
+
+## A JVM-Native Knowledge Graph and Local LLM Architecture
+
+### Executive Summary
+
+We can develop HolonBridge into a **Knowledge-Centric Cognitive Platform** that combines:
+
+- Apache Jena/Fuseki as persistent knowledge memory
+- Holon ontologies as semantic constraints
+- Java-based agent orchestration
+- Local LLM inference
+- Deterministic reasoning (SHACL/SPARQL/Rules)
+- Natural language interfaces
+
+### Architectural Principle
+
+> The LLM is not the source of truth. The knowledge graph is the source of truth. The LLM is a semantic interpreter.
+This eliminates most hallucination problems while allowing natural language interaction with highly structured knowledge domains.
+
+---
+
+# 1. Vision
+
+### Current State
+
+```text
+User
+  |
+HolonBridge
+  |
+Fuseki
+```
+
+### Target State
+
+```text
+User
+  |
+Natural Language
+  |
+HolonBridge Cognitive Layer
+  |
++-------------------------------+
+| Ontology Service              |
+| SPARQL Planner                |
+| Graph Retriever               |
+| SHACL Validator               |
+| Local LLM                     |
+| Agent Runtime                 |
++-------------------------------+
+  |
+Fuseki
+```
+
+The goal is not chatbot capability.
+
+The goal is:
+
+```text
+Question
+   ->
+Knowledge Retrieval
+   ->
+Reasoning
+   ->
+Narrative Explanation
+```
+
+---
+
+# 2. Design Principles
+
+## Principle 1: RDF is Long-Term Memory
+
+Store all knowledge in RDF: Model, Metadata, Documents, Mappings, Relationships, Business Rules, Agent State
+
+All become graph resources.
+
+Example:
+
+```ttl
+:Dataset123
+    rdf:type hdp:Dataset ;
+    dct:title "PLIS Prescription Claims" ;
+    hdp:containsElement :DrugName ;
+    hdp:containsElement :DIN .
+```
+
+The graph becomes institutional memory.
+
+---
+
+## Principle 2: The LLM Has No Persistent Knowledge
+
+The local model:
+
+- does not own knowledge
+- does not memorize data
+- does not make authoritative decisions
+
+Instead it performs: Interpretation, Translation, Summarization, Planning, Classification
+
+Knowledge remains in Fuseki.
+
+---
+
+## Principle 3: Deterministic Before Probabilistic
+
+Always attempt: SPARQL, SHACL, Rules, Ontology
+
+before using an LLM.
+
+Example:
+
+### Question
+
+```
+Which datasets contain DIN?
+```
+
+### Graph Query
+
+```sparql
+SELECT ?dataset
+WHERE {
+   ?dataset hdp:containsElement hdp:DIN .
+}
+```
+
+No LLM required.
+
+The LLM only explains results.
+
+---
+
+# 3. Proposed Architecture
+
+## Core Components
+
+### A. Fuseki Knowledge Layer
+
+#### Responsibilities
+
+- Ontology storage
+- Metadata storage
+- Graph persistence
+- Versioning
+
+#### Technology
+
+```text
+Apache Jena
+Apache Fuseki
+TDB2
+```
+
+---
+
+### B. Holon Semantic Layer
+
+#### Responsibilities
+
+- Concept definitions
+- Context boundaries
+- Relationship inheritance
+- Semantic constraints
+
+#### Example
+
+```text
+Health System
+   |
+Hospital
+   |
+Department
+   |
+Application
+   |
+Dataset
+```
+
+Each element becomes a holon.
+
+---
+
+### C. LLM Runtime Layer
+
+#### Technology Options
+
+```text
+llama.cpp
+Ollama
+LM Studio Runtime
+ONNX Runtime
+```
+
+#### Java Integration
+
+```text
+LangChain4j
+```
+
+#### Recommended Models
+
+```text
+Qwen 3 8B
+Mistral Small
+Llama 3.1 8B
+Phi 4
+```
+
+#### Objectives
+
+- Local execution
+- Privacy
+- Low operating cost
+
+---
+
+### D. Agent Layer
+
+Every agent implements:
+
+```java
+public interface Agent {
+    TaskResult execute(Task task);
+}
+```
+
+#### Example Agents
+
+```text
+Catalog Agent
+Metadata Agent
+SPARQL Agent
+Ontology Agent
+Analysis Agent
+```
+
+---
+
+# 4. Functional Components
+
+## Natural Language Query Agent
+
+Converts:
+
+```text
+Which HDPBC datasets contain prescription data?
+```
+
+into:
+
+```sparql
+SELECT ?dataset
+WHERE {
+  ?dataset rdf:type hdp:Dataset .
+  ?dataset hdp:domain hdp:Prescription .
+}
+```
+
+### Workflow
+
+```text
+Question
+ ->
+Ontology Context
+ ->
+LLM
+ ->
+SPARQL
+ ->
+Validation
+ ->
+Execution
+```
+
+---
+
+## Ontology Discovery Agent
+
+Allows users to explore unknown domains.
+
+### Example
+
+```text
+What does PLIS contain?
+```
+
+### Workflow
+
+```text
+Question
+ ->
+Graph Lookup
+ ->
+Context Retrieval
+ ->
+Response Generation
+```
+
+No hallucinated answers.
+
+Everything must come from RDF.
+
+---
+
+## Metadata Curation Agent
+
+### Inputs
+
+```text
+CSV
+Excel
+XML
+JSON
+```
+
+### Outputs
+
+```text
+RDF
+Metadata Records
+Holon Structures
+```
+
+### Use Case
+
+```text
+HDPBC dataset ingestion
+```
+
+---
+
+## SHACL Validation Agent
+
+Responsible for:
+
+```text
+Policy Compliance
+Metadata Quality
+Model Integrity
+```
+
+### Example Constraint
+
+```text
+Dataset
+must_have
+Title
+Owner
+Classification
+Steward
+```
+
+Validation occurs before graph commits.
+
+---
+
+# 5. GraphRAG Implementation
+
+## Traditional RAG
+
+```text
+Document Chunks
+   ->
+Embeddings
+   ->
+Vector Search
+```
+
+## HolonBridge GraphRAG
+
+```text
+Question
+   ->
+Ontology Expansion
+   ->
+Graph Traversal
+   ->
+Subgraph Extraction
+   ->
+Context Package
+   ->
+LLM
+```
+
+### Example Traversal
+
+```text
+Drug Dataset
+   ->
+Prescription System
+   ->
+Patient Domain
+   ->
+Health Authority
+```
+
+Context is built from graph relationships rather than cosine similarity.
+
+### Benefits
+
+- Explainable retrieval
+- Provenance
+- Auditable reasoning
+- Ontology-aware context
+
+---
+
+# 6. Proposed Java Technology Stack
+
+## Core Platform
+
+```text
+Java 21
+Spring Boot
+LangChain4j
+Apache Jena
+Fuseki
+SHACL
