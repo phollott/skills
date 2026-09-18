@@ -177,6 +177,16 @@ In the long term, the most interesting architecture may be to treat your project
 
 The projection graph defines what knowledge capabilities are available, while the boundary graph defines the conditions under which those capabilities may create, modify, or integrate knowledge.
 
+## Today's progress: Summary: 2026-09-18
+
+### HolonBridge Java
+
+Today I reflected on my attempts to stage the HolonBridge architecture locally and identified two practical challenges. First, the original design relied on a cloud-hosted LLM to generate SPARQL dynamically, introducing significant latency and creating a dependency on external services. To address this, I began exploring a local LLM approach where the model focuses on intent recognition and query selection rather than full SPARQL generation. This shifts the architecture toward a more deterministic and responsive model that can run entirely within a local environment.
+
+A key insight was that a Query Catalog may be more appropriate than unrestricted natural-language-to-SPARQL generation. Instead of asking the LLM to construct arbitrary queries, the model can identify a user's intent and select from a library of approved, parameterized query templates. This approach improves reliability, security, performance, and testability while still providing a natural language interface. The knowledge graph remains the authoritative source of truth, and the LLM acts primarily as an interpreter between user requests and graph operations.
+
+The second challenge involved authentication and authorization. While the concept of a chatbot generating and executing queries against a Fuseki-based knowledge graph is sound, production use requires all query execution to occur within the security context of the authenticated user rather than through a privileged chatbot account. This suggests a future architecture of Natural Language → Intent Classification → Query Catalog → Authorization Layer → Fuseki → Narrative Response, where Holon ontologies provide semantic guidance, Fuseki provides trusted knowledge retrieval, and a local LLM provides the conversational experience. This appears to be a more practical and enterprise-ready direction for HolonBridge than unrestricted SPARQL generation.
+
 # HolonBridge Java
 
 ## A JVM-Native Knowledge Graph and Local LLM Architecture
