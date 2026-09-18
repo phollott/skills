@@ -358,15 +358,7 @@ TDB2
 #### Example
 
 ```text
-Health System
-   |
-Hospital
-   |
-Department
-   |
-Application
-   |
-Dataset
+Health System -> Hospital -> Department -> Application -> Dataset
 ```
 
 Each element becomes a holon.
@@ -419,13 +411,7 @@ public interface Agent {
 
 #### Example Agents
 
-```text
-Catalog Agent
-Metadata Agent
-SPARQL Agent
-Ontology Agent
-Analysis Agent
-```
+Catalog Agent, Metadata Agent, SPARQL Agent, Ontology Agent, Analysis Agent
 
 ---
 
@@ -433,13 +419,11 @@ Analysis Agent
 
 ## Natural Language Query Agent
 
-Converts:
-
 ```text
 Which HDPBC datasets contain prescription data?
 ```
 
-into:
+Converts into:
 
 ```sparql
 SELECT ?dataset
@@ -452,17 +436,7 @@ WHERE {
 ### Workflow
 
 ```text
-Question
- ->
-Ontology Context
- ->
-LLM
- ->
-SPARQL
- ->
-Validation
- ->
-Execution
+Question -> Ontology Context -> LLM -> SPARQL -> Validation -> Execution
 ```
 
 ---
@@ -607,5 +581,391 @@ Java 21
 Spring Boot
 LangChain4j
 Apache Jena
+```
+
+# HolonBridge Local LLM Implementation Specification
+
+## Overview
+
+This implementation defines a JVM-based HolonBridge architecture that uses a local Large Language Model (LLM) to provide natural language access to a Fuseki-hosted knowledge graph.
+
+The design intentionally avoids unrestricted LLM-generated SPARQL. Instead, the LLM performs intent classification and query selection, while query execution is performed through an approved Query Catalog. This provides improved performance, security, explainability, and governance while maintaining a conversational user experience.
+
+# Architectural Goals
+
+## Primary Objectives
+
+- Operate entirely in a local environment
+- Minimize dependency on cloud AI services
+- Reduce latency and operating costs
+- Preserve Fuseki as the authoritative source of truth
+- Support enterprise authentication and authorization
+- Provide a natural language interface to RDF knowledge graphs
+- Enable ontology-driven knowledge discovery
+
+# Core Architectural Principle
+
+> The knowledge graph provides truth. The LLM provides interpretation.
+
+The LLM is responsible for: Intent classification, Entity recognition, Query selection, Response formatting
+
+The knowledge graph is responsible for: Data storage, Relationships, Metadata, Ontological structure, Governance
+
+# Proposed Technology Stack
+
+## Platform Components
+
+```text
+Java 21
+Spring Boot
+LangChain4j
+Apache Jena/Fuseki
+TDB2
+SHACL
+Jackson
+```
+
+## Local LLM Runtime
+
+### Preferred MVP Configuration
+
+```text
+Java
+  |
+LangChain4j
+  |
+Ollama
+  |
+llama.cpp
+  |
+Qwen / Mistral / Phi
+```
+
+Recommended models:
+
+```text
+Qwen 3 8B
+Mistral Small
+Phi 4
+Llama 3.1 8B
+```
+
+### Future Configuration
+
+```text
+Java
+  |
+LangChain4j
+  |
+JNI Wrapper
+  |
+llama.cpp
+  |
+GGUF Model
+```
+
+This would eliminate the Ollama dependency and provide direct JVM integration.
+
+---
+
+# Reference Architecture
+
+```text
++--------------------------------------------------+
+|                User Interface                    |
+|         Chat | Search | Explore                  |
++-----------------------+--------------------------+
+                        |
+                        v
++--------------------------------------------------+
+|                 HolonBridge                       |
++--------------------------------------------------+
+| Intent Classification                             |
+| Entity Extraction                                 |
+| Query Selection                                   |
+| Response Formatting                               |
++-----------------------+--------------------------+
+                        |
+                        v
++--------------------------------------------------+
+|                 Query Catalog                     |
+|        Approved Parameterized Queries             |
++-----------------------+--------------------------+
+                        |
+                        v
++--------------------------------------------------+
+|          Authentication & Authorization           |
++-----------------------+--------------------------+
+                        |
+                        v
++--------------------------------------------------+
+|              Apache Fuseki Knowledge Graph        |
++--------------------------------------------------+
+```
+
+---
+
+# Query Processing Model
+
+## Traditional Approach
+
+```text
+Question -> LLM -> SPARQL -> Fuseki
+```
+
+### Challenges
+
+- Hallucinated queries
+- Security risks
+- Difficult testing
+- High token consumption
+- Reduced predictability
+
+# HolonBridge Local LLM Roadmap
+
+Five Testable Implementation Sprints
+
+The goal of these sprints is to move from concept to a working, enterprise-ready prototype while validating the major architectural assumptions at each stage.
+
+## Sprint 1: Local LLM Intent Classification
+Objective
+
+Prove that a local LLM can reliably classify user requests without generating SPARQL.
+
+Deliverables
+Java 21 application
+LangChain4j integration
+Ollama or LM Studio local model
+Intent classification service
+Structured JSON output
+Example
+
+User asks:
+
+What datasets contain prescription information?
+
+
+LLM returns:
+
+{
+  "intent": "find_datasets",
+  "domain": "prescription"
+}
+
+Success Criteria
+Response time under 3 seconds
+No cloud dependencies
+Consistent intent classification across repeated tests
+At least 20 predefined test questions
+Risks Addressed
+Local model performance
+Latency concerns
+JVM integration feasibility
+
+## Sprint 2: Query Catalog Framework
+Objective
+
+Replace dynamic SPARQL generation with parameterized query templates.
+
+Deliverables
+Query catalog repository
+Query metadata model
+Parameter substitution engine
+Query selection service
+Example Catalog Entry
+id: DATASET_BY_DOMAIN
+description: Find datasets by business domain
+
+parameters:
+  - domain
+
+
+Mapped query:
+
+SELECT ?dataset
+WHERE {
+   ?dataset rdf:type hdp:Dataset .
+   ?dataset hdp:domain ?domain .
+}
+
+Success Criteria
+10-20 reusable query templates
+Parameter validation
+No arbitrary SPARQL execution
+Unit tests for all templates
+Risks Addressed
+Hallucinated queries
+Query safety
+Maintainability
+
+## Sprint 3: Fuseki Integration and Graph Retrieval
+Objective
+
+Execute catalog queries against a live Fuseki instance.
+
+Deliverables
+Apache Jena client services
+Fuseki connection layer
+Result processing layer
+Query audit logging
+Workflow
+Question
+   ->
+Intent
+   ->
+Catalog Query
+   ->
+Fuseki
+   ->
+Results
+
+Success Criteria
+Successful execution of all catalog queries
+Result sets returned to application
+Query logging enabled
+Error handling and timeout management
+Test Scenarios
+Find datasets
+Find systems
+Explore relationships
+Retrieve metadata
+
+Risks Addressed
+Fuseki connectivity
+Query execution performance
+RDF model compatibility
+
+## Sprint 4: Authentication and Authorization
+Objective
+
+Ensure all graph access occurs within the authenticated user's security context.
+
+Deliverables
+OAuth2/OIDC integration
+User identity propagation
+Role-based query access
+Security audit logging
+Architecture
+User
+ |
+Authentication
+ |
+Authorization
+ |
+Query Execution
+ |
+Fuseki
+
+Example Roles
+Metadata Reader
+Ontology Curator
+Administrator
+Analyst
+
+Success Criteria
+Users can only execute authorized queries
+Full audit trail
+No shared administrative credentials
+Role-based access validation
+Risks Addressed
+Security
+Governance
+Compliance
+Production readiness
+
+## Sprint 5: Conversational Knowledge Graph Experience
+Objective
+
+Create the complete end-to-end HolonBridge experience.
+
+Deliverables
+Chat interface
+Intent classification
+Query catalog integration
+Authorized execution
+Narrative response generation
+Workflow
+Question
+   ->
+Intent Classification
+   ->
+Query Catalog
+   ->
+Authorization
+   ->
+Fuseki
+   ->
+Results
+   ->
+Narrative Response
+
+Example
+
+User:
+
+What systems consume PLIS data?
+
+
+System:
+
+I found 7 systems that consume PLIS data.
+
+The primary consuming systems are:
+• PharmaNet
+• System A
+• System B
+
+These systems interact with PLIS through...
+
+Success Criteria
+End-to-end conversational workflow
+Sub-5-second response time
+Multiple query types supported
+User acceptance testing completed
+Risks Addressed
+User experience
+Explainability
+Overall architecture validation
+
+## End State After Sprint 5
+
+```text
++-----------------------------+
+| User Conversation Interface |
++-------------+---------------+
+              |
+              v
++-----------------------------+
+| Local LLM                   |
+| Intent Classification       |
++-------------+---------------+
+              |
+              v
++-----------------------------+
+| Query Catalog               |
+| Ontology Mapping            |
++-------------+---------------+
+              |
+              v
++-----------------------------+
+| Authentication & AuthZ      |
++-------------+---------------+
+              |
+              v
++-----------------------------+
+| Apache Fuseki               |
+| Holon Knowledge Graph       |
++-------------+---------------+
+              |
+              v
++-----------------------------+
+| Narrative Response Layer    |
++-----------------------------+
+```
+
+This roadmap deliberately postpones autonomous SPARQL generation. The first production-capable version focuses on intent classification, query catalog selection, security, and graph retrieval, creating a reliable foundation before experimenting with more advanced agentic or generative capabilities.
+
+
+
 Fuseki
 SHACL
