@@ -59,6 +59,56 @@ could return:
 }
 ```
 
+Alternatively, use the Parameters resource, which is a bit more verbose, but less of a stretch:
+
+```http
+GET /Patient/123/$lab-result-filter-options?date=ge2024-01-01&status=final
+```
+
+### Response model
+
+Because this is an aggregated convenience response rather than a collection of a single resource type, a FHIR `Parameters` response is a reasonable fit. For example:
+
+```json
+{
+  "resourceType": "Parameters",
+  "parameter": [
+    {
+      "name": "reporting-lab",
+      "valueReference": {
+        "identifier": {
+          "system": "https://example.ca/facility-id",
+          "value": "LAB-001"
+        },
+        "display": "Example Central Laboratory"
+      }
+    },
+    {
+      "name": "ordering-provider",
+      "valueReference": {
+        "identifier": {
+          "system": "https://example.ca/provider-id",
+          "value": "PRV-879"
+        },
+        "display": "Dr. Amina Patel"
+      }
+    }
+  ]
+}
+```
+
+### Important design rules
+
+- **Apply the caller’s authorization context.** Only return labs/providers that appear in results the caller is permitted to see.
+- **Use the same filters as the result endpoint.** If the viewer filters the results to a date range, status, category, or source, the available dropdown values should reflect that same subset.
+- **Define the association rules.** For example:
+  - reporting labs from `DiagnosticReport.performer`;
+  - ordering providers from the linked `ServiceRequest.requester`;
+  - fallback behavior if only `Observation.performer` is available.
+- **Deduplicate by stable identifier**, not display string.
+- **Do not call the output a `ValueSet`** unless it actually represents coded terminology content. Labs and providers are typically operational entities, and the output is patient- and query-specific.
+- **Document it in an `OperationDefinition`**, including supported input filters, source-resource rules, cardinality, and response structure.
+
 # BC Health Ontology and Service Delivery Location Skill
 
 ## Purpose
