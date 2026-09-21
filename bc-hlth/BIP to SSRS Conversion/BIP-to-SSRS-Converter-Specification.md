@@ -354,6 +354,12 @@ These synthetic BIP templates were created for testing the converter. Real produ
 - Complex visual elements (charts, Gantt bars, images) are placeholders only
 - Tablix row/column alignment may need manual adjustment in Report Builder
 - Conditional formatting and calculated fields may require manual conversion
+- They convert to RDL, but the generated reports are incomplete because they use features the converter does not currently map.
+
+**Project Status**: relies heavily on _nested repeating structures_ and named templates for progress bars, badges, risks, milestones, and tasks. The converter only extracts simple field references and does not reproduce the nested layout or execute those templates fully. See project-status.xsl-fo:163.
+**Inventory Report**: contains nested warehouse/category/product loops and fo:external-graphic images. The converter has _no image handler_, and nested loops inside the outer grouping are not preserved correctly. See inventory-report.xsl-fo:98-180.
+**Customer Dashboard**: uses Oracle-specific _xdochart:* chart elements_. Those elements have no conversion template, so the charts disappear; the result is only a partial dashboard. See customer-dashboard.xsl-fo:265-294.
+**Purchase Order**: uses fo:page-sequence-master, fo:marker, fo:retrieve-marker, and external graphics for the company logo. These header/page-continuation constructs are unsupported, so important portions of the document are omitted. See purchase-order.xsl-fo:76-123.
 
 ### After Conversion
 
