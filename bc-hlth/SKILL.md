@@ -17,6 +17,16 @@ This skill supports:
 
 # BC Health HALO Roadmap for PLIS
 
+## Purpose
+
+This skill describes the [HALO Roadmap](https://simplifier.net/guide/HALO/Home?version=current) for BC e-Health, including but not confined to BC Provincial Labs
+
+This skill supports:
+- BC Provincial Labs
+- BC PharmaNet integration roadmap
+
+## BC Provincial Labs
+
 BC’s Provincial Laboratory Information Solution (PLIS) is a centralized clinical data repository that aggregates laboratory results from all six BC health authorities, providing a single provincial source of truth for lab information. Rather than replacing PLIS, the Pan-Canadian HALO framework would sit above it as an interoperability layer, enabling HALO-compliant EMRs, EHRs, and clinical viewer applications to securely launch, receive patient context, and retrieve laboratory data through PLIS FHIR APIs. This allows application vendors to integrate once to a common provincial pattern rather than building separate integrations for each health authority.
 
 HALO also provides a standardized approach for context management and event-driven integration through SMART on FHIR, context-sharing operations, and FHIR subscription profiles. In a BC implementation, a clinical viewer launched from a HALO-enabled EMR could receive patient context, query PLIS for DiagnosticReport and Observation resources, and subscribe to notifications for new, updated, or critical laboratory results. This would support a more scalable architecture than traditional polling approaches and promote consistent interoperability across participating healthcare systems.
