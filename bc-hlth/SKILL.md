@@ -15,6 +15,14 @@ This skill supports:
 - Ongoing need to deprecate existing BI Publisher reports to Power BI Service (SSRS), using the bip-to-rdl.xsl transform in the "BIP to SSRS Conversion" folder, which was developed using a prototype called Sideswipe, using ExistDB and SQL Server as a test framework. The transform is intended to be used with a shell script as a standalone, as described in additional documentation in the same folder.
 - Outstanding question: do we need to change the SQL at all, since it is still coming from the same data source?
 
+# BC Health HALO Roadmap for PLIS
+
+BC’s Provincial Laboratory Information Solution (PLIS) is a centralized clinical data repository that aggregates laboratory results from all six BC health authorities, providing a single provincial source of truth for lab information. Rather than replacing PLIS, the Pan-Canadian HALO framework would sit above it as an interoperability layer, enabling HALO-compliant EMRs, EHRs, and clinical viewer applications to securely launch, receive patient context, and retrieve laboratory data through PLIS FHIR APIs. This allows application vendors to integrate once to a common provincial pattern rather than building separate integrations for each health authority.
+
+HALO also provides a standardized approach for context management and event-driven integration through SMART on FHIR, context-sharing operations, and FHIR subscription profiles. In a BC implementation, a clinical viewer launched from a HALO-enabled EMR could receive patient context, query PLIS for DiagnosticReport and Observation resources, and subscribe to notifications for new, updated, or critical laboratory results. This would support a more scalable architecture than traditional polling approaches and promote consistent interoperability across participating healthcare systems.
+
+Several existing provincial and national assets naturally complement HALO. The Canada Health Infoway terminology server can provide centralized terminology services such as LOINC, SNOMED CT, and value set management, ensuring semantic consistency across applications. Province-wide Microsoft Entra ID can serve as the primary identity provider for clinician authentication, while Keycloak can support OAuth2/OIDC authorization and machine-to-machine security for backend services. Together with PLIS and other provincial repositories, these assets form the foundational infrastructure upon which a HALO-enabled BC digital health ecosystem could be built.
+
 # BC Health Ontology pCLOCD Service and Patient Metadata
 
 ## Purpose
