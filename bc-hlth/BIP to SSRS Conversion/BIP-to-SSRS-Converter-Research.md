@@ -1,6 +1,6 @@
 # BIP to SSRS Conversion
 
-There is no Microsoft-provided one-click conversion from Oracle BI Publisher (BIP) to SSRS/Power BI Paginated Reports, but there are well-established migration patterns that many organizations follow.
+There is no Microsoft-provided one-click conversion from Oracle BI Publisher (BIP) to SSRS/Power BI Paginated Reports, but there are well-established migration patterns that many organizations follow. Templates are likely Excel-based, not necessarily RTF., so we should focus on XDO inspection and Excel-template handling.
 
 ## Typical Conversion Mapping
 
