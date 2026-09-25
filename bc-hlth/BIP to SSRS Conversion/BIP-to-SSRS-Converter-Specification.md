@@ -440,7 +440,7 @@ If XQuery modules need to be updated:
 | O5 | Provide detailed conversion logs and error reports | Medium |
 | O6 | Support batch processing of multiple reports | Medium |
 | O7 | Generate migration assessment reports | Low |
-
+| 08 | Determine template type from XDO | High |
 ---
 
 ## Scope
