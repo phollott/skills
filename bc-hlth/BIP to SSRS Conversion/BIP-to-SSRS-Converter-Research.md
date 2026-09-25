@@ -106,7 +106,7 @@ or
 
 For .xls templates, Apache POI might be useful, as a way of converting Excel into a JSON or XML representation. SSRS generation needs to understand the report layout, and POI already exposes the workbook as rows, cells, styles, merged regions, and formulas. That's almost exactly the abstraction level you want. A low-level .xls parser would force you to rebuild that model yourself before you could even start converting the report.
 
-Converting .xls to .xslx is also an option, although Excel XML can be messy to work with. Apache POI Is one way to do this. LibreOffice may help, and opening in Excel and saving as XLSX is also an option.
+Converting .xls to .xslx is also an option, although Excel XML can be messy to work with. Apache POI Is one way to do this. LibreOffice may help, and opening in Excel and saving as XLSX is also an option. Using Tika to convert .xls into .xhtml may also be a useful approach, for really simple reports.
 
 Excel Template to Report Model; Report Model to SSRS.
 
