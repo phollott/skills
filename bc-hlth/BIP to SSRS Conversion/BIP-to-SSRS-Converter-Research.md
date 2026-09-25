@@ -88,6 +88,28 @@ Most conversion effort is testing rather than development.
 
 ## Common Challenges
 
+### Multiple Template Types
+
+Inspect .xdo file and extract: template name, template type, locale, parameter definitions, data model references. For example:
+
+```xml
+<template name="Default"
+          location="pli010_en.xls"
+          type="xls"/>
+```
+
+or
+
+```xml
+<layout templateFile="pli010_en.xls"/>
+```
+
+For .xls templates, Apache POI might be useful, as a way of converting Excel into a JSON or XML representation. SSRS generation needs to understand the report layout, and POI already exposes the workbook as rows, cells, styles, merged regions, and formulas. That's almost exactly the abstraction level you want. A low-level .xls parser would force you to rebuild that model yourself before you could even start converting the report.
+
+Converting .xls to .xslx is also an option, although Excel XML can be messy to work with. Apache POI Is one way to do this. LibreOffice may help, and opening in Excel and saving as XLSX is also an option.
+
+Excel Template to Report Model; Report Model to SSRS.
+
 ### Oracle-Specific SQL
 
 BI Publisher reports often contain:
