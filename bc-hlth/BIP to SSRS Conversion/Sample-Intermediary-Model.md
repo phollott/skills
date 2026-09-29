@@ -357,6 +357,148 @@ ORDER BY l.line_number
 </report-model>
 ```
 
+## Example XDO
+
+Below is a **well-formed, illustrative BI Publisher data-template-style XML file** that matches the invoice semantics in the earlier intermediate model: parameter `P_INVOICE_ID`, invoice header fields, line items, and `AMOUNT`.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<dataTemplate
+    name="PLI010_INVOICE_REPORT"
+    description="Sample invoice report for BI Publisher to SSRS conversion testing"
+    version="1.0">
+
+    <properties>
+        <property name="include_parameters" value="true"/>
+        <property name="include_null_Element" value="true"/>
+    </properties>
+
+    <parameters>
+        <parameter
+            name="P_INVOICE_ID"
+            dataType="character"
+            defaultValue=""
+            include_in_output="true"/>
+    </parameters>
+
+    <dataQuery>
+
+        <!-- One row per invoice header -->
+        <sqlStatement name="Q_INVOICE"><![CDATA[
+SELECT
+    h.invoice_id       AS INVOICE_ID,
+    h.invoice_number   AS INVOICE_NUMBER,
+    h.customer_name    AS CUSTOMER_NAME
+FROM invoice_header h
+WHERE h.invoice_id = :P_INVOICE_ID
+        ]]></sqlStatement>
+
+        <!-- One row per invoice line.
+             :INVOICE_ID is supplied from the parent G_INVOICE group. -->
+        <sqlStatement name="Q_INVOICE_LINES"><![CDATA[
+SELECT
+    l.invoice_id         AS INVOICE_ID,
+    l.line_number        AS LINE_NUMBER,
+    l.item_description   AS ITEM_DESCRIPTION,
+    l.amount             AS AMOUNT
+FROM invoice_line l
+WHERE l.invoice_id = :INVOICE_ID
+ORDER BY l.line_number
+        ]]></sqlStatement>
+
+    </dataQuery>
+
+    <dataStructure>
+
+        <group name="G_INVOICE" source="Q_INVOICE">
+            <element name="INVOICE_ID" value="INVOICE_ID"/>
+            <element name="INVOICE_NUMBER" value="INVOICE_NUMBER"/>
+            <element name="CUSTOMER_NAME" value="CUSTOMER_NAME"/>
+
+            <group name="G_LINE" source="Q_INVOICE_LINES">
+                <element name="INVOICE_ID" value="INVOICE_ID"/>
+                <element name="LINE_NUMBER" value="LINE_NUMBER"/>
+                <element name="ITEM_DESCRIPTION" value="ITEM_DESCRIPTION"/>
+                <element name="AMOUNT" value="AMOUNT"/>
+            </group>
+        </group>
+
+    </dataStructure>
+</dataTemplate>
+```
+
+With a compatible BI Publisher data-template processor, the intended data XML shape would be similar to:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<DATA_DS>
+    <G_INVOICE>
+        <INVOICE_ID>1001</INVOICE_ID>
+        <INVOICE_NUMBER>INV-1001</INVOICE_NUMBER>
+        <CUSTOMER_NAME>Example Customer</CUSTOMER_NAME>
+
+        <G_LINE>
+            <INVOICE_ID>1001</INVOICE_ID>
+            <LINE_NUMBER>1</LINE_NUMBER>
+            <ITEM_DESCRIPTION>Consulting</ITEM_DESCRIPTION>
+            <AMOUNT>1250.00</AMOUNT>
+        </G_LINE>
+
+        <G_LINE>
+            <INVOICE_ID>1001</INVOICE_ID>
+            <LINE_NUMBER>2</LINE_NUMBER>
+            <ITEM_DESCRIPTION>Support</ITEM_DESCRIPTION>
+            <AMOUNT>500.00</AMOUNT>
+        </G_LINE>
+    </G_INVOICE>
+</DATA_DS>
+```
+
+This maps to the earlier intermediate XML as follows:
+
+| XDO component | Intermediate model component |
+|---|---|
+| `P_INVOICE_ID` parameter | `<parameter id="P_INVOICE_ID">` |
+| `Q_INVOICE` and `Q_INVOICE_LINES` | One or more `<dataset>` definitions |
+| `G_INVOICE` | Header region / outer row group |
+| `G_LINE` | `<tablix>` detail group |
+| `LINE_NUMBER`, `ITEM_DESCRIPTION`, `AMOUNT` | Tablix detail-row fields |
+| `AMOUNT` | `sum(field('AMOUNT'))` in the tablix footer |
+
+For an SSRS target, you would normally flatten this into one dataset query:
+
+```sql
+SELECT
+    h.invoice_id,
+    h.invoice_number,
+    h.customer_name,
+    l.line_number,
+    l.item_description,
+    l.amount
+FROM invoice_header h
+JOIN invoice_line l
+  ON l.invoice_id = h.invoice_id
+WHERE h.invoice_id = @P_INVOICE_ID
+ORDER BY l.line_number;
+```
+
+Then generate:
+
+- Header textboxes using `INVOICE_NUMBER` and `CUSTOMER_NAME`
+- A tablix detail row using the line fields
+- `=Sum(Fields!AMOUNT.Value)` for the report total
+
+The critical caution is that a real `_report.xdo` from your XDOZ may instead be a catalog/report-definition format rather than this BI Publisher data-template format. Your first parser should therefore detect the root element:
+
+```text
+<dataTemplate>     → parse as a BI Publisher data template
+<report> ...        → parse as report-definition XML
+other/non-XML       → inspect before attempting conversion
+```
+
+This sample is still useful for building and testing the transformation from BI Publisher-style datasets/groups into your intermediate XML model.
+
+
 ## Why this is a useful model
 
 It is deliberately not tied to either BI Publisher or SSRS:
