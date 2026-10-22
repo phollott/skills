@@ -1,6 +1,4 @@
-# PLIS Cloud Readiness Assessment
-
-## Revised workload profile
+# PLIS Workload Profile
 
 Assuming monthly volumes:
 
@@ -22,7 +20,173 @@ Annualized, this is approximately:
 
 At **2.5 TB annual growth**, the implied net new stored data averages roughly **21 KB per put request** if puts broadly correspond to new retained data. That is only a rough planning indicator; actual database I/O can be much larger due to indexes, redo/undo, logging, LOBs, and updates.
 
-## Impact on the cloud-platform decision
+# Cost comparison
+
+For a production-grade deployment with high availability, backup, and disaster recovery, the expected **fully burdened cost** ranking is usually:
+
+1. **Oracle on Azure VMs** — often lowest cloud infrastructure cost, but highest client operational responsibility.
+2. **AWS RDS for Oracle BYOL** — typically higher platform cost than raw VMs, but lower operational cost because AWS manages much of the database infrastructure.
+3. **Oracle Database@Azure / Exadata** — typically the highest-cost option, unless it replaces a substantial operational-support cost, consolidates multiple Oracle workloads, or has a demonstrated performance/availability requirement that avoids other costs.
+
+That is a directional comparison, not a quote. A defensible dollar comparison requires a region, sizing, Oracle edition/options, HA/DR targets, retention, and a validated Oracle license position.
+
+## What should be compared
+
+The comparison should not be limited to monthly cloud infrastructure. Use a **five-year total cost of ownership (TCO)** model:
+
+| Cost element | AWS RDS for Oracle BYOL | Oracle on Azure VMs | Oracle Database@Azure / Exadata |
+|---|---|---|---|
+| Database compute | RDS DB instance(s), normally primary plus Multi-AZ standby | Primary and Data Guard standby VMs | Exadata database compute: OCPU/ECPU consumption |
+| Database storage | RDS storage, IOPS/throughput, backup/snapshot storage | Managed disks or ANF, plus backup storage and replication | Exadata/Exascale storage, backup storage, flash cache where applicable |
+| Oracle licenses and support | Existing BYOL licenses, Oracle support, separately licensed options | Existing Oracle licenses, Oracle support, separately licensed options | BYOL or license-included; conversion ratios and included features must be validated |
+| High availability | Managed Multi-AZ platform | Two VMs plus Data Guard design, configuration, monitoring, and testing | Included service architecture, but configuration and DR scope still affect cost |
+| Disaster recovery | Cross-region replica/restore design, additional license and infrastructure where needed | Second-region infrastructure, Data Guard/backup replication, networking | Oracle-provided DR architecture and cross-region service scope |
+| Operations | Lower: AWS manages core platform tasks | Higher: client or replacement provider manages Oracle and OS operations | Lower: Oracle manages Exadata/service infrastructure |
+| Cloud/platform integration | New AWS landing zone, networking, security, monitoring, skills | Uses existing Azure landing zone and services | Uses Azure marketplace, Azure networking, and OCI/Oracle service operations |
+| Migration | Assessment, conversion, testing, cutover | Assessment, migration, build, testing, cutover | Assessment, Oracle onboarding/private offer, migration, testing, cutover |
+
+## Directional cost view
+
+| Option | Infrastructure cost | Oracle licensing exposure | Client / support operating cost | Overall TCO expectation |
+|---|---|---|---|---|
+| **AWS RDS BYOL** | Medium | Medium to high | Low to medium | **Potentially competitive** if managed operations replace the current support vendor and AWS is acceptable |
+| **Azure VMs** | Low to medium | Medium to high | High unless the client has an internal DBA/platform team | **Can be lowest**, but only if internal operations are genuinely available and costed |
+| **Database@Azure / Exadata** | High | Medium to high, depending on BYOL conversion and options | Low to medium | **Usually highest**, but may be justified for consolidation, demanding SLOs, or a favorable negotiated offer |
+
+## 1. AWS RDS for Oracle BYOL
+
+### Cost strengths
+
+- The client pays for a managed RDS service rather than separately staffing or contracting for many routine infrastructure activities.
+- AWS manages provisioning, backups, patching processes, monitoring, hardware scaling, and Multi-AZ failover infrastructure. ([aws.amazon.com](https://aws.amazon.com/rds/oracle/?utm_source=openai))
+- Reserved pricing and Database Savings Plans can reduce predictable production costs; AWS states RDS Reserved Instances can provide up to 48% savings versus on-demand pricing, depending on the commitment model. ([aws.amazon.com](https://aws.amazon.com/rds/oracle/?utm_source=openai))
+
+### Cost watch-outs
+
+- **BYOL does not eliminate Oracle cost.** The client must retain appropriate Oracle licenses and active Software Update License & Support for the selected edition, instance class, and separately licensed features. ([docs.aws.amazon.com](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Oracle.Concepts.Licensing.html?linkId=448078997&sc_campaign=Support&sc_channel=sm&sc_content=Support&sc_country=global&sc_geo=GLOBAL&sc_outcome=AWS+Support&sc_publisher=REDDIT&trk=Support&utm_source=openai))
+- For a production Multi-AZ RDS BYOL deployment, Oracle licensing is needed for both the primary and standby instances. This is a major TCO item. ([docs.aws.amazon.com](https://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/migration-oracle-database/migration-oracle-database.pdf?utm_source=openai))
+- Storage, provisioned IOPS/throughput, backup retention, snapshots, data transfer, and optional reporting replicas all add cost. AWS notes that Multi-AZ synchronous replication doubles write I/O. ([aws.amazon.com](https://aws.amazon.com/rds/oracle/pricing/?utm_source=openai))
+- If the Java application tier remains in Azure, network connectivity, latency, egress, security controls, and a second-cloud operating model must be priced—not just the RDS service.
+
+### Interpretation for this client
+
+RDS is potentially the best answer if the main goal is to **replace the current operational support partner with a cloud-managed operating model**. It is likely more expensive than raw Azure VMs at the infrastructure layer, but the managed-service value may offset the cost of a replacement DBA/operations provider.
+
+---
+
+## 2. Oracle on Azure Virtual Machines
+
+### Cost strengths
+
+- The client can use its existing Azure commercial construct, landing zone, network, identity, monitoring, and support model.
+- Azure VM infrastructure is generally the most flexible option for rightsizing compute, storage, and commitment discounts.
+- Oracle workloads on Azure VMs are BYOL: the client is charged for Azure compute, storage, and networking, while maintaining the required Oracle license and support agreement. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-vm-solutions?utm_source=openai))
+- Azure supports constrained-core VM configurations, which can provide the memory, storage, and I/O of a larger VM while limiting the licensed vCPU count—potentially important for Oracle Enterprise Edition licensing. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-vm-solutions?utm_source=openai))
+
+### Cost watch-outs
+
+- The apparent infrastructure savings can be misleading if operations are excluded.
+- A resilient design requires at least:
+  - a primary database VM;
+  - a Data Guard standby VM in another Availability Zone;
+  - separate backup storage;
+  - monitoring, security, patching, and recovery tooling;
+  - potentially a second-region DR environment.
+
+Microsoft’s Azure guidance describes Oracle HA/DR on Azure as requiring separate database VMs and Data Guard/Active Data Guard or comparable design; Azure remains responsible for the VM platform, while the customer is responsible for implementing the database HA/DR solution. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-overview?utm_source=openai))
+
+- Cross-region Data Guard redo transport has a published Azure network charge; Microsoft cites US$0.02/GB for remote-region redo transport, while same-region availability-zone redo transport has no charge. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-azure-vms-faq?utm_source=openai))
+- The client must explicitly include the cost of database operations, either through internal staff or a new managed-services provider:
+  - Oracle patching and upgrades;
+  - RMAN backup and restore testing;
+  - Data Guard monitoring and failover;
+  - performance tuning;
+  - capacity management;
+  - security hardening and audit support;
+  - 24×7 incident coverage.
+
+### Interpretation for this client
+
+Azure VMs may have the **lowest direct cloud bill**, but they do **not** inherently meet the objective of shifting operational work from the current support vendor to the cloud provider. They are the lowest-cost choice only if the client has, or deliberately wants to build, an internal Oracle operations capability—or contracts a new provider and still finds that model cheaper.
+
+---
+
+## 3. Oracle Database@Azure / Exadata
+
+### Cost strengths
+
+- It is Azure-aligned and purchased through Azure Marketplace; Oracle states that this spend can count toward the Microsoft Azure Consumption Commitment (MACC). ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/oracle/oracle-azure-overview?utm_source=openai))
+- It shifts more database platform and engineered-infrastructure responsibility to Oracle than the Azure VM model.
+- It can be purchased as BYOL or license-included, and Oracle offers private pricing based on contract term, commitment, and number of Exadata deployments. ([docs.oracle.com](https://docs.oracle.com/en-us/iaas/Content/database-at-azure/getting-started-private-offer.htm?utm_source=openai))
+- For customers with qualifying Oracle support spend, Oracle Support Rewards may offset a portion of the Oracle technology support bill. ([oracle.com](https://www.oracle.com/engineered-systems/exadata/database-service/faq/?utm_source=openai))
+
+### Cost watch-outs
+
+- Exadata has a materially different cost structure from a VM database:
+  - **Dedicated Exadata** includes Exadata infrastructure charges plus enabled database OCPU charges.
+  - **Exadata Exascale** includes database ECPU charges plus separately metered infrastructure, smart database storage, VM filesystem storage, and optional flash cache. ([oracle.com](https://www.oracle.com/contracts/docs/oracle_database_azure_credits_service_descriptions_v121123.pdf?download=true&utm_source=openai))
+- Oracle’s pricing is generally quote-based/private-offer based for Database@Azure. Public list prices alone will not be sufficient for a decision. ([docs.oracle.com](https://docs.oracle.com/en-us/iaas/Content/database-at-azure/getting-started-private-offer.htm?utm_source=openai))
+- Exadata may offer operational and performance benefits, but it should not be assumed to be cheaper merely because it is managed or because the organization is Azure-first.
+- The client still needs technical governance for schema, stored procedures, performance, access management, releases, recovery requirements, and vendor escalation.
+
+### Interpretation for this client
+
+Database@Azure is strategically attractive because it supports the two stated goals:
+
+- remain aligned to Azure; and
+- reduce dependency on the current operational support vendor.
+
+However, the client should require Oracle to demonstrate that the additional Exadata cost delivers measurable value compared with RDS or Azure VMs.
+
+---
+
+## Recommended TCO scenarios
+
+Request pricing in three comparable scenarios:
+
+### Scenario A — AWS managed baseline
+
+- RDS for Oracle BYOL, Multi-AZ.
+- Current 20 TB plus five-year projected growth.
+- Production backup retention and immutable/recovery copy.
+- Cross-region DR option.
+- Java application tier in AWS, or explicitly cost secure connectivity to Azure.
+- Include Oracle licenses for both Multi-AZ database instances.
+
+### Scenario B — Azure self-managed baseline
+
+- Oracle Enterprise Edition on a right-sized Azure VM.
+- Data Guard standby in a second Availability Zone.
+- Backup and regional DR design.
+- Azure monitoring, storage, security, networking, and support plan.
+- Internal staffing or replacement managed-service-provider cost.
+- Oracle license model, including constrained-core sizing and standby/DR rights validation.
+
+### Scenario C — Database@Azure / Exadata managed proposal
+
+Require Oracle to provide:
+
+- a recommended Exadata configuration and a smaller viable configuration;
+- BYOL and license-included alternatives;
+- dedicated-infrastructure and Exascale options where available;
+- production HA, regional DR, backup, and retention assumptions;
+- Oracle support and operational responsibilities;
+- five-year committed and on-demand pricing;
+- all migration, onboarding, network, and exit costs;
+- the exact Oracle features assumed to be included under the BYOL model.
+
+## Recommended decision rule
+
+For this client, compare the options using **fully burdened five-year TCO**, not cloud resource cost alone:
+
+> **Azure VMs** should win only if the client accepts the responsibility and cost of operating Oracle, internally or through a new provider.  
+> **AWS RDS BYOL** should win if minimizing database operational dependence is more important than remaining single-cloud Azure.  
+> **Database@Azure / Exadata** should win only if Oracle’s managed, Azure-aligned service delivers a clear advantage in service levels, operational-risk reduction, consolidation, or total cost that exceeds its likely premium.
+
+The most important input is the client’s current operational-support contract cost. If that contract is substantial, RDS or Database@Azure may compare far better than a simple infrastructure-only calculation suggests.
+
+
+# PLIS Database Feasibility Assessment for not using Exadata
 
 This is now a **meaningful transactional production workload**, though it is still not automatically a case for Exadata.
 
@@ -47,7 +211,7 @@ For Oracle, the hard part is likely not raw request count. It is:
 - reporting queries competing with inserts;
 - RPO/RTO, auditability, and backup/restore requirements.
 
-## Updated recommendation
+## Recommendation
 
 ### 1. Oracle on AWS RDS BYOL — still the default first choice, if compatible
 
