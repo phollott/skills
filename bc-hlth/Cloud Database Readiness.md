@@ -20,6 +20,191 @@ Annualized, this is approximately:
 
 At **2.5 TB annual growth**, the implied net new stored data averages roughly **21 KB per put request** if puts broadly correspond to new retained data. That is only a rough planning indicator; actual database I/O can be much larger due to indexes, redo/undo, logging, LOBs, and updates.
 
+# Sizing recommendations
+
+## Provisional Sizing Recommendations
+
+These are **planning baselines**, not final sizing. The final production configuration should be based on AWR/ASH data, peak 5–15-minute stored-procedure concurrency, SQL execution plans, redo generation, p95/p99 response-time targets, and the required RPO/RTO.
+
+The monthly request volumes alone do not indicate an Exadata-class workload. The daytime real-time window is the main sizing driver; the throttled overnight cache process should be included in testing but is not the primary driver.
+
+### Core planning assumption
+
+Assuming the current **20 TB** represents the active Oracle database footprint, and growth is **2.5 TB/year**:
+
+- **At  plan approximately **30 TB** of primary database storage, allowing for near-term growth and ~25–30% operational headroom.
+- **At year 5:** active database footprint is approximately **32.5 TB** before headroom; plan for **45–50 TB** of primary database storage.
+- The HA standby requires roughly the **same database capacity**.
+- Backups, archive logs, retained restore points, and DR copies must be sized and priced separately; they should not be assumed to fit inside the primary database-storage estimate.
+
+The 20 TB figure should be confirmed as either:
+- total allocated Oracle datafiles, including indexes and LOBs; or
+- application data only.
+
+That distinction materially affects final storage sizing.
+
+---
+
+## 1. Proof of concept / development and test
+
+Development, functional test, and performance test should be separated where possible. A small development database cannot establish whether the production platform will meet summary-query, cache-warming, backup, recovery, or growth requirements.
+
+| Environment | Purpose | Recommended initial sizing | Data volume |
+|---|---|---|---|
+| **Development** | Application and stored-procedure changes; unit testing | **8 vCPU / 64 GB RAM** | **0.5–1 TB** masked or synthetic data |
+| **Integration / functional test** | End-to-end Java, JDBC, PL/SQL, security, and interfaces | **8–16 vCPU / 64–128 GB RAM** | **1–2 TB** representative masked data |
+| **Performance POC** | Validate real-time daytime puts, Gets, Lab Summaries, and throttled overnight cache traffic | **16–32 vCPU / 128–256 GB RAM** | **3–5 TB minimum** of representative data; ideally 6–12 months of production-like history |
+| **Pre-production / cutover rehearsal** | Validate migration, backup/restore, DR, and production runbook | Near-production configuration | Preferably **10–20 TB**; use a full-size rehearsal if migration duration and recovery time are material risks |
+
+### POC workload requirements
+
+The performance POC should replay:
+
+- peak daytime result-ingestion rate, including expected burst behavior;
+- concurrent real-time Get and Lab Summary calls;
+- actual Java connection-pool behavior;
+- stored procedures and SQL execution plans used in production;
+- throttled overnight cache warming;
+- backup activity, archive-log generation, and replication;
+- failover and Java application reconnect/retry behavior.
+
+A POC using a few gigabytes of data or only synthetic single-user transactions would be useful for compatibility, but **not sufficient for production sizing**.
+
+---
+
+## 2. Production baseline
+
+A reasonable initial production baseline is:
+
+| Component | Initial recommendation |
+|---|---|
+| Database compute | **32 vCPU / 256 GB RAM** minimum planning point |
+| Scale-up range | Allow growth to **64 vCPU / 512 GB RAM** without architecture change |
+| Primary data storage at go-live | **~30 TB usable** |
+| Five-year primary data-storage plan | **45–50 TB usable** |
+| HA | Synchronous or near-synchronous standby in another availability zone, according to platform capability and required RPO |
+| DR | Separate-region recovery design, sized to the agreed RPO/RTO—not necessarily a continuously running full-capacity environment |
+| Storage performance | Low-latency SSD; separate capacity/performance planning for data, redo, temp, archive logs, and backups |
+| Application connectivity | Java application tier in the same cloud region and private network path as the database |
+| Reporting/cache workload | Test alongside daytime ingestion; apply application-level rate limiting to overnight cache warming |
+
+The **32 vCPU / 256 GB** baseline is not a claim that all of those resources will be required at day one. It is a prudent starting point for a 20 TB Oracle production repository with real-time ingestion, stored-procedure-based Gets and summaries, high availability, and expected growth. If AWR/ASH evidence shows that the workload is memory-light and I/O-efficient, it may be reduced. If Lab Summary procedures scan large historical ranges or have high daytime concurrency, it may need to increase.
+
+---
+
+## 3. Platform-specific sizing starting points
+
+### A. AWS RDS for Oracle BYOL
+
+#### Development / test / POC
+
+- ** 8 vCPU / 64 GB RAM equivalent, using general-purpose SSD storage.
+- **Performance  16–32 vCPU / 128–256 GB RAM equivalent.
+- ** 3–5 TB for a meaningful POC; provisioned IOPS storage for performance testing rather than relying only on general-purpose storage.
+
+AWS positions general-purpose SSD as suitable for development and test, while provisioned IOPS SSD is intended for I/O-intensive production database workloads requiring consistent low latency and throughput. ([docs.aws.amazon.com](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html?utm_source=openai))
+
+#### Production
+
+- ** start at a memory-optimized RDS class equivalent to **32 vCPU / 256 GB RAM**.
+- **Scale  validate a path to **64 vCPU / 512 GB RAM** if peak Lab Summary execution or concurrent stored-procedure load requires it.
+- ** start with approximately **30 TB** of provisioned IOPS SSD storage; plan to expand toward **45–50 TB** over five years.
+- ** Multi-AZ production deployment.
+- ** price a separate cross-region recovery or replica strategy against the client’s RPO/RTO.
+
+RDS for Oracle now supports up to **256 TiB total storage** when additional storage volumes are used. For Oracle provisioned IOPS storage, AWS documents support up to 256,000 IOPS and 16,000 MiB/s in applicable configurations, though instance-class limits must also be checked. ([docs.aws.amazon.com](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html?utm_source=openai))
+
+**Sizing  RDS remains technically credible for this workload, but the POC must validate RDS compatibility for all Oracle stored-procedure dependencies, administrative processes, monitoring requirements, and maintenance procedures.
+
+---
+
+### B. Oracle Database on Azure Virtual Machines
+
+#### Development / test / POC
+
+- ** 8 vCPU / 64 GB RAM.
+- **Functional  8–16 vCPU / 64–128 GB RAM.
+- **Performance  16–32 vCPU / 128–256 GB RAM.
+- ** 3–5 TB representative workload dataset, using Premium SSD v2, Ultra Disk, Azure NetApp Files, or another storage choice validated against measured latency, IOPS, and throughput requirements.
+
+For Oracle databases on Azure VMs, Microsoft recommends E-series memory-optimized VMs and specifically identifies Ebdsv5 as a strong price/performance starting point for many Oracle workloads; M-series is intended for larger or mission-critical databases. Microsoft also notes that D-series is better suited to smaller databases or dev/test because it has less memory per vCPU. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-performance-best-practice?context=%2Fpartner-support%2Fazure%2Fbackup%2Fcontext%2Fcontext&utm_source=openai))
+
+#### Production
+
+- **Primary  start with an Azure Ebdsv5-class, memory-optimized VM sized around **32 vCPU / 256 GB RAM**, or a constrained-core equivalent where licensing economics justify it.
+- **Scale  preserve the ability to scale to **64 vCPU / 512 GB RAM**.
+- **Standby  same or near-same specification in a second Availability Zone for Data Guard.
+- ** approximately **30 TB usable** at go-live; grow toward **45–50 TB** over five years.
+- **Storage  separate Oracle data, redo, temp, archive-log, and backup workloads where warranted; use ASM and multiple disks where that improves I/O parallelism.
+- ** Oracle Data Guard between Availability Zones.
+- ** independent regional DR plan, with standby/recovery capacity driven by RPO/RTO.
+
+Microsoft recommends choosing Azure VM compute based on the needed memory-to-vCore ratio, IOPS, and throughput, then adding storage capacity. Its Oracle guidance identifies Ebdsv5 as the preferred starting point for many Oracle workloads and recommends Premium SSD or Ultra Disk for production performance. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-performance-best-practice?context=%2Fpartner-support%2Fazure%2Fbackup%2Fcontext%2Fcontext&utm_source=openai))
+
+For Azure VM deployments, the client remains responsible for implementing database HA/DR. Microsoft’s guidance describes a two-VM Oracle/Data Guard architecture as the minimum baseline and recommends separate availability zones or regions according to resiliency needs. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-overview?utm_source=openai))
+
+---
+
+### C. Oracle Database@Azure / Exadata
+
+#### Development / POC
+
+If Exadata remains under evaluation, request that Oracle provide a **small but highly available Exadata Exascale POC**, not a single-node configuration that cannot represent the target operating model.
+
+The POC should include:
+
+- two-node HA configuration;
+- enough ECPU and memory to run the real Java/stored-procedure test load;
+- 3–5 TB of representative masked data;
+- identical daytime and overnight workload replay used for RDS and Azure VM tests;
+- measured p95/p99 response times, CPU, I/O, smart-scan usage where applicable, backup/recovery behavior, and operational responsibilities.
+
+Oracle’s Database@Azure Exascale service has a technical minimum of 8 ECPUs per VM and supports online scaling in increments of four ECPUs. Those are platform minimums—not recommended production sizing for this repository. ([docs.oracle.com](https://docs.oracle.com/en/learn/exadb-xs-azure/?utm_source=openai))
+
+#### Production
+
+Rather than accepting a generic Exadata configuration, require Oracle to quote and substantiate:
+
+- an **initial configuration** sized for approximately **30 TB usable database capacity**;
+- growth to **45–50 TB** over five years;
+- a highly available VM-cluster topology;
+- compute and memory that demonstrably meet the real-time daytime service levels;
+- backup, local HA, and regional DR;
+- BYOL and license-included alternatives;
+- dedicated Exadata and Exadata Exascale alternatives where available;
+- the operational activities Oracle will perform versus those retained by the client.
+
+For comparison, the Exadata production proposal should be tested against the same baseline as Azure VMs: roughly **32 vCPU / 256 GB RAM equivalent** at the outset, with validated scale to **64 vCPU / 512 GB equivalent** if testing demonstrates a need. The point is not that Exadata must match VM specifications directly; it is to ensure Oracle demonstrates an equivalent or better outcome for the agreed load and service levels.
+
+---
+
+## 4. Recommended sizing decision gates
+
+Before committing to a production size, establish these acceptance criteria:
+
+1. **Daytime real-time service levels**
+   - Put, Get, and Lab Summary p95/p99 response times meet agreed targets at peak concurrent load.
+   - No material queueing or timeout behavior in the Java connection pool.
+
+2. **Database resource headroom**
+   - CPU, memory, storage latency, IOPS, and throughput show sustainable headroom during the peak daytime period.
+   - The environment handles overnight cache warming without affecting backups, replication, or next-day readiness.
+
+3. **Growth and operational tests**
+   - Test key summaries against representative historical depth.
+   - Validate backup completion, restore time, archive-log handling, Data Guard transport, and failover.
+   - Confirm expansion path from current capacity to five-year capacity without a disruptive redesign.
+
+4. **Commercial comparison**
+   - Compare equivalent HA/DR and backup assumptions across RDS, Azure VMs, and Database@Azure.
+   - Include Oracle license requirements, cloud storage, replicas, backup retention, network, operational support, and migration costs.
+
+## Recommended wording for the assessment
+
+> For development and functional testing, a modest Oracle environment of 8–16 vCPU, 64–128 GB RAM, and 0.5–2 TB of masked representative data is expected to be sufficient. A meaningful performance POC should use 16–32 vCPU, 128–256 GB RAM, and at least 3–5 TB of representative historical data, with realistic Java-tier concurrency and stored-procedure workload replay.  
+>
+> For production, an initial planning baseline of 32 vCPU, 256 GB RAM, and approximately 30 TB of usable primary database storage is recommended, with a scale path to 64 vCPU, 512 GB RAM, and 45–50 TB usable storage over five years. The HA standby should be comparably sized. Final sizing should be validated through AWR/ASH analysis and performance testing of the peak daytime real-time workload, including concurrent puts, Gets, and Lab Summary requests.
+
 # Cost comparison
 
 For a production-grade deployment with high availability, backup, and disaster recovery, the expected **fully burdened cost** ranking is usually:
