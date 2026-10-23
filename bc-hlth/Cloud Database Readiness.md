@@ -537,3 +537,87 @@ For the stated design, it should only be selected if a realistic benchmark shows
 ## Concise conclusion
 
 A **managed Oracle RDS BYOL deployment is likely technically feasible** for this workload, assuming RDS compatibility and successful performance validation. **Azure VMs** are appropriate if self-management and unrestricted Oracle control are essential. **Database@Azure / Exadata is not currently justified by the workload description**; it should be chosen only after a proof of concept demonstrates a measurable performance, resiliency, or operational advantage.
+
+# RAC Considerations
+
+Yes, that makes sense. Your current on-premises design already separates **three different objectives**:
+
+1. **RAC** — local instance/node resilience and reduced disruption for certain maintenance events.
+2. **Local active/standby** — controlled service patching and local recovery.
+3. **Geographically separate standby** — disaster recovery against a site-level event.
+
+In a cloud architecture, the last two objectives remain clearly relevant. The question is whether **RAC adds enough incremental value** beyond a cloud-native multi-zone and multi-region Data Guard design to justify the Exadata cost and complexity.
+
+## The cloud changes the value equation for RAC
+
+In an on-premises estate, RAC often provides significant value because the organization owns the physical cluster, storage, patching process, hardware failures, and local operational procedures. RAC can reduce interruption from server/node failures and support rolling maintenance within the cluster.
+
+In cloud, you can instead design around broader fault domains:
+
+- **Primary database in Availability Zone A**
+- **Local Data Guard standby in Availability Zone B**
+- **Remote Data Guard standby in a second geography/region**
+- Application tier deployed across zones and, where required, replicated to the DR region
+
+Oracle’s current Database@Azure reference architectures use Data Guard between separate Azure availability zones for local protection and across Azure regions for geographic DR. Oracle explicitly describes a local standby as the mechanism for local failures and a remote standby for regional failures. ([docs.oracle.com](https://docs.oracle.com/en/database/oracle/oracle-database/26/haovw/oracle-maximum-availability-architecture-oracle-databaseazure.html?utm_source=openai))
+
+That means Data Guard—not RAC—is doing most of the work that matters for your current **active/standby plus geographic DR** approach.
+
+## What RAC still adds in cloud
+
+RAC is still valuable if you require:
+
+- very low interruption for a database-instance/node failure;
+- reduced disruption during certain planned database maintenance;
+- active-active database instances for capacity or connection distribution;
+- Oracle Application Continuity, FAN, UCP, and Transaction Guard configured and tested in the Java tier;
+- a stronger local availability tier before invoking a Data Guard failover.
+
+But it does **not** remove the need for Data Guard, and it does not protect against an Azure region loss. Even Oracle’s Database@Azure MAA design pairs RAC-capable Exadata with Data Guard between zones and/or regions. ([docs.oracle.com](https://docs.oracle.com/en/database/oracle/oracle-database/26/haovw/oracle-maximum-availability-architecture-oracle-databaseazure.html?utm_source=openai))
+
+## The practical architecture comparison
+
+| Design | Local node/instance failure | Zone/site failure | Geographic disaster recovery | Planned maintenance | Operational model |
+|---|---|---|---|---|---|
+| **Azure VM, single instance + Data Guard** | Requires standby failover/reconnect | Data Guard failover to second zone | Data Guard to second region | Switchover/failover or planned outage | Client/partner manages Oracle |
+| **AWS RDS Multi-AZ** | Managed failover/reconnect | Managed Multi-AZ failover within region | Separate regional strategy required | Cloud-managed maintenance windows/failover behavior | AWS manages more platform work |
+| **Database@Azure Exadata RAC + Data Guard** | RAC can mask/reduce impact of individual node failure | Data Guard to standby in another zone | Data Guard to another region | RAC can support more rolling/non-disruptive maintenance patterns | Oracle manages Exadata service/platform |
+
+The material distinction is outage tolerance:
+
+- If a **brief reconnect and failover** for a node failure or maintenance event is acceptable, then a single-instance primary with local and remote Data Guard may meet the requirement.
+- If the clinical/business requirement is **near-continuous service through node failure and planned maintenance**, then RAC has real incremental value—and in the Azure-aligned managed options, that likely means Database@Azure/Exadata.
+
+## A key point: do not simply reproduce the on-premises topology
+
+Your existing architecture may reflect excellent on-premises practice, but cloud migration is an opportunity to map requirements to cloud capabilities rather than automatically duplicate every component.
+
+For example, a cloud target could be:
+
+- ** single-instance Oracle database in Azure Region 1, Zone A  
+- **Local  physical standby in Zone B with Data Guard and a defined/automated failover mechanism  
+- ** physical standby in Azure Region 2  
+- ** Java tier redundant across zones in Region 1 and deployable in Region 2  
+- ** planned Data Guard switchovers, with defined application reconnect behavior
+
+This can provide robust zone and regional protection without RAC. Oracle’s own Database@Azure guidance recommends at least two deployments with Data Guard for single-site protection, while its multi-region architecture uses primary/standby databases in separate regions. ([learn.microsoft.com](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/oracle-on-azure/oracle-disaster-recovery-oracle-database-azure?utm_source=openai))
+
+## The test for Exadata/RAC
+
+Ask the client to make the requirement measurable:
+
+1. **Maximum interruption for an individual database node  seconds, <1 minute, 5 minutes, or longer?
+2. **Maximum interruption for planned Oracle  none, brief reconnect, or a scheduled maintenance window?
+3. **RPO/RTO for zone loss and region  Are zero data loss and rapid automatic failover required?
+4. **Can Java sessions reconnect and safely retry?**  
+   Put requests must be idempotent; client behavior during failover must be proven.
+5. **Does current RAC solve an actual demonstrated problem?**  
+   Review incidents: how often has RAC prevented an outage or avoided disruptive patching? Is it currently needed for throughput, or primarily retained as a historical HA standard?
+6. **What is the incremental cost of RAC/Exadata?**  
+   Compare it against a two-zone plus second-region Data Guard design—not against a single VM.
+
+## Recommended position
+
+> The client’s existing use of RAC, active/standby databases, and geographically separate DR is a mature availability model. In a cloud target, the multi-geography Data Guard requirement remains essential. RAC remains relevant only if the client requires near-continuous local service through an individual database-node failure or maintenance event.  
+>
+> A cloud architecture based on a primary Oracle database, cross-zone Data Guard standby, and cross-region Data Guard standby can preserve the most important resiliency outcomes without requiring RAC or Exadata. RAC/Exadata should therefore be assessed as an incremental availability and maintenance-continuity capability—not as a prerequisite for multi-region resilience or for Data Guard-based migration.
