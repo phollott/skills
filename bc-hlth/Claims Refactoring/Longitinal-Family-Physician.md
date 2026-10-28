@@ -1,4 +1,4 @@
-# Longitudinal Family Practitioner Enhancements
+# Longitudinal Family Physician (LFP) Enhancements
 
 Below are five distinct architectural approaches for implementing the full LFP capability—including policy enforcement, sequencing, claim history, cross-setting controls, reporting, and operational support tooling. The key decision is not only where the **rules** run, but where the platform holds **state**, manages **process sequencing**, and records the authoritative **adjudication outcome**.
 
