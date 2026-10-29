@@ -32,6 +32,8 @@ Additionally, CareConnect could load timeline using date range, rather than brut
 2. Increase CareConnect timeout for LSM/GET so that we can raise the threshold and avoid death spiral
 3. If LA is involved, reroute/withhold LA Battery Event Distribution snippets, which is more in line with the FHIR API
 
+The LSM performance SLA currently relies on 200 or fewer batteries in the response, but this is essentially all responses, and could be based on message size instead. It doesn't protect Quest at all. For what it is worth, the CareConnect change may not impact PLIS performance SLA. 
+
 ### Test Evidence
 
 #### 2026-10-26 Intentional LSM Precache Increase
