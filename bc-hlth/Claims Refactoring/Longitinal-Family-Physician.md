@@ -2,6 +2,44 @@
 
 Below are five distinct architectural approaches for implementing the full LFP capability—including policy enforcement, sequencing, claim history, cross-setting controls, reporting, and operational support tooling. The key decision is not only where the **rules** run, but where the platform holds **state**, manages **process sequencing**, and records the authoritative **adjudication outcome**.
 
+## Objectives
+
+> Enable the most appropriate adjudication outcome at an acceptable cost and time, with effort proportional to claim complexity, financial materiality, and risk.
+
+A future-state design should recognize that not every claim deserves the same level of automated processing or human review. Low-value, low-risk claims should have a low-cost path—ideally with clear submission guidance, early validation, and minimal avoidable handling. Complex, ambiguous, high-value, cross-setting, history-dependent, or policy-sensitive claims should receive richer context, explainable rule results, and an efficient route to an MOA or adjudicator with the information needed to decide correctly. The architecture should not optimize only for throughput if that increases incorrect approvals, incorrect denials, rework, provider burden, or downstream recovery activity.
+
+That suggests a **risk- and complexity-based routing model**:
+
+```text
+Claim received
+   ↓
+Validate completeness and identify context
+   ↓
+Classify complexity / materiality / confidence / policy risk
+   ├─ Low-risk, clear outcome → automated adjudication
+   ├─ Missing information → actionable pend/request for information
+   ├─ Known exception → targeted operational work queue
+   └─ Complex, high-risk, or ambiguous → adjudicator review with full decision context
+```
+
+For an MOA or adjudicator, the future architecture should provide a navigable “decision workspace,” not a collection of disconnected system screens. It should show the submitted claim, relevant provider/clinic status, LFP eligibility, applicable policy and effective-date version, prior history, rule outcomes, reason codes, related documents, and recommended next action. The user should be able to understand **what happened, why it happened, what is missing, and what authority they have to do next**—without manually reconstructing the case from Aion outputs, database screens, reports, email, and institutional memory.
+
+This gives you a more complete set of architecture outcomes:
+
+- **Correctness:** improve the likelihood of the right adjudication outcome.
+- **Cost effectiveness:** avoid spending more to process a claim than its value or risk warrants.
+- **Timeliness:** resolve straightforward claims quickly and route exceptions efficiently.
+- **Explainability:** make outcomes understandable to providers, operations, audit, and appeals.
+- **Human effectiveness:** equip MOAs and adjudicators with coherent information and controlled actions.
+- **Payment integrity:** reduce inappropriate approvals, duplicate payments, missed denials, and avoidable recoveries.
+- **Operational resilience:** support re-adjudication, corrections, overrides, history, and policy change safely.
+
+A useful architecture principle could be:
+
+> **Adjudication should be designed for outcome quality and proportional effort, not automation volume alone. Automate clear, low-risk decisions; provide guided, evidence-rich workflows for complex or consequential decisions; and preserve auditable human accountability where judgment is required.**
+
+That principle also helps evaluate LFP options. A new Java/DMN service, a legacy enhancement, Salesforce workflow, or a commercial platform should not be assessed only on whether it can execute rules. It should be assessed on whether it improves the end-to-end economics and quality of adjudication for both automated and human-reviewed claims.
+
 ## Comparison criteria for an options analysis
 
 Use criteria that reflect the real problem, not only product preference:
@@ -18,6 +56,8 @@ Use criteria that reflect the real problem, not only product preference:
 | Vendor/skills risk | Does it create dependence on scarce skills or a single implementer? |
 | Reuse potential | Can its APIs, audit model, data model, and patterns be reused beyond LFP? |
 | Cost and transition debt | What is the total cost now, later migration cost, and cost if later phases never occur? |
+
+
 
 ## Options Analysis
 
@@ -145,6 +185,34 @@ Mainframe claim history + financial posting
 - Keep one authoritative writer for claim/payment state—initially probably the mainframe.
 - Persist a distinct LFP decision record with rule version, inputs, history facts, outcome, and reason codes.
 - Run in parallel/shadow mode and reconcile outcomes before financially binding cutover.
+
+#### Java-based POC Specification
+
+A useful prototype would model one **bounded LFP adjudication decision**, such as determining whether a submitted activity is eligible, payable, pended, or denied. Run a Spring Boot Java service in Docker with a DMN engine such as KIE/Drools, exposing a small REST API like `POST /lfp/adjudications`. The request would contain a deliberately simplified `AdjudicationContext`: provider and clinic eligibility, activity type, service date, claimed time/amount, care setting, current-period total, and a small prior-payment history. The service would validate the request, invoke one or more DMN decision tables, return the outcome, reason code, calculated recommendation, and DMN/rule version, and persist a decision record in PostgreSQL. Keep the policy readable in DMN tables—for example, eligibility, rate selection, cross-setting exclusion, and period-limit decisions—while keeping orchestration, validation, and error handling in Java.
+
+Use separate Docker containers for the Java service, PostgreSQL, and optionally a lightweight mock “legacy claims API” that supplies provider status and history. Add a simple browser UI or Swagger/OpenAPI page to submit example claims and inspect decisions; a second minimal operations screen could show decision history, inputs, outcome, and rule version. Instrument the Java service with structured logs and correlation IDs; if practical, add an OpenTelemetry collector and a local telemetry viewer, though that is optional for the first version. The prototype should demonstrate the architectural separation: **API intake → context assembly → explicit Java sequencing → DMN policy evaluation → durable decision evidence/history**. Use synthetic data only—no real PHI—and include a few regression scenarios: clear approval, ineligible provider, exceeded limit, conflicting setting, missing history, and a claim that must pend for human review.
+
+**For a prototype, a FHIR clinical data repository (CDR) would be a very good substitute for a real mainframe environment.** It lets you demonstrate the architectural boundary you want: the Java/DMN adjudication service retrieves normalized provider, patient, coverage, organization/clinic, service, and prior-claim facts through standard FHIR APIs rather than by querying legacy tables or calling stored procedures. Populate it with synthetic LFP scenarios and use resources such as `Patient`, `Practitioner`, `Organization`, `PractitionerRole`, `Coverage`, `Claim`, and `ClaimResponse`. FHIR’s financial model includes `Claim` for the adjudication request and `ClaimResponse` for adjudication results; `ClaimResponse` also supports the conceptual handling of re-adjudication and reversals. ([hl7.org](https://hl7.org/fhir/claimresponse.html?utm_source=openai))
+
+For the laptop prototype, run a HAPI FHIR JPA server backed by PostgreSQL in Docker, along with the Spring Boot LFP service and its own small decision-evidence database. The LFP service can query the CDR for provider/clinic/coverage context and prior synthetic claims, assemble its internal `AdjudicationContext`, invoke DMN, and persist a decision trace. This is more realistic than hard-coded mocks and lets you explore FHIR profiles, terminology, identifiers, search patterns, and history-related data access. Keep the boundary clear, though: the FHIR CDR is a **context and interoperability repository**, not automatically a complete claims ledger. For the prototype, your Java service should still own the authoritative LFP decision record, idempotency, sequencing state, and audit trail.
+
+A useful prototype shape would be:
+
+```text
+HAPI FHIR CDR
+  - synthetic Patient / Practitioner / Organization / Coverage
+  - Claim and ClaimResponse history
+             ↓ FHIR REST
+Spring Boot LFP Adjudication Service
+  - context assembly
+  - Java sequencing
+  - DMN evaluation
+  - decision evidence / audit
+             ↓
+PostgreSQL decision store
+```
+
+This would be an effective demonstration of how a future LFP flow could isolate itself from mainframe-specific schemas while retaining a path to integrate with real legacy data through a FHIR façade or a domain API later.
 
 ---
 
@@ -345,3 +413,9 @@ Inside the adjudication core, use concise **domain APIs and events** rather than
 However, I would avoid making the FHIR layer the place where all LFP-specific adjudication logic lives. LFP requires purpose-specific capabilities—payment sequencing, cross-setting enforcement, accumulators, concurrency control, duplicate prevention, reversals, re-adjudication, financial posting, and operational controls. A modern Java adjudication service should consume a compact internal `AdjudicationContext`, derived through the FHIR layer or other domain APIs, then execute explicit orchestration plus DMN/Drools rules. The service should persist its own decision evidence and events; it should not rely on a FHIR server alone to provide the financial ledger or audit model.
 
 The RIM lineage is helpful for semantic consistency, but it should not become a constraint. HL7 describes the RIM as an abstract model created for HL7 standards development, explicitly **not** as a logical or physical database model. ([hl7.org](https://www.hl7.org/cda/stds/online-navigation/2024May/infrastructure/rim/rim.htm?utm_source=openai)) So use the existing RIM-informed Oracle model as a valuable starting point, map only the needed concepts into constrained FHIR profiles, and keep a clean anti-corruption layer between it and LFP adjudication. The practical target would be: **FHIR at clinical/interoperability edges; Java domain APIs and events in the adjudication core; Oracle-backed persistence where appropriate; and a controlled mainframe adapter until authoritative claims history and financial posting can move.**
+
+## Agentic Considerations
+
+An agentic layer could sit **above** the deterministic LFP adjudication services as an assistive interface for analysts, operations, clinical reviewers, and architects. The core APIs remain the source of truth: FHIR APIs expose approved clinical/administrative context at external healthcare boundaries; internal domain APIs expose tightly scoped capabilities such as claim-status lookup, policy retrieval, history queries, decision-trace retrieval, and case creation. An MCP server can then expose selected, read-only tools and resources to an authorized agent—for example, “retrieve the LFP decision trace,” “find the policy and effective version,” “summarize related claim history,” or “draft a provider inquiry.” MCP is designed to expose tools, data resources, and reusable prompts to AI clients, but its guidance emphasizes visibility and human control over tool use. ([github.com](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/docs/2026-07-28/learn/architecture.mdx?utm_source=openai)) FHIR is appropriate where the agent needs normalized healthcare context such as patient, practitioner, organization, coverage, medication, or clinical-document data; it is an HL7 standard for healthcare data exchange using resources and commonly REST-style APIs. ([hl7.org](https://hl7.org/fhir/overview-arch.html?utm_source=openai))
+
+The guardrail is that agents should **not autonomously adjudicate, approve payment, alter policy/rules, or write to the claims ledger**. They can explain an outcome, identify missing information, classify documents, surface potentially relevant policy, prepare a case, or recommend a next action; deterministic rules, explicit workflow, and authorized humans remain responsible for financially binding decisions. A sensible initial pattern is read-only MCP tools backed by audited domain/FHIR APIs, with role-based access, PHI minimization, approved prompt/tool scopes, full tool-call logging, and human confirmation for any future write action. That lets agentic capabilities improve knowledge access and operational productivity without weakening the reproducibility, auditability, and control required for LFP adjudication.
