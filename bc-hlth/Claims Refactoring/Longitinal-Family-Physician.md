@@ -412,11 +412,48 @@ Use **FHIR selectively at health-system interoperability boundaries**—for exam
 
 Inside the adjudication core, use concise **domain APIs and events** rather than forcing the rules engine to process a complete FHIR graph. For example: `SubmitLfpClaim`, `GetAdjudicationContext`, `EvaluateLfpDecision`, `RecordAdjudicationOutcome`, and `GetLfpHistory`. The internal `AdjudicationContext` should contain only the normalized, versioned facts required for the decision, while adapters translate from FHIR, EMR-specific formats, Salesforce, or legacy records at the edges. This gives the program a standards-based architecture without conflating “standards-based” with “FHIR everywhere,” and it preserves a clean migration boundary away from mainframe-specific data structures.
 
-**a Java/Spring Boot service using HAPI FHIR could make sense for LFP**, but primarily as an **interoperability and information-access layer**, not as the complete adjudication runtime or financial system of record. For LFP, it could expose normalized clinical and administrative facts needed by the new adjudication flow: patient/client, practitioner, clinic/organization, coverage/eligibility, service context, relevant clinical evidence, and perhaps claim/request and adjudication-response representations. FHIR has relevant financial resources such as `Claim`, `ClaimResponse`, `Coverage`, `ExplanationOfBenefit`, and workflow patterns for re-adjudication, reversals, status, and payment-related interactions. ([build.fhir.org](https://build.fhir.org/financial-module.html?utm_source=openai)) This could be particularly useful at boundaries with EMRs, clinical systems, special-authority processes, or Salesforce Health Cloud.
+### HAPI FHIR
 
-However, I would avoid making the FHIR layer the place where all LFP-specific adjudication logic lives. LFP requires purpose-specific capabilities—payment sequencing, cross-setting enforcement, accumulators, concurrency control, duplicate prevention, reversals, re-adjudication, financial posting, and operational controls. A modern Java adjudication service should consume a compact internal `AdjudicationContext`, derived through the FHIR layer or other domain APIs, then execute explicit orchestration plus DMN/Drools rules. The service should persist its own decision evidence and events; it should not rely on a FHIR server alone to provide the financial ledger or audit model.
+**a Java/Spring Boot service using HAPI FHIR could make sense for LFP**, but primarily as an **interoperability and information-access layer**, not as the complete adjudication runtime or financial system of record. For LFP, it could expose normalized clinical and administrative facts needed by the new adjudication flow: patient/client, practitioner, clinic/organization, coverage/eligibility, service context, relevant clinical evidence, and perhaps claim/request and adjudication-response representations. FHIR has relevant financial resources such as `Claim`, `ClaimResponse`, `Coverage`, `ExplanationOfBenefit`, and workflow patterns for re-adjudication, reversals, status, and payment-related interactions. ([build.fhir.org](https://build.fhir.org/financial-module.html?utm_source=openai)) This could be particularly useful at boundaries with EMRs, clinical systems, special-authority processes, or Salesforce Health Cloud. I would avoid making the FHIR layer the place where all LFP-specific adjudication logic lives. LFP requires purpose-specific capabilities—payment sequencing, cross-setting enforcement, accumulators, concurrency control, duplicate prevention, reversals, re-adjudication, financial posting, and operational controls. A modern Java adjudication service should consume a compact internal `AdjudicationContext`, derived through the FHIR layer or other domain APIs, then execute explicit orchestration plus DMN/Drools rules. The service should persist its own decision evidence and events; it should not rely on a FHIR server alone to provide the financial ledger or audit model.
 
 The RIM lineage is helpful for semantic consistency, but it should not become a constraint. HL7 describes the RIM as an abstract model created for HL7 standards development, explicitly **not** as a logical or physical database model. ([hl7.org](https://www.hl7.org/cda/stds/online-navigation/2024May/infrastructure/rim/rim.htm?utm_source=openai)) So use the existing RIM-informed Oracle model as a valuable starting point, map only the needed concepts into constrained FHIR profiles, and keep a clean anti-corruption layer between it and LFP adjudication. The practical target would be: **FHIR at clinical/interoperability edges; Java domain APIs and events in the adjudication core; Oracle-backed persistence where appropriate; and a controlled mainframe adapter until authoritative claims history and financial posting can move.**
+
+**Yes, but with an important distinction.** You can build a Java/Spring Boot FHIR façade over Db2, including Db2 for z/OS, much as you did with Oracle. Java can access Db2 through IBM’s JDBC/SQLJ driver, and Db2 can also expose selected SQL packages as REST services. ([ibm.com](https://www.ibm.com/docs/en/db2-for-zos/13.0.0?topic=zos-java&utm_source=openai))
+
+However, **HAPI FHIR’s JPA server does not currently list Db2 as a supported persistence database**. Its actively supported JPA databases are SQL Server, PostgreSQL, and Oracle; CockroachDB is experimental, and MariaDB is deprecated. ([hapifhir.io](https://hapifhir.io/hapi-fhir/docs/server_jpa/database_support.html)) So the exact “HAPI JPA server owns its FHIR schema in the existing Db2 database” pattern would be a custom/unsupported implementation—not a prudent production choice for DPP/LFP.
+
+A better Db2-oriented pattern would be:
+
+```text
+Db2 / CICS / existing claims capabilities
+              ↓
+Java/Spring Boot FHIR façade or domain API
+  - JDBC, Db2 REST, z/OS Connect, or controlled service adapter
+  - maps legacy records to constrained FHIR profiles
+  - enforces authorization, masking, audit, and versioned contracts
+              ↓
+FHIR consumers: EMR/clinical integration/Salesforce where justified
+              ↓
+LFP adjudication service
+  - builds compact internal AdjudicationContext
+  - DMN/Drools rules and explicit sequencing
+  - persists decision evidence separately
+```
+
+This means Db2 remains the transitional authoritative store, but modern consumers see stable healthcare/domain contracts instead of schemas and stored procedures. For LFP, you could expose selected capabilities such as provider/clinic eligibility, coverage, historical `Claim`/`ClaimResponse` views, and supporting data through FHIR where that improves interoperability. The adjudication core should still use its own compact domain APIs for `GetLfpAdjudicationContext`, history/accumulator queries, and controlled financial posting—not use FHIR as the sole internal financial transaction model.
+
+There are three practical variants:
+
+1. **Read-only FHIR façade over Db2 — strongest initial option**  
+   Map existing Db2 claims, provider, clinic, coverage, and history data into FHIR resources. This is useful for inquiry, staff workspaces, Salesforce/clinical interoperability, and a prototype. It avoids immediately changing financial transaction ownership.
+
+2. **FHIR façade plus a separate modern persistence store**  
+   Keep Db2 authoritative initially, but replicate or selectively publish data into a supported HAPI FHIR JPA store—typically PostgreSQL or Oracle. This creates a modern read model/CDR while avoiding unsupported HAPI-on-Db2 persistence. The LFP service can use it for context, but authoritative history and concurrency controls still need careful design.
+
+3. **FHIR/Domain API façade with controlled write operations**  
+   Longer term, expose limited writes such as a claim submission, decision recommendation, or status update. Do not simply map arbitrary FHIR `PUT`/`POST` calls into Db2 tables. Writes should invoke explicit business operations and preserve existing CICS/Db2 transaction, validation, authorization, and audit semantics.
+
+The caution is that a FHIR façade alone does **not** reduce mainframe coupling if it is merely a one-to-one mapping of Db2 tables. It is most useful if it establishes business concepts and constraints—e.g., a provider role, clinic, coverage, LFP participation, claim, adjudication response—and hides legacy data structures. For production, I would validate performance, search behavior, security, transaction boundaries, versioning, and the feasibility of any FHIR profiles/extensions against representative LFP history and cross-setting scenarios before committing.
 
 ## Agentic Considerations
 
