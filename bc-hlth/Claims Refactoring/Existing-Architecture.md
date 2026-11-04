@@ -8,3 +8,9 @@ Batch system that primarily validates claim information:
 
 Interfaces with ICBC & WSBC external agencies
 Application coded in PL/I, COBOL, DB2, IMS
+
+## Adjudication System
+
+Batch system that primarily adjudicates claims, using patient previous medical history
+Interfaces with ICBC external agency
+Application in PL/I, COBOL, DB2
