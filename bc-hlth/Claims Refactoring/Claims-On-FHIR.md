@@ -101,62 +101,12 @@ Condition/Observation          clinically driven eligibility or exception criter
 
 The key design work would be a **BC/LFP implementation profile**: agreed identifiers, required fields, local code systems, value sets, extensions, security, terminology, and mappings to existing DPP/Teleplan/mainframe data. Without profiles, using generic FHIR resources alone will not solve ambiguity around LFP-specific categories, practice settings, payment rules, or cross-setting enforcement.
 
-## Proof of Concept Specification
-
-Yes. It makes sense **as an architecture proof of concept**, provided you are explicit that it is not a production recommendation to make FHIR the core LFP claims platform.
-
-A HAPI FHIR backend gives you a credible stand-in for the unavailable legacy components: it can hold synthetic providers, clinics, patients, coverage, submitted claims, prior adjudication outcomes, and supporting references. Your Java LFP service can then retrieve a normalized context through APIs, apply DMN rules and explicit sequencing, and persist its own decision evidence. This demonstrates the separation you want to explore:
-
-```text
-Synthetic claim and history context
-    → standards-based API / FHIR façade
-    → Java LFP orchestration service
-    → DMN policy decisions
-    → decision trace, audit record, and outcome
-```
-
-Use FHIR resources such as `Practitioner`, `PractitionerRole`, `Organization`, `Patient`, `Coverage`, `Claim`, `ClaimResponse`, and possibly `Task` for a pend/manual-review path. Keep LFP-specific concepts—time accumulators, cross-setting checks, payment-period limits, sequencing stages, idempotency, and financial-posting commands—in your own compact Java domain model rather than trying to force all of them into generic FHIR resources.
-
-The prototype’s value is to test architectural questions, not FHIR conformance alone:
-
-- Can TeleMax-like routing identify an LFP claim and invoke a separate service?
-- Can the service construct an adjudication context without direct database coupling?
-- Can policy be represented visibly in DMN?
-- Can claim history influence a decision?
-- Can the process distinguish approve, deny, pend, and manual review?
-- Can it produce an understandable decision trace for an MOA/adjudicator?
-- What minimum APIs would be needed from E&E and payment in a real transition?
-
-Use only synthetic data and label the components clearly: **“FHIR-backed mock claims context,”** **“simulated E&E eligibility service,”** and **“simulated payment-posting endpoint.”** That avoids implying that the prototype proves integration with the actual DPP environment.
-
-A sensible Docker-based prototype might include:
-
-```text
-HAPI FHIR JPA Server + PostgreSQL
-    - synthetic provider, clinic, coverage, Claim and ClaimResponse data
-
-Spring Boot LFP Adjudication Service
-    - REST API
-    - context assembly from FHIR
-    - Java sequencing
-    - DMN evaluation
-    - decision-evidence persistence
-
-Mock E&E / Payment API
-    - eligibility/edit response
-    - controlled payment-status or posting response
-
-Optional simple UI / Swagger
-    - submit claim
-    - inspect decision, trace, history, and manual-review queue
-```
-
 ## Information from DPP PIA
 
 > APEX will be searchable by Practitioner Number and will display practitioner name, and beneficiary PHN in the results, among other claim details. 
 > Current MAXPatH claim data that will be replicated in the new APEX application is shown below. 
 > Each transaction record for a Patient Claim within the MSP claims system and associated applications such as MAXPath and APEX is considered to be and treated as PI data. 
->   PATIENT_CLAIM_SK
+> - PATIENT_CLAIM_SK
 >	HEALTH_IDENTIFIER
 >	PROVINCE_CODE
 >	NEW_BORN_FLAG
@@ -211,4 +161,54 @@ Optional simple UI / Swagger
 >	DW_CREATE_TS
 >	DW_UPDATE_TS
 
+
+## Proof of Concept Specification
+
+Yes. It makes sense **as an architecture proof of concept**, provided you are explicit that it is not a production recommendation to make FHIR the core LFP claims platform.
+
+A HAPI FHIR backend gives you a credible stand-in for the unavailable legacy components: it can hold synthetic providers, clinics, patients, coverage, submitted claims, prior adjudication outcomes, and supporting references. Your Java LFP service can then retrieve a normalized context through APIs, apply DMN rules and explicit sequencing, and persist its own decision evidence. This demonstrates the separation you want to explore:
+
+```text
+Synthetic claim and history context
+    → standards-based API / FHIR façade
+    → Java LFP orchestration service
+    → DMN policy decisions
+    → decision trace, audit record, and outcome
+```
+
+Use FHIR resources such as `Practitioner`, `PractitionerRole`, `Organization`, `Patient`, `Coverage`, `Claim`, `ClaimResponse`, and possibly `Task` for a pend/manual-review path. Keep LFP-specific concepts—time accumulators, cross-setting checks, payment-period limits, sequencing stages, idempotency, and financial-posting commands—in your own compact Java domain model rather than trying to force all of them into generic FHIR resources.
+
+The prototype’s value is to test architectural questions, not FHIR conformance alone:
+
+- Can TeleMax-like routing identify an LFP claim and invoke a separate service?
+- Can the service construct an adjudication context without direct database coupling?
+- Can policy be represented visibly in DMN?
+- Can claim history influence a decision?
+- Can the process distinguish approve, deny, pend, and manual review?
+- Can it produce an understandable decision trace for an MOA/adjudicator?
+- What minimum APIs would be needed from E&E and payment in a real transition?
+
+Use only synthetic data and label the components clearly: **“FHIR-backed mock claims context,”** **“simulated E&E eligibility service,”** and **“simulated payment-posting endpoint.”** That avoids implying that the prototype proves integration with the actual DPP environment.
+
+A sensible Docker-based prototype might include:
+
+```text
+HAPI FHIR JPA Server + PostgreSQL
+    - synthetic provider, clinic, coverage, Claim and ClaimResponse data
+
+Spring Boot LFP Adjudication Service
+    - REST API
+    - context assembly from FHIR
+    - Java sequencing
+    - DMN evaluation
+    - decision-evidence persistence
+
+Mock E&E / Payment API
+    - eligibility/edit response
+    - controlled payment-status or posting response
+
+Optional simple UI / Swagger
+    - submit claim
+    - inspect decision, trace, history, and manual-review queue
+```
 This is a strong personal proof of concept because it illustrates the desired **architectural boundary and adjudication flow**, while remaining honest that a real implementation may later use Db2- or domain-API-backed services instead of FHIR.
