@@ -4,6 +4,8 @@ Below are five distinct architectural approaches for implementing the full LFP c
 
 ## Objectives
 
+Stage 1 implemented a bounded time-based payment capability. The deferred stages introduce cross-mainline, provider-level, and history-dependent adjudication controls. These require more than additional rules: they require authoritative claim-history access, explicit sequencing, concurrency controls, and reliable handling of corrections, reversals, and re-adjudication.
+
 > Enable the most appropriate adjudication outcome at an acceptable cost and time, with effort proportional to claim complexity, financial materiality, and risk.
 
 A future-state design should recognize that not every claim deserves the same level of automated processing or human review. Low-value, low-risk claims should have a low-cost path—ideally with clear submission guidance, early validation, and minimal avoidable handling. Complex, ambiguous, high-value, cross-setting, history-dependent, or policy-sensitive claims should receive richer context, explainable rule results, and an efficient route to an MOA or adjudicator with the information needed to decide correctly. The architecture should not optimize only for throughput if that increases incorrect approvals, incorrect denials, rework, provider burden, or downstream recovery activity.
