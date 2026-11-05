@@ -106,7 +106,7 @@ The key design work would be a **BC/LFP implementation profile**: agreed identif
 > APEX will be searchable by Practitioner Number and will display practitioner name, and beneficiary PHN in the results, among other claim details. 
 > Current MAXPatH claim data that will be replicated in the new APEX application is shown below. 
 > Each transaction record for a Patient Claim within the MSP claims system and associated applications such as MAXPath and APEX is considered to be and treated as PI data. 
-> - PATIENT_CLAIM_SK
+>   PATIENT_CLAIM_SK
 >	HEALTH_IDENTIFIER
 >	PROVINCE_CODE
 >	NEW_BORN_FLAG
