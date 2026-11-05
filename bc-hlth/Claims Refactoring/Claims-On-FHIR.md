@@ -151,4 +151,64 @@ Optional simple UI / Swagger
     - inspect decision, trace, history, and manual-review queue
 ```
 
+## Information from DPP PIA
+
+> APEX will be searchable by Practitioner Number and will display practitioner name, and beneficiary PHN in the results, among other claim details. 
+> Current MAXPatH claim data that will be replicated in the new APEX application is shown below. 
+> Each transaction record for a Patient Claim within the MSP claims system and associated applications such as MAXPath and APEX is considered to be and treated as PI data. 
+>   PATIENT_CLAIM_SK
+>	HEALTH_IDENTIFIER
+>	PROVINCE_CODE
+>	NEW_BORN_FLAG
+>	DATA_CENTRE_NUMBER
+>	PAID_DATE
+>	CLAIM_SEQ_NUMBER
+>	EXPLANATORY_CD_1
+>	EXPLANATORY_CD_2
+>	EXPLANATORY_CD_3
+>	RECORD_TYPE
+>	SERVICE_DATE_TXT
+>	SERVICE_DATE
+>	HISTORY_YEAR
+>	PAID_AMOUNT
+>	CLAIM_RECORD_CD
+>	SERVICE_TO_DATE
+>	PAID_SERVICE_CD
+>	PAID_SERVICE_UNITS
+>	PAID_FEE_ITEM
+>	PAY_TO_CD
+>	SERVICE_WHERE_CD
+>	INSURER_CD
+>	PRACT_NUMBER
+>	PRACT_SPECIALTY_CD
+>	PAYEE_NUMBER
+>	SUBMISSION_CD
+>	CORRESPONDENCE_CD
+>	BILLED_SERVICE_CLARIFICATION
+>	BILLED_SERVICE_UNITS
+>	BILLED_FEE_ITEM
+>	BILLED_AMOUNT
+>	SERVICE_TIME_START
+>	SERVICE_TIME_FINISH
+>	ANESTHESTIC_PROCEDURAL_UNITS
+>	CLAIM_NUMBER
+>	SERVICE_LOCN_CD
+>	ROUTINE_BLOCK_CD
+>	REFERRING_PRACT_1_CD
+>	REFERRING_PRACT_1_NUMBER
+>	REFERRING_PRACT_1_STATUS
+>	REFERRING_PRACT_2_CD
+>	REFERRING_PRACT_2_NUMBER
+>	DIAGNOSTIC_CD_1
+>	DIAGNOSTIC_CD_2
+>	DIAGNOSTIC_CD_3
+>	PLAN_REF_NUMBER
+>	REJECT_CD
+>	SPECIAL_PROCESSING_CD
+>	FACILITY_NUMBER
+>	FACILITY_SUB_NUMBER
+>	PRSNL_ID_NUMBER
+>	DW_CREATE_TS
+>	DW_UPDATE_TS
+
 This is a strong personal proof of concept because it illustrates the desired **architectural boundary and adjudication flow**, while remaining honest that a real implementation may later use Db2- or domain-API-backed services instead of FHIR.
